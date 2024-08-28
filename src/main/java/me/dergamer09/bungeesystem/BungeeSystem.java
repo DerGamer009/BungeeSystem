@@ -8,6 +8,8 @@ import net.md_5.bungee.api.plugin.Command;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.api.config.ServerInfo;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -16,6 +18,9 @@ public final class BungeeSystem extends Plugin {
 
     private final String prefix = ChatColor.DARK_GRAY + "| " + ChatColor.RED + "ᴍɪɴᴇᴄᴏꜱɪᴀ " + ChatColor.GRAY + "» ";
     private final String webhookUrl = "https://discord.com/api/webhooks/1278349809530437683/1oYWODkc92wE_Q3B_xUQDD3NpS_2_shkiwI0shXKGAs0UjlQqQ_ntoecL5f6bgtOatgE";
+
+    private final String currentVersion = "1.2-SNAPSHOT";  // Deine aktuelle Version
+    private final String jenkinsApiUrl = "http://ci.dergamer09.me/job/BungeeSystem/lastSuccessfulBuild/api/json";  // API-Endpunkt für die neueste Version
 
     @Override
     public void onEnable() {
@@ -31,11 +36,61 @@ public final class BungeeSystem extends Plugin {
         getLogger().info(prefix + ChatColor.DARK_AQUA + "Plugin by DerGamer09");
         getLogger().info(prefix + ChatColor.DARK_AQUA + "Version 1.1-SNAPSHOT");
         getLogger().info(prefix + ChatColor.GRAY + "-------------------------------------");
+
+        checkForUpdates();
     }
 
     @Override
     public void onDisable() {
         // Plugin shutdown logic
+    }
+
+    private void checkForUpdates() {
+        try {
+            URL url = new URL(jenkinsApiUrl);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("GET");
+            connection.setRequestProperty("Accept", "application/json");
+
+            BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+            String inputLine;
+            StringBuilder content = new StringBuilder();
+
+            while ((inputLine = in.readLine()) != null) {
+                content.append(inputLine);
+            }
+
+            in.close();
+            connection.disconnect();
+
+            String jsonResponse = content.toString();
+            String latestVersion = extractVersionFromJson(jsonResponse);
+
+            if (latestVersion != null && !currentVersion.equals(latestVersion)) {
+                getLogger().warning(ChatColor.YELLOW + "Ein neues Update ist verfügbar: " + latestVersion + " (aktuelle Version: " + currentVersion + ")");
+            } else {
+                getLogger().info(ChatColor.GREEN + "Dein Plugin ist auf dem neuesten Stand.");
+            }
+
+        } catch (Exception e) {
+            getLogger().severe(ChatColor.RED + "Fehler beim Überprüfen auf Updates: " + e.getMessage());
+        }
+    }
+
+    private String extractVersionFromJson(String jsonResponse) {
+        try {
+            // Parsing der JSON-Antwort, um die Version herauszufiltern
+            // Annahme: Deine Jenkins-API gibt ein JSON mit einem Feld 'displayName' oder 'fullDisplayName' zurück, das die Version enthält
+            int index = jsonResponse.indexOf("\"displayName\":\"");
+            if (index != -1) {
+                int start = index + 14; // 14 = Länge von "displayName":"
+                int end = jsonResponse.indexOf("\"", start);
+                return jsonResponse.substring(start, end);
+            }
+        } catch (Exception e) {
+            getLogger().severe(ChatColor.RED + "Fehler beim Extrahieren der Version aus der JSON-Antwort: " + e.getMessage());
+        }
+        return null;
     }
 
     // LobbyCommand Klasse für /l, /lobby und /hub
