@@ -1,0 +1,21 @@
+name: BungeeSystem
+version: '${project.version}'
+main: me.dergamer09.bungeesystem.BungeeSystem
+author: 'DerGamer09'
+description: 'Ein BungeeCord-Plugin, das verschiedene Befehle und Funktionen bietet, einschließlich eines Report-Systems mit Discord-Webhook.'
+commands:
+  report:
+    description: 'Meldet einen Spieler an die Administratoren.'
+    usage: '/report <Spieler> <Grund>'
+  l:
+    description: 'Teleportiert den Spieler zur Lobby.'
+    usage: '/l'
+  lobby:
+    description: 'Teleportiert den Spieler zur Lobby.'
+    usage: '/lobby'
+  hub:
+    description: 'Teleportiert den Spieler zur Lobby.'
+    usage: '/hub'
+  bungee:
+    description: 'Ein blockierter Befehl mit Berechtigungsprüfung.'
+    usage: '/bungee'
