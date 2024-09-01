@@ -20,8 +20,8 @@ public final class BungeeSystem extends Plugin {
     private final String prefix = ChatColor.DARK_GRAY + "| " + ChatColor.RED + "ᴍɪɴᴇᴄᴏꜱɪᴀ " + ChatColor.GRAY + "» ";
     private final String webhookUrl = "https://discord.com/api/webhooks/1278349809530437683/1oYWODkc92wE_Q3B_xUQDD3NpS_2_shkiwI0shXKGAs0UjlQqQ_ntoecL5f6bgtOatgE";
 
-    private final String currentVersion = "1.3-SNAPSHOT";  // Deine aktuelle Version
-    private final String jenkinsApiUrl = "http://ci.dergamer09.me/job/BungeeSystem/lastSuccessfulBuild/api/json";
+    private final String currentVersion = "1.4-SNAPSHOT";  // Deine aktuelle Version
+    private final String jenkinsApiUrl = "https://ci.dergamer09.me/job/BungeeSystem/lastSuccessfulBuild/api/json";
 
     @Override
     public void onEnable() {
@@ -35,7 +35,7 @@ public final class BungeeSystem extends Plugin {
         getLogger().info(prefix + ChatColor.GRAY + "-------------------------------------");
         getLogger().info(prefix + ChatColor.GREEN + "Plugin wurde erfolgreich gestartet!");
         getLogger().info(prefix + ChatColor.DARK_AQUA + "Plugin by DerGamer09");
-        getLogger().info(prefix + ChatColor.DARK_AQUA + "Version 1.1-SNAPSHOT");
+        getLogger().info(prefix + ChatColor.DARK_AQUA + "Version " + currentVersion);
         getLogger().info(prefix + ChatColor.GRAY + "-------------------------------------");
 
         checkForUpdates();
@@ -54,7 +54,7 @@ public final class BungeeSystem extends Plugin {
             connection.setRequestProperty("Accept", "application/json");
 
             // Basic Auth Header hinzufügen, falls benötigt
-            String userCredentials = "DerGamer09:1136bb04d26883e6b2e850e3dad5338d5a"; // Ersetze "username" und "apiToken"
+            String userCredentials = "dergamer09:112f9f6cfeecac7c9f5a2ca09df155280e"; // Ersetze "username" und "apiToken"
             String basicAuth = "Basic " + new String(Base64.getEncoder().encode(userCredentials.getBytes()));
             connection.setRequestProperty("Authorization", basicAuth);
 
