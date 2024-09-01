@@ -6,7 +6,7 @@
 
   <groupId>me.dergamer09</groupId>
   <artifactId>BungeeSystem</artifactId>
-  <version>1.7-SNAPSHOT</version>
+  <version>1.8-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <name>BungeeSystem</name>
@@ -65,7 +65,7 @@
       <dependency>
           <groupId>net.md-5</groupId>
           <artifactId>bungeecord-api</artifactId>
-          <version>1.21-R0.1-SNAPSHOT</version>
+          <version>1.19-R0.1-SNAPSHOT</version>
           <scope>provided</scope>
       </dependency>
   </dependencies>
