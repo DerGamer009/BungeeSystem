@@ -20,7 +20,7 @@ public final class BungeeSystem extends Plugin {
     private final String prefix = ChatColor.DARK_GRAY + "| " + ChatColor.RED + "ᴍɪɴᴇᴄᴏꜱɪᴀ " + ChatColor.GRAY + "» ";
     private final String webhookUrl = "https://discord.com/api/webhooks/1278349809530437683/1oYWODkc92wE_Q3B_xUQDD3NpS_2_shkiwI0shXKGAs0UjlQqQ_ntoecL5f6bgtOatgE";
 
-    private final String currentVersion = "1.4-SNAPSHOT";  // Deine aktuelle Version
+    private final String currentVersion = "1.5-SNAPSHOT";  // Deine aktuelle Version
     private final String jenkinsApiUrl = "https://ci.dergamer09.me/job/BungeeSystem/lastSuccessfulBuild/api/json";
 
     @Override
@@ -53,8 +53,8 @@ public final class BungeeSystem extends Plugin {
             connection.setRequestMethod("GET");
             connection.setRequestProperty("Accept", "application/json");
 
-            // Basic Auth Header hinzufügen, falls benötigt
-            String userCredentials = "dergamer09:112f9f6cfeecac7c9f5a2ca09df155280e"; // Ersetze "username" und "apiToken"
+            // Basic Auth Header hinzufügen
+            String userCredentials = "dergamer09:112f9f6cfeecac7c9f5a2ca09df155280e"; // Ersetze "deinBenutzername" und "deinApiToken"
             String basicAuth = "Basic " + new String(Base64.getEncoder().encode(userCredentials.getBytes()));
             connection.setRequestProperty("Authorization", basicAuth);
 
@@ -74,10 +74,16 @@ public final class BungeeSystem extends Plugin {
                 String jsonResponse = content.toString();
                 String latestVersion = extractVersionFromJson(jsonResponse);
 
-                if (latestVersion != null && !currentVersion.equals(latestVersion)) {
-                    getLogger().warning(ChatColor.YELLOW + "Ein neues Update ist verfügbar: " + latestVersion + " (aktuelle Version: " + currentVersion + ")");
+                if (latestVersion != null) {
+                    if (!currentVersion.equals(latestVersion)) {
+                        getLogger().warning(ChatColor.YELLOW + "Ein neues Update ist verfügbar: " + latestVersion + " (aktuelle Version: " + currentVersion + ")");
+                    } else if (isSameSnapshot(latestVersion)) {
+                        getLogger().info(ChatColor.GREEN + "Dein Plugin ist auf dem neuesten Stand.");
+                    } else {
+                        getLogger().warning(ChatColor.YELLOW + "Es gibt ein neues Snapshot-Build: " + latestVersion + " (aktuelles Build: " + currentVersion + ")");
+                    }
                 } else {
-                    getLogger().info(ChatColor.GREEN + "Dein Plugin ist auf dem neuesten Stand.");
+                    getLogger().severe(ChatColor.RED + "Fehler beim Extrahieren der Versionsinformation.");
                 }
 
             } else {
@@ -88,6 +94,26 @@ public final class BungeeSystem extends Plugin {
             getLogger().severe(ChatColor.RED + "Fehler beim Überprüfen auf Updates: " + e.getMessage());
         }
     }
+
+    private boolean isSameSnapshot(String latestVersion) {
+        // Überprüft, ob beide Versionen denselben Snapshot-Namen haben (z.B. "1.2-SNAPSHOT")
+        return currentVersion.equals(latestVersion);
+    }
+
+    private String extractVersionFromJson(String jsonResponse) {
+        try {
+            int index = jsonResponse.indexOf("\"displayName\":\"");
+            if (index != -1) {
+                int start = index + 14; // 14 = Länge von "displayName":"
+                int end = jsonResponse.indexOf("\"", start);
+                return jsonResponse.substring(start, end);
+            }
+        } catch (Exception e) {
+            getLogger().severe(ChatColor.RED + "Fehler beim Extrahieren der Version aus der JSON-Antwort: " + e.getMessage());
+        }
+        return null;
+    }
+
 
     private String extractVersionFromJson(String jsonResponse) {
         try {
