@@ -4,6 +4,7 @@ import me.dergamer09.bungeesystem.commands.BlockBungeeCommand;
 import me.dergamer09.bungeesystem.commands.ListCommand;
 import me.dergamer09.bungeesystem.commands.OnlineTimeCommand;
 import me.dergamer09.bungeesystem.commands.ToggleNotifyCommand;
+import me.dergamer09.bungeesystem.listeners.PlayerEventListener;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -60,20 +61,7 @@ public final class BungeeSystem extends Plugin {
         OnlineTimeCommand onlineTimeCommand = new OnlineTimeCommand(this);
         getProxy().getPluginManager().registerCommand(this, onlineTimeCommand);
 
-        // Spieler-Login-Events verfolgen
-        getProxy().getPluginManager().registerListener(this, new Listener() {
-            @EventHandler
-            public void onPlayerJoin(PostLoginEvent event) {
-                ProxiedPlayer player = event.getPlayer();
-                onlineTimeCommand.recordLoginTime(player);
-            }
-
-            @EventHandler
-            public void onPlayerDisconnect(PlayerDisconnectEvent event) {
-                ProxiedPlayer player = event.getPlayer();
-                onlineTimeCommand.recordLogoutTime(player);
-            }
-        });
+        getProxy().getPluginManager().registerListener(this, new PlayerEventListener(onlineTimeCommand));
 
         loadConfig();
 
