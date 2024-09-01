@@ -1,0 +1,9 @@
+# config.yml
+
+prefix: "&8| &cᴍɪɴᴇᴄᴏꜱɪᴀ &7» "
+defaultMessageColor: "&7"
+updateMessageColor: "&e"
+successMessageColor: "&a"
+errorMessageColor: "&c"
+
+# Weitere Einstellungen können hier hinzugefügt werden
