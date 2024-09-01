@@ -114,23 +114,6 @@ public final class BungeeSystem extends Plugin {
         return null;
     }
 
-
-    private String extractVersionFromJson(String jsonResponse) {
-        try {
-            // Parsing der JSON-Antwort, um die Version herauszufiltern
-            // Annahme: Deine Jenkins-API gibt ein JSON mit einem Feld 'displayName' oder 'fullDisplayName' zurück, das die Version enthält
-            int index = jsonResponse.indexOf("\"displayName\":\"");
-            if (index != -1) {
-                int start = index + 14; // 14 = Länge von "displayName":"
-                int end = jsonResponse.indexOf("\"", start);
-                return jsonResponse.substring(start, end);
-            }
-        } catch (Exception e) {
-            getLogger().severe(ChatColor.RED + "Fehler beim Extrahieren der Version aus der JSON-Antwort: " + e.getMessage());
-        }
-        return null;
-    }
-
     // LobbyCommand Klasse für /l, /lobby und /hub
     public class LobbyCommand extends Command {
         public LobbyCommand(String name) {
