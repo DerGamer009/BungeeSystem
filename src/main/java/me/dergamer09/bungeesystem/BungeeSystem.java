@@ -1,16 +1,35 @@
 package me.dergamer09.bungeesystem;
 
 import me.dergamer09.bungeesystem.commands.BlockBungeeCommand;
+import me.dergamer09.bungeesystem.commands.ListCommand;
+import me.dergamer09.bungeesystem.commands.OnlineTimeCommand;
+import me.dergamer09.bungeesystem.commands.ToggleNotifyCommand;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
+import net.md_5.bungee.api.event.PlayerDisconnectEvent;
+import net.md_5.bungee.api.event.PostLoginEvent;
 import net.md_5.bungee.api.plugin.Command;
+import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.api.config.ServerInfo;
+import net.md_5.bungee.config.Configuration;
+import net.md_5.bungee.config.ConfigurationProvider;
+import net.md_5.bungee.config.YamlConfiguration;
+import net.md_5.bungee.event.EventHandler;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
+import net.md_5.bungee.api.plugin.Plugin;
+import net.md_5.bungee.config.Configuration;
+import net.md_5.bungee.config.ConfigurationProvider;
+import net.md_5.bungee.config.YamlConfiguration;
+
+
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Base64;
@@ -23,6 +42,8 @@ public final class BungeeSystem extends Plugin {
     private final String currentVersion = "1.5-SNAPSHOT";  // Deine aktuelle Version
     private final String jenkinsApiUrl = "https://ci.dergamer09.me/job/BungeeSystem/lastSuccessfulBuild/api/json";
 
+    private Configuration config;
+
     @Override
     public void onEnable() {
         // Registrierung der Befehle
@@ -31,6 +52,29 @@ public final class BungeeSystem extends Plugin {
         getProxy().getPluginManager().registerCommand(this, new LobbyCommand("hub"));
         getProxy().getPluginManager().registerCommand(this, new BlockBungeeCommand());
         getProxy().getPluginManager().registerCommand(this, new ReportCommand());
+        getProxy().getPluginManager().registerCommand(this, new ListCommand(this));
+        getProxy().getPluginManager().registerCommand(this, new ToggleNotifyCommand());
+
+        // Registrierung des neuen OnlineTimeCommand
+        OnlineTimeCommand onlineTimeCommand = new OnlineTimeCommand(this);
+        getProxy().getPluginManager().registerCommand(this, onlineTimeCommand);
+
+        // Spieler-Login-Events verfolgen
+        getProxy().getPluginManager().registerListener(this, new Listener() {
+            @EventHandler
+            public void onPlayerJoin(PostLoginEvent event) {
+                ProxiedPlayer player = event.getPlayer();
+                onlineTimeCommand.recordLoginTime(player);
+            }
+
+            @EventHandler
+            public void onPlayerDisconnect(PlayerDisconnectEvent event) {
+                ProxiedPlayer player = event.getPlayer();
+                onlineTimeCommand.recordLogoutTime(player);
+            }
+        });
+
+        loadConfig();
 
         getLogger().info(prefix + ChatColor.GRAY + "-------------------------------------");
         getLogger().info(prefix + ChatColor.GREEN + "Plugin wurde erfolgreich gestartet!");
@@ -203,6 +247,52 @@ public final class BungeeSystem extends Plugin {
                 e.printStackTrace();
             }
         }
+    }
+
+    private void loadConfig() {
+        if (!getDataFolder().exists()) {
+            getDataFolder().mkdir();
+        }
+
+        File configFile = new File(getDataFolder(), "config.yml");
+
+        if (!configFile.exists()) {
+            try (InputStream inputStream = getResourceAsStream("config.yml")) {
+                if (inputStream != null) {
+                    Files.copy(inputStream, configFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                } else {
+                    getLogger().severe("Die Ressource 'config.yml' konnte nicht gefunden werden.");
+                }
+            } catch (IOException e) {
+                getLogger().severe("Fehler beim Erstellen der config.yml: " + e.getMessage());
+            }
+        }
+
+        try {
+            config = ConfigurationProvider.getProvider(YamlConfiguration.class).load(configFile);
+        } catch (IOException e) {
+            getLogger().severe("Fehler beim Laden der config.yml: " + e.getMessage());
+        }
+    }
+
+    public String getPrefix() {
+        return ChatColor.translateAlternateColorCodes('&', config.getString("prefix", "&8| &cᴍɪɴᴇᴄᴏꜱɪᴀ &7» "));
+    }
+
+    public String getDefaultMessageColor() {
+        return ChatColor.translateAlternateColorCodes('&', config.getString("defaultMessageColor", "&7"));
+    }
+
+    public String getUpdateMessageColor() {
+        return ChatColor.translateAlternateColorCodes('&', config.getString("updateMessageColor", "&e"));
+    }
+
+    public String getSuccessMessageColor() {
+        return ChatColor.translateAlternateColorCodes('&', config.getString("successMessageColor", "&a"));
+    }
+
+    public String getErrorMessageColor() {
+        return ChatColor.translateAlternateColorCodes('&', config.getString("errorMessageColor", "&c"));
     }
 
     private String joinArray(String[] array, int start, int end) {
