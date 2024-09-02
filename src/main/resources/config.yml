@@ -6,4 +6,9 @@ updateMessageColor: "&e"
 successMessageColor: "&a"
 errorMessageColor: "&c"
 
-# Weitere Einstellungen können hier hinzugefügt werden
+mysql:
+  host: "localhost"
+  port: "3306"
+  database: "bungeesystem"
+  username: "root"
+  password: "password"

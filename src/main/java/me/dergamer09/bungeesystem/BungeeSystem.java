@@ -33,6 +33,9 @@ import net.md_5.bungee.config.YamlConfiguration;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.Base64;
 
 public final class BungeeSystem extends Plugin {
@@ -40,11 +43,14 @@ public final class BungeeSystem extends Plugin {
     private final String prefix = ChatColor.DARK_GRAY + "| " + ChatColor.RED + "ᴍɪɴᴇᴄᴏꜱɪᴀ " + ChatColor.GRAY + "» ";
     private final String webhookUrl = "https://discord.com/api/webhooks/1278349809530437683/1oYWODkc92wE_Q3B_xUQDD3NpS_2_shkiwI0shXKGAs0UjlQqQ_ntoecL5f6bgtOatgE";
 
-    private final String currentVersion = "1.8-SNAPSHOT";  // Deine aktuelle Version
+    private final String currentVersion = "1.9-SNAPSHOT";  // Deine aktuelle Version
     private final String jenkinsApiUrl = "https://ci.dergamer09.me/job/BungeeSystem/lastSuccessfulBuild/api/json";
 
     private Configuration config;
     private File configFile;
+
+    private static BungeeSystem instance;
+    private Connection connection;
 
     @Override
     public void onEnable() {
@@ -63,7 +69,13 @@ public final class BungeeSystem extends Plugin {
 
         getProxy().getPluginManager().registerListener(this, new PlayerEventListener(onlineTimeCommand));
 
+        instance = this;
         loadConfig();
+        connectToDatabase();
+
+        if (!getDataFolder().exists()) {
+            getDataFolder().mkdir();
+        }
 
         getLogger().info(prefix + ChatColor.GRAY + "-------------------------------------");
         getLogger().info(prefix + ChatColor.GREEN + "Plugin wurde erfolgreich gestartet!");
@@ -76,7 +88,7 @@ public final class BungeeSystem extends Plugin {
 
     @Override
     public void onDisable() {
-        // Plugin shutdown logic
+        closeDatabaseConnection();
     }
 
     private void checkForUpdates() {
@@ -246,42 +258,42 @@ public final class BungeeSystem extends Plugin {
         File configFile = new File(getDataFolder(), "config.yml");
 
         if (!configFile.exists()) {
-            try (InputStream inputStream = getResourceAsStream("config.yml")) {
-                if (inputStream != null) {
-                    Files.copy(inputStream, configFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
-                } else {
-                    getLogger().severe("Die Ressource 'config.yml' konnte nicht gefunden werden.");
-                }
+            try (InputStream in = getResourceAsStream("config.yml")) {
+                Files.copy(in, configFile.toPath());
             } catch (IOException e) {
-                getLogger().severe("Fehler beim Erstellen der config.yml: " + e.getMessage());
+                e.printStackTrace();
             }
         }
 
         try {
             config = ConfigurationProvider.getProvider(YamlConfiguration.class).load(configFile);
         } catch (IOException e) {
-            getLogger().severe("Fehler beim Laden der config.yml: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
+    public Configuration getConfig() {
+        return config;
+    }
+
     public String getPrefix() {
-        return ChatColor.translateAlternateColorCodes('&', config.getString("prefix", "&8| &cᴍɪɴᴇᴄᴏꜱɪᴀ &7» "));
+        return ChatColor.translateAlternateColorCodes('&', config.getString("prefix"));
     }
 
     public String getDefaultMessageColor() {
-        return ChatColor.translateAlternateColorCodes('&', config.getString("defaultMessageColor", "&7"));
+        return ChatColor.translateAlternateColorCodes('&', config.getString("defaultMessageColor"));
     }
 
     public String getUpdateMessageColor() {
-        return ChatColor.translateAlternateColorCodes('&', config.getString("updateMessageColor", "&e"));
+        return ChatColor.translateAlternateColorCodes('&', config.getString("updateMessageColor"));
     }
 
     public String getSuccessMessageColor() {
-        return ChatColor.translateAlternateColorCodes('&', config.getString("successMessageColor", "&a"));
+        return ChatColor.translateAlternateColorCodes('&', config.getString("successMessageColor"));
     }
 
     public String getErrorMessageColor() {
-        return ChatColor.translateAlternateColorCodes('&', config.getString("errorMessageColor", "&c"));
+        return ChatColor.translateAlternateColorCodes('&', config.getString("errorMessageColor"));
     }
 
     private String joinArray(String[] array, int start, int end) {
@@ -293,6 +305,43 @@ public final class BungeeSystem extends Plugin {
             result.append(array[i]);
         }
         return result.toString();
+    }
+
+    public static BungeeSystem getInstance() {
+        return instance;
+    }
+
+    public Connection getConnection() {
+        return connection;
+    }
+    
+    // Verbindung zur MySQL-Datenbank herstellen
+    private void connectToDatabase() {
+        String host = config.getString("mysql.host");
+        String port = config.getString("mysql.port");
+        String database = config.getString("mysql.database");
+        String username = config.getString("mysql.username");
+        String password = config.getString("mysql.password");
+
+        String url = "jdbc:mysql://" + host + ":" + port + "/" + database;
+
+        try {
+            connection = DriverManager.getConnection(url, username, password);
+            getLogger().info("MySQL connection established.");
+        } catch (SQLException e) {
+            getLogger().severe("MySQL connection failed: " + e.getMessage());
+        }
+    }
+
+    private void closeDatabaseConnection() {
+        if (connection != null) {
+            try {
+                connection.close();
+                getLogger().info("MySQL connection closed.");
+            } catch (SQLException e) {
+                getLogger().severe("Failed to close MySQL connection: " + e.getMessage());
+            }
+        }
     }
 
 }
