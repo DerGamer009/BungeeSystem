@@ -12,3 +12,5 @@ mysql:
   database: "bungeesystem"
   username: "root"
   password: "password"
+
+webhookUrl: "deinwebhook" # ReportSystem

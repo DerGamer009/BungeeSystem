@@ -5,14 +5,16 @@ import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
 
 public class OnlineTimeCommand extends Command {
 
     private final BungeeSystem plugin;
-    private final Map<String, Long> loginTimes = new HashMap<>();
 
     public OnlineTimeCommand(BungeeSystem plugin) {
         super("onlinetime", "bungeesystem.onlinetime", "otime");
@@ -29,25 +31,27 @@ public class OnlineTimeCommand extends Command {
         ProxiedPlayer player = (ProxiedPlayer) sender;
         String playerName = player.getName();
 
-        if (!loginTimes.containsKey(playerName)) {
-            player.sendMessage(plugin.getPrefix() + plugin.getErrorMessageColor() + "Es konnte keine Online-Zeit gefunden werden.");
-            return;
+        try (Connection connection = plugin.getConnection();
+             PreparedStatement statement = connection.prepareStatement("SELECT login_time FROM online_time WHERE player_name = ?")) {
+
+            statement.setString(1, playerName);
+            ResultSet resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                long loginTime = resultSet.getLong("login_time");
+                long currentTime = System.currentTimeMillis();
+                long onlineTimeMillis = currentTime - loginTime;
+
+                String formattedTime = formatTime(onlineTimeMillis);
+                player.sendMessage(plugin.getPrefix() + plugin.getSuccessMessageColor() + "Deine bisherige Online-Zeit: " + plugin.getUpdateMessageColor() + formattedTime);
+            } else {
+                player.sendMessage(plugin.getPrefix() + plugin.getErrorMessageColor() + "Es konnte keine Online-Zeit gefunden werden.");
+            }
+
+        } catch (SQLException e) {
+            plugin.getLogger().log(Level.SEVERE, "Fehler beim Abrufen der Online-Zeit aus der Datenbank: ", e);
+            player.sendMessage(plugin.getPrefix() + plugin.getErrorMessageColor() + "Ein Fehler ist aufgetreten.");
         }
-
-        long loginTime = loginTimes.get(playerName);
-        long currentTime = System.currentTimeMillis();
-        long onlineTimeMillis = currentTime - loginTime;
-
-        String formattedTime = formatTime(onlineTimeMillis);
-        player.sendMessage(plugin.getPrefix() + plugin.getSuccessMessageColor() + "Deine bisherige Online-Zeit: " + plugin.getUpdateMessageColor() + formattedTime);
-    }
-
-    public void recordLoginTime(ProxiedPlayer player) {
-        loginTimes.put(player.getName(), System.currentTimeMillis());
-    }
-
-    public void recordLogoutTime(ProxiedPlayer player) {
-        loginTimes.remove(player.getName());
     }
 
     private String formatTime(long millis) {

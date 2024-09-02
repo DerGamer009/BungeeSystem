@@ -19,9 +19,13 @@ commands:
   bungee:
     description: 'Ein blockierter Befehl mit Berechtigungsprüfung.'
     usage: '/bungee'
-  commands:
-    onlinetime:
-      description: "Zeigt die gesamte Online-Zeit eines Spielers an."
-      usage: "/onlinetime"
-      aliases: [ otime ]
-      permission: "bungeesystem.onlinetime"
+  onlinetime:
+    description: "Zeigt die gesamte Online-Zeit eines Spielers an."
+    usage: "/onlinetime"
+    aliases: [ otime ]
+    permission:
+  togglenotify:
+    description: "Togglet alle Notifications"
+    usage: "/onlinetime"
+    aliases: [ tnotify ]
+    permission: "bungeesystem.notify"

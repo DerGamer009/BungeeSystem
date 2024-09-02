@@ -41,9 +41,9 @@ import java.util.Base64;
 public final class BungeeSystem extends Plugin {
 
     private final String prefix = ChatColor.DARK_GRAY + "| " + ChatColor.RED + "ᴍɪɴᴇᴄᴏꜱɪᴀ " + ChatColor.GRAY + "» ";
-    private final String webhookUrl = "https://discord.com/api/webhooks/1278349809530437683/1oYWODkc92wE_Q3B_xUQDD3NpS_2_shkiwI0shXKGAs0UjlQqQ_ntoecL5f6bgtOatgE";
+    private String webhookUrl;
 
-    private final String currentVersion = "1.0.9-SNAPSHOT";  // Deine aktuelle Version
+    private final String currentVersion = "1.1.0-SNAPSHOT";  // Deine aktuelle Version
     private final String jenkinsApiUrl = "https://ci.dergamer09.me/job/BungeeSystem/lastSuccessfulBuild/api/json";
 
     private Configuration config;
@@ -67,7 +67,10 @@ public final class BungeeSystem extends Plugin {
         OnlineTimeCommand onlineTimeCommand = new OnlineTimeCommand(this);
         getProxy().getPluginManager().registerCommand(this, onlineTimeCommand);
 
-        getProxy().getPluginManager().registerListener(this, new PlayerEventListener(onlineTimeCommand));
+        webhookUrl = getConfig().getString("webhookUrl");
+        getLogger().info("Discord Webhook URL: " + webhookUrl);
+
+        getProxy().getPluginManager().registerListener(this, new PlayerEventListener(this));
 
         instance = this;
         loadConfig();
@@ -314,7 +317,7 @@ public final class BungeeSystem extends Plugin {
     public Connection getConnection() {
         return connection;
     }
-    
+
     // Verbindung zur MySQL-Datenbank herstellen
     private void connectToDatabase() {
         String host = config.getString("mysql.host");
