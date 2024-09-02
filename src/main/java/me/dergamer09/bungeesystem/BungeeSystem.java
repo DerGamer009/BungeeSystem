@@ -43,7 +43,7 @@ public final class BungeeSystem extends Plugin {
     private final String prefix = ChatColor.DARK_GRAY + "| " + ChatColor.RED + "ᴍɪɴᴇᴄᴏꜱɪᴀ " + ChatColor.GRAY + "» ";
     private final String webhookUrl = "https://discord.com/api/webhooks/1278349809530437683/1oYWODkc92wE_Q3B_xUQDD3NpS_2_shkiwI0shXKGAs0UjlQqQ_ntoecL5f6bgtOatgE";
 
-    private final String currentVersion = "1.9-SNAPSHOT";  // Deine aktuelle Version
+    private final String currentVersion = "1.0.9-SNAPSHOT";  // Deine aktuelle Version
     private final String jenkinsApiUrl = "https://ci.dergamer09.me/job/BungeeSystem/lastSuccessfulBuild/api/json";
 
     private Configuration config;
@@ -58,7 +58,7 @@ public final class BungeeSystem extends Plugin {
         getProxy().getPluginManager().registerCommand(this, new LobbyCommand("l"));
         getProxy().getPluginManager().registerCommand(this, new LobbyCommand("lobby"));
         getProxy().getPluginManager().registerCommand(this, new LobbyCommand("hub"));
-        getProxy().getPluginManager().registerCommand(this, new BlockBungeeCommand());
+        getProxy().getPluginManager().registerCommand(this, new BlockBungeeCommand(this));
         getProxy().getPluginManager().registerCommand(this, new ReportCommand());
         getProxy().getPluginManager().registerCommand(this, new ListCommand(this));
         getProxy().getPluginManager().registerCommand(this, new ToggleNotifyCommand());
