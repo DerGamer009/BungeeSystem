@@ -29,3 +29,12 @@ commands:
     usage: "/onlinetime"
     aliases: [ tnotify ]
     permission: "bungeesystem.notify"
+  teamchat:
+    description: Send a message to team members only
+    permission: teamchat.use
+    aliases: [ tc ]
+    usage: "/teamchat"
+  joinme:
+    description: Broadcasts a message inviting players to join your server
+    permission: joinme.use
+    usage: "/joinme"

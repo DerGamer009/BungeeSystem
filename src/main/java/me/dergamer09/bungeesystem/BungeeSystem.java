@@ -1,18 +1,13 @@
 package me.dergamer09.bungeesystem;
 
-import me.dergamer09.bungeesystem.commands.BlockBungeeCommand;
-import me.dergamer09.bungeesystem.commands.ListCommand;
-import me.dergamer09.bungeesystem.commands.OnlineTimeCommand;
-import me.dergamer09.bungeesystem.commands.ToggleNotifyCommand;
+import me.dergamer09.bungeesystem.commands.*;
 import me.dergamer09.bungeesystem.listeners.PlayerEventListener;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.event.PlayerDisconnectEvent;
 import net.md_5.bungee.api.event.PostLoginEvent;
-import net.md_5.bungee.api.plugin.Command;
-import net.md_5.bungee.api.plugin.Listener;
-import net.md_5.bungee.api.plugin.Plugin;
+import net.md_5.bungee.api.plugin.*;
 import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.config.Configuration;
 import net.md_5.bungee.config.ConfigurationProvider;
@@ -43,8 +38,8 @@ public final class BungeeSystem extends Plugin {
     private final String prefix = ChatColor.DARK_GRAY + "| " + ChatColor.RED + "ᴍɪɴᴇᴄᴏꜱɪᴀ " + ChatColor.GRAY + "» ";
     private String webhookUrl;
 
-    private final String currentVersion = "1.1.0-SNAPSHOT";  // Deine aktuelle Version
-    private final String jenkinsApiUrl = "https://ci.dergamer09.me/job/BungeeSystem/lastSuccessfulBuild/api/json";
+    private final String currentVersion = "1.1.2-SNAPSHOT";  // Deine aktuelle Version
+    private final String jenkinsApiUrl = "https://ci.darkhex24.de/job/BungeeSystem/lastSuccessfulBuild/api/json";
 
     private Configuration config;
     private File configFile;
@@ -55,6 +50,9 @@ public final class BungeeSystem extends Plugin {
     @Override
     public void onEnable() {
         // Registrierung der Befehle
+        PluginManager pm = getProxy().getPluginManager();
+        pm.registerCommand(this, new TeamChatCommand("teamchat", "teamchat.use"));
+        pm.registerCommand(this, new JoinMeCommand("joinme", "joinme.use"));
         getProxy().getPluginManager().registerCommand(this, new LobbyCommand("l"));
         getProxy().getPluginManager().registerCommand(this, new LobbyCommand("lobby"));
         getProxy().getPluginManager().registerCommand(this, new LobbyCommand("hub"));
