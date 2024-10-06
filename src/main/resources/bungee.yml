@@ -31,10 +31,10 @@ commands:
     permission: "bungeesystem.notify"
   teamchat:
     description: Send a message to team members only
-    permission: teamchat.use
+    permission: "bungeesystem.teamchat.use"
     aliases: [ tc ]
     usage: "/teamchat"
   joinme:
     description: Broadcasts a message inviting players to join your server
-    permission: joinme.use
+    permission: "bungeesystem.joinme.use"
     usage: "/joinme"

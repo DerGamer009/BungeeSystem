@@ -38,7 +38,7 @@ public final class BungeeSystem extends Plugin {
     private final String prefix = ChatColor.DARK_GRAY + "| " + ChatColor.RED + "ᴍɪɴᴇᴄᴏꜱɪᴀ " + ChatColor.GRAY + "» ";
     private String webhookUrl;
 
-    private final String currentVersion = "1.1.2-SNAPSHOT";  // Deine aktuelle Version
+    private final String currentVersion = "1.1.3-BETA";  // Deine aktuelle Version
     private final String jenkinsApiUrl = "https://ci.darkhex24.de/job/BungeeSystem/lastSuccessfulBuild/api/json";
 
     private Configuration config;
@@ -51,8 +51,8 @@ public final class BungeeSystem extends Plugin {
     public void onEnable() {
         // Registrierung der Befehle
         PluginManager pm = getProxy().getPluginManager();
-        pm.registerCommand(this, new TeamChatCommand("teamchat", "teamchat.use"));
-        pm.registerCommand(this, new JoinMeCommand("joinme", "joinme.use"));
+        pm.registerCommand(this, new TeamChatCommand("teamchat", "bungeesystem.teamchat.use"));
+        pm.registerCommand(this, new JoinMeCommand("joinme", "bungeesystem.joinme.use"));
         getProxy().getPluginManager().registerCommand(this, new LobbyCommand("l"));
         getProxy().getPluginManager().registerCommand(this, new LobbyCommand("lobby"));
         getProxy().getPluginManager().registerCommand(this, new LobbyCommand("hub"));
