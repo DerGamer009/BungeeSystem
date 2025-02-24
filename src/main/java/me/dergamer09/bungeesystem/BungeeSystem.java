@@ -53,6 +53,9 @@ public final class BungeeSystem extends Plugin {
         PluginManager pm = getProxy().getPluginManager();
         pm.registerCommand(this, new TeamChatCommand("teamchat", "bungeesystem.teamchat.use"));
         pm.registerCommand(this, new JoinMeCommand("joinme", "bungeesystem.joinme.use"));
+        pm.registerCommand(this, new PingCommand());
+        pm.registerCommand(this, new ServerListCommand());
+        pm.registerCommand(this, new FindCommand());
         getProxy().getPluginManager().registerCommand(this, new LobbyCommand("l"));
         getProxy().getPluginManager().registerCommand(this, new LobbyCommand("lobby"));
         getProxy().getPluginManager().registerCommand(this, new LobbyCommand("hub"));
