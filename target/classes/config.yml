@@ -1,0 +1,16 @@
+# config.yml
+
+prefix: "&8| &cBungeeSystem &7» "
+defaultMessageColor: "&7"
+updateMessageColor: "&e"
+successMessageColor: "&a"
+errorMessageColor: "&c"
+
+mysql:
+  host: "localhost"
+  port: "3306"
+  database: "bungeesystem"
+  username: "root"
+  password: "password"
+
+webhookUrl: "deinwebhook" # ReportSystem

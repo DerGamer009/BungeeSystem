@@ -1,0 +1,40 @@
+name: BungeeSystem
+version: '1.1.3-BETA'
+main: me.dergamer09.bungeesystem.BungeeSystem
+author: 'DerGamer09'
+description: 'Ein BungeeCord-Plugin, das verschiedene Befehle und Funktionen bietet, einschließlich eines Report-Systems mit Discord-Webhook.'
+commands:
+  report:
+    description: 'Meldet einen Spieler an die Administratoren.'
+    usage: '/report <Spieler> <Grund>'
+  l:
+    description: 'Teleportiert den Spieler zur Lobby.'
+    usage: '/l'
+  lobby:
+    description: 'Teleportiert den Spieler zur Lobby.'
+    usage: '/lobby'
+  hub:
+    description: 'Teleportiert den Spieler zur Lobby.'
+    usage: '/hub'
+  bungee:
+    description: 'Ein blockierter Befehl mit Berechtigungsprüfung.'
+    usage: '/bungee'
+  onlinetime:
+    description: "Zeigt die gesamte Online-Zeit eines Spielers an."
+    usage: "/onlinetime"
+    aliases: [ otime ]
+    permission:
+  togglenotify:
+    description: "Togglet alle Notifications"
+    usage: "/onlinetime"
+    aliases: [ tnotify ]
+    permission: "bungeesystem.notify"
+  teamchat:
+    description: Send a message to team members only
+    permission: "bungeesystem.teamchat.use"
+    aliases: [ tc ]
+    usage: "/teamchat"
+  joinme:
+    description: Broadcasts a message inviting players to join your server
+    permission: "bungeesystem.joinme.use"
+    usage: "/joinme"
