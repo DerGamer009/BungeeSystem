@@ -7,8 +7,8 @@ import net.md_5.bungee.api.plugin.Command;
 
 public class TeamChatCommand extends Command {
 
-    public TeamChatCommand(String name, String permission) {
-        super(name, permission);
+    public TeamChatCommand() {
+        super("teamchat", "bungeesystem.teamchat.use", "tc");
     }
 
     @Override

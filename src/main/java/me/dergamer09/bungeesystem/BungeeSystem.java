@@ -9,6 +9,7 @@ import net.md_5.bungee.api.event.PlayerDisconnectEvent;
 import net.md_5.bungee.api.event.PostLoginEvent;
 import net.md_5.bungee.api.plugin.*;
 import net.md_5.bungee.api.config.ServerInfo;
+import net.md_5.bungee.command.PlayerCommand;
 import net.md_5.bungee.config.Configuration;
 import net.md_5.bungee.config.ConfigurationProvider;
 import net.md_5.bungee.config.YamlConfiguration;
@@ -51,11 +52,13 @@ public final class BungeeSystem extends Plugin {
     public void onEnable() {
         // Registrierung der Befehle
         PluginManager pm = getProxy().getPluginManager();
-        pm.registerCommand(this, new TeamChatCommand("teamchat", "bungeesystem.teamchat.use"));
+        pm.registerCommand(this, new TeamChatCommand());
         pm.registerCommand(this, new JoinMeCommand("joinme", "bungeesystem.joinme.use"));
         pm.registerCommand(this, new PingCommand());
         pm.registerCommand(this, new ServerListCommand());
         pm.registerCommand(this, new FindCommand());
+        pm.registerCommand(this, new VanishCommand());
+        pm.registerCommand(this, new PlayCommand());
         getProxy().getPluginManager().registerCommand(this, new LobbyCommand("l"));
         getProxy().getPluginManager().registerCommand(this, new LobbyCommand("lobby"));
         getProxy().getPluginManager().registerCommand(this, new LobbyCommand("hub"));
@@ -63,6 +66,7 @@ public final class BungeeSystem extends Plugin {
         getProxy().getPluginManager().registerCommand(this, new ReportCommand());
         getProxy().getPluginManager().registerCommand(this, new ListCommand(this));
         getProxy().getPluginManager().registerCommand(this, new ToggleNotifyCommand());
+
 
         // Registrierung des neuen OnlineTimeCommand
         OnlineTimeCommand onlineTimeCommand = new OnlineTimeCommand(this);
