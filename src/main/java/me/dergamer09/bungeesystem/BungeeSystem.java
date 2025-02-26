@@ -40,7 +40,7 @@ public final class BungeeSystem extends Plugin {
     private String webhookUrl;
 
     private final String currentVersion = "1.1.4-BETA";  // Deine aktuelle Version
-    private final String jenkinsApiUrl = "https://ci.darkhex24.de/job/BungeeSystem/lastSuccessfulBuild/api/json";
+    private final String jenkinsApiUrl = "https://dergamer09.at/job/BungeeSystem/lastSuccessfulBuild/api/json";
 
     private Configuration config;
     private File configFile;
@@ -50,6 +50,15 @@ public final class BungeeSystem extends Plugin {
 
     @Override
     public void onEnable() {
+
+        // Ensure the configuration is loaded before accessing it
+        loadConfig();
+
+        if (getConfig() == null) {
+            getLogger().severe("Config file could not be loaded! Disabling plugin...");
+            return;
+        }
+
         // Registrierung der Befehle
         PluginManager pm = getProxy().getPluginManager();
         pm.registerCommand(this, new TeamChatCommand());
@@ -78,7 +87,6 @@ public final class BungeeSystem extends Plugin {
         getProxy().getPluginManager().registerListener(this, new PlayerEventListener(this));
 
         instance = this;
-        loadConfig();
         connectToDatabase();
 
         if (!getDataFolder().exists()) {
@@ -263,20 +271,24 @@ public final class BungeeSystem extends Plugin {
             getDataFolder().mkdir();
         }
 
-        File configFile = new File(getDataFolder(), "config.yml");
+        configFile = new File(getDataFolder(), "config.yml");
 
         if (!configFile.exists()) {
             try (InputStream in = getResourceAsStream("config.yml")) {
-                Files.copy(in, configFile.toPath());
+                if (in != null) {
+                    Files.copy(in, configFile.toPath());
+                } else {
+                    getLogger().severe("Could not find config.yml inside the plugin jar!");
+                }
             } catch (IOException e) {
-                e.printStackTrace();
+                getLogger().severe("Error creating config.yml: " + e.getMessage());
             }
         }
 
         try {
             config = ConfigurationProvider.getProvider(YamlConfiguration.class).load(configFile);
         } catch (IOException e) {
-            e.printStackTrace();
+            getLogger().severe("Error loading config.yml: " + e.getMessage());
         }
     }
 
