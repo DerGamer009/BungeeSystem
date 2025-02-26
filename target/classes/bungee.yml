@@ -1,40 +1,87 @@
 name: BungeeSystem
-version: '1.1.3-BETA'
+version: '1.1.6-BETA'
 main: me.dergamer09.bungeesystem.BungeeSystem
 author: 'DerGamer09'
-description: 'Ein BungeeCord-Plugin, das verschiedene Befehle und Funktionen bietet, einschließlich eines Report-Systems mit Discord-Webhook.'
+description: 'A BungeeCord plugin that provides various commands and features, including a report system with Discord webhook.'
 commands:
   report:
-    description: 'Meldet einen Spieler an die Administratoren.'
-    usage: '/report <Spieler> <Grund>'
+    description: 'Reports a player to the administrators.'
+    usage: '/report <player> <reason>'
   l:
-    description: 'Teleportiert den Spieler zur Lobby.'
+    description: 'Teleports the player to the lobby.'
     usage: '/l'
   lobby:
-    description: 'Teleportiert den Spieler zur Lobby.'
+    description: 'Teleports the player to the lobby.'
     usage: '/lobby'
   hub:
-    description: 'Teleportiert den Spieler zur Lobby.'
+    description: 'Teleports the player to the lobby.'
     usage: '/hub'
   bungee:
-    description: 'Ein blockierter Befehl mit Berechtigungsprüfung.'
+    description: 'A blocked command with permission check.'
     usage: '/bungee'
   onlinetime:
-    description: "Zeigt die gesamte Online-Zeit eines Spielers an."
+    description: "Shows the total online time of a player."
     usage: "/onlinetime"
     aliases: [ otime ]
-    permission:
+    permission: "bungeesystem.onlinetime"
   togglenotify:
-    description: "Togglet alle Notifications"
-    usage: "/onlinetime"
+    description: "Toggles all notifications"
+    usage: "/togglenotify"
     aliases: [ tnotify ]
     permission: "bungeesystem.notify"
   teamchat:
-    description: Send a message to team members only
+    description: 'Sends a message only to team members'
     permission: "bungeesystem.teamchat.use"
     aliases: [ tc ]
     usage: "/teamchat"
   joinme:
-    description: Broadcasts a message inviting players to join your server
+    description: 'Broadcasts a message inviting players to join your server'
     permission: "bungeesystem.joinme.use"
     usage: "/joinme"
+  play:
+    description: "Connects the player to a specific server"
+    usage: "/play <server name>"
+    permission: "bungeesystem.play"
+  ping:
+    description: "Shows the player's current ping"
+    usage: "/ping"
+  serverlist:
+    description: "Lists all servers in the network"
+    usage: "/serverlist"
+    permission: "bungeesystem.servers"
+  vanish:
+    description: "Toggles vanish mode for the player"
+    usage: "/vanish"
+    aliases: [ v ]
+    permission: "bungeesystem.vanish"
+  find:
+    description: "Finds out which server a player is currently on"
+    usage: "/find <player>"
+  send:
+    description: "Moves a player to a specific server"
+    usage: "/send <player> <server>"
+    permission: "bungeesystem.send"
+  broadcast:
+    description: "Sends a message to the entire network"
+    usage: "/broadcast <message>"
+    permission: "bungeesystem.broadcast"
+  uptime:
+    description: "Shows how long the server has been running"
+    usage: "/uptime"
+    permission: "bungeesystem.uptime"
+  afk:
+    description: "Marks a player as AFK"
+    usage: "/afk"
+    permission: "bungeesystem.afk"
+  ignore:
+    description: "Blocks messages from a specific player"
+    usage: "/ignore <player>"
+    permission: "bungeesystem.ignore"
+  nick:
+    description: "Changes your nickname"
+    usage: "/nick <name>"
+    permission: "bungeesystem.nick"
+  realname:
+    description: "Reveals a player's real username"
+    usage: "/realname <nickname>"
+    permission: "bungeesystem.realname"

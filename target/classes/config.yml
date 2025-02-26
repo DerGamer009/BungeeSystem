@@ -6,11 +6,10 @@ updateMessageColor: "&e"
 successMessageColor: "&a"
 errorMessageColor: "&c"
 
+webhookUrl: "https://your-discord-webhook-url.com" #ReportSystem
 mysql:
   host: "localhost"
   port: "3306"
-  database: "bungeesystem"
+  database: "bungee_db"
   username: "root"
   password: "password"
-
-webhookUrl: "deinwebhook" # ReportSystem

@@ -25,6 +25,8 @@ import net.md_5.bungee.config.Configuration;
 import net.md_5.bungee.config.ConfigurationProvider;
 import net.md_5.bungee.config.YamlConfiguration;
 
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 
 import java.io.*;
 import java.net.HttpURLConnection;
@@ -39,8 +41,7 @@ public final class BungeeSystem extends Plugin {
     private final String prefix = "&8| &cBungeeSystem &7» ";
     private String webhookUrl;
 
-    private final String currentVersion = "1.1.6-BETA";  // Deine aktuelle Version
-    private final String jenkinsApiUrl = "http://dergamer09.at/job/BungeeSystem/lastSuccessfulBuild/api/json";
+    private final String currentVersion = "1.1.6";  // Deine aktuelle Version
 
     private Configuration config;
     private File configFile;
@@ -111,17 +112,13 @@ public final class BungeeSystem extends Plugin {
         closeDatabaseConnection();
     }
 
+    // Update Check from SpigotMC
     private void checkForUpdates() {
         try {
-            URL url = new URL(jenkinsApiUrl);
+            URL url = new URL("https://api.spigotmc.org/simple/0.2/index.php?action=getResource&id=119339");
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("GET");
             connection.setRequestProperty("Accept", "application/json");
-
-            // Basic Auth Header hinzufügen
-            String userCredentials = "dergamer09:112f9f6cfeecac7c9f5a2ca09df155280e"; // Ersetze "deinBenutzername" und "deinApiToken"
-            String basicAuth = "Basic " + new String(Base64.getEncoder().encode(userCredentials.getBytes()));
-            connection.setRequestProperty("Authorization", basicAuth);
 
             int responseCode = connection.getResponseCode();
             if (responseCode == HttpURLConnection.HTTP_OK) {
@@ -136,33 +133,25 @@ public final class BungeeSystem extends Plugin {
                 in.close();
                 connection.disconnect();
 
-                String jsonResponse = content.toString();
-                String latestVersion = extractVersionFromJson(jsonResponse);
+                JSONParser parser = new JSONParser();
+                JSONObject jsonResponse = (JSONObject) parser.parse(content.toString());
+                String latestVersion = (String) jsonResponse.get("current_version");
 
-                if (latestVersion != null) {
-                    if (!currentVersion.equals(latestVersion)) {
-                        getLogger().warning(ChatColor.YELLOW + "Ein neues Update ist verfügbar: " + latestVersion + " (aktuelle Version: " + currentVersion + ")");
-                    } else if (isSameSnapshot(latestVersion)) {
-                        getLogger().info(ChatColor.GREEN + "Dein Plugin ist auf dem neuesten Stand.");
-                    } else {
-                        getLogger().warning(ChatColor.YELLOW + "Es gibt ein neues Snapshot-Build: " + latestVersion + " (aktuelles Build: " + currentVersion + ")");
-                    }
+                if (latestVersion != null && !currentVersion.equals(latestVersion)) {
+                    getLogger().warning(ChatColor.YELLOW + "A new update is available: " + latestVersion + " (Current Version: " + currentVersion + ")");
                 } else {
-                    getLogger().severe(ChatColor.RED + "Fehler beim Extrahieren der Versionsinformation.");
+                    getLogger().info(ChatColor.GREEN + "Your plugin is up to date.");
                 }
-
             } else {
-                getLogger().severe(ChatColor.RED + "Fehler beim Abrufen der Versionsinformation. HTTP Fehlercode: " + responseCode);
+                getLogger().severe(ChatColor.RED + "Error retrieving version information from SpigotMC. HTTP Error Code: " + responseCode);
             }
-
         } catch (Exception e) {
-            getLogger().severe(ChatColor.RED + "Fehler beim Überprüfen auf Updates: " + e.getMessage());
+            getLogger().severe(ChatColor.RED + "Error checking for updates via SpigotMC: " + e.getMessage());
         }
     }
 
     private boolean isSameSnapshot(String latestVersion) {
-        // Überprüft, ob beide Versionen denselben Snapshot-Namen haben (z.B. "1.2-SNAPSHOT")
-        return currentVersion.equals(latestVersion);
+        return currentVersion.replaceAll("-SNAPSHOT", "").equals(latestVersion.replaceAll("-SNAPSHOT", ""));
     }
 
     private String extractVersionFromJson(String jsonResponse) {
