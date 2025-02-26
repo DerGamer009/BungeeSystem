@@ -39,7 +39,7 @@ public final class BungeeSystem extends Plugin {
     private final String prefix = ChatColor.DARK_GRAY + "| " + ChatColor.RED + "ᴍɪɴᴇᴄᴏꜱɪᴀ " + ChatColor.GRAY + "» ";
     private String webhookUrl;
 
-    private final String currentVersion = "1.1.4-BETA";  // Deine aktuelle Version
+    private final String currentVersion = "1.1.5-BETA";  // Deine aktuelle Version
     private final String jenkinsApiUrl = "https://dergamer09.at/job/BungeeSystem/lastSuccessfulBuild/api/json";
 
     private Configuration config;
