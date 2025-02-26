@@ -21,7 +21,7 @@ public class PlayCommand extends Command {
         }
 
         if (args.length < 1) {
-            sender.sendMessage(ChatColor.RED + "Usage: /play <player>");
+            sender.sendMessage(ChatColor.RED + "Usage: /play <server>");
             return;
         }
 

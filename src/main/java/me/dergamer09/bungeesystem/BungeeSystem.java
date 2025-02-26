@@ -36,11 +36,11 @@ import java.util.Base64;
 
 public final class BungeeSystem extends Plugin {
 
-    private final String prefix = ChatColor.DARK_GRAY + "| " + ChatColor.RED + "ᴍɪɴᴇᴄᴏꜱɪᴀ " + ChatColor.GRAY + "» ";
+    private final String prefix = "&8| &cBungeeSystem &7» ";
     private String webhookUrl;
 
-    private final String currentVersion = "1.1.5-BETA";  // Deine aktuelle Version
-    private final String jenkinsApiUrl = "https://dergamer09.at/job/BungeeSystem/lastSuccessfulBuild/api/json";
+    private final String currentVersion = "1.1.6-BETA";  // Deine aktuelle Version
+    private final String jenkinsApiUrl = "http://dergamer09.at/job/BungeeSystem/lastSuccessfulBuild/api/json";
 
     private Configuration config;
     private File configFile;
@@ -68,6 +68,10 @@ public final class BungeeSystem extends Plugin {
         pm.registerCommand(this, new FindCommand());
         pm.registerCommand(this, new VanishCommand());
         pm.registerCommand(this, new PlayCommand());
+        pm.registerCommand(this, new ServerCommand());
+        pm.registerCommand(this, new UptimeCommand());
+        pm.registerCommand(this, new SendCommand());
+        pm.registerCommand(this, new BroadcastCommand());
         getProxy().getPluginManager().registerCommand(this, new LobbyCommand("l"));
         getProxy().getPluginManager().registerCommand(this, new LobbyCommand("lobby"));
         getProxy().getPluginManager().registerCommand(this, new LobbyCommand("hub"));

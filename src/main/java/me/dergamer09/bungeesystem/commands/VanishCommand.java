@@ -13,7 +13,7 @@ public class VanishCommand extends Command {
     private static final Set<ProxiedPlayer> vanishedPlayers = new HashSet<>();
 
     public VanishCommand() {
-        super("vanish", "bungeecord.command.vanish",  "v");
+        super("vanish", "bungeesystem.vanish",  "v");
     }
 
     @Override

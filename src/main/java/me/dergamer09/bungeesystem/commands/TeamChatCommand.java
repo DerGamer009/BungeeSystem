@@ -20,7 +20,7 @@ public class TeamChatCommand extends Command {
 
         ProxiedPlayer player = (ProxiedPlayer) sender;
 
-        if (!player.hasPermission("teamchat.use")) {
+        if (!player.hasPermission("bungeesystem.teamchat.use")) {
             player.sendMessage(ChatColor.RED + "You do not have permission to use this command.");
             return;
         }

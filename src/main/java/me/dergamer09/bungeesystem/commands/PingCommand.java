@@ -19,6 +19,6 @@ public class PingCommand extends Command {
         }
 
         ProxiedPlayer player = (ProxiedPlayer) sender;
-        player.sendMessage(ChatColor.GREEN + "Dein Ping " + ChatColor.YELLOW + player.getPing() + "ms");
+        player.sendMessage(ChatColor.GREEN + "Your Ping " + ChatColor.YELLOW + player.getPing() + "ms");
     }
 }
