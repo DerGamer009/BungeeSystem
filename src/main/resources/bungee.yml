@@ -85,3 +85,7 @@ commands:
     description: "Reveals a player's real username"
     usage: "/realname <nickname>"
     permission: "bungeesystem.realname"
+  maintenance:
+    description: "enabled/disable maintenance mode on your Server"
+    usage: "/maintenance"
+    permission: "bungeesystem.maintenance"

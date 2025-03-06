@@ -2,28 +2,22 @@ package me.dergamer09.bungeesystem;
 
 import me.dergamer09.bungeesystem.commands.*;
 import me.dergamer09.bungeesystem.listeners.PlayerEventListener;
+import me.dergamer09.bungeesystem.listeners.MotdListener;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
-import net.md_5.bungee.api.event.PlayerDisconnectEvent;
-import net.md_5.bungee.api.event.PostLoginEvent;
 import net.md_5.bungee.api.plugin.*;
 import net.md_5.bungee.api.config.ServerInfo;
-import net.md_5.bungee.command.PlayerCommand;
 import net.md_5.bungee.config.Configuration;
 import net.md_5.bungee.config.ConfigurationProvider;
 import net.md_5.bungee.config.YamlConfiguration;
-import net.md_5.bungee.event.EventHandler;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
-import java.nio.file.StandardCopyOption;
+
 import net.md_5.bungee.api.plugin.Plugin;
-import net.md_5.bungee.config.Configuration;
-import net.md_5.bungee.config.ConfigurationProvider;
-import net.md_5.bungee.config.YamlConfiguration;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -34,14 +28,13 @@ import java.net.URL;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.Base64;
 
 public final class BungeeSystem extends Plugin {
 
     private final String prefix = "&8| &cBungeeSystem &7» ";
     private String webhookUrl;
 
-    private final String currentVersion = "1.1.6";  // Deine aktuelle Version
+    private final String currentVersion = "1.1.7";  // Deine aktuelle Version
 
     private Configuration config;
     private File configFile;
@@ -73,6 +66,8 @@ public final class BungeeSystem extends Plugin {
         pm.registerCommand(this, new UptimeCommand());
         pm.registerCommand(this, new SendCommand());
         pm.registerCommand(this, new BroadcastCommand());
+        pm.registerCommand(this, new MaintenanceCommand());
+        pm.registerListener(this, new MotdListener());
         getProxy().getPluginManager().registerCommand(this, new LobbyCommand("l"));
         getProxy().getPluginManager().registerCommand(this, new LobbyCommand("lobby"));
         getProxy().getPluginManager().registerCommand(this, new LobbyCommand("hub"));
