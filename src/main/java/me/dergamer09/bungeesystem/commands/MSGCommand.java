@@ -50,7 +50,7 @@ public class MSGCommand extends Command {
         String message = messageBuilder.toString().trim();
 
         senderPlayer.sendMessage(new TextComponent("§7[§bYou §7→ §a" + targetPlayer.getName() + "§7] §f" + message));
-        targetPlayer.sendMessage(new TextComponent("§7[§a" + senderPlayer.getName() + "§7→ §bYou§7]" + message));
+        targetPlayer.sendMessage(new TextComponent("§7[§a" + senderPlayer.getName() + "§7→ §bYou§7] §f" + message));
 
         // Save the last message pair for both players
         BungeeSystem.lastMessageMap.put(senderPlayer.getUniqueId(), targetPlayer.getUniqueId());

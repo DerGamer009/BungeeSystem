@@ -77,6 +77,7 @@ public final class BungeeSystem extends Plugin {
         pm.registerListener(this, new MotdListener());
         pm.registerCommand(this, new MSGCommand());
         pm.registerCommand(this, new ReplyCommand());
+        pm.registerCommand(this, new IgnoreCommand());
         getProxy().getPluginManager().registerCommand(this, new LobbyCommand("l"));
         getProxy().getPluginManager().registerCommand(this, new LobbyCommand("lobby"));
         getProxy().getPluginManager().registerCommand(this, new LobbyCommand("hub"));
