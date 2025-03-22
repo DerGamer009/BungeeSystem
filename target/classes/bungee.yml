@@ -1,5 +1,5 @@
 name: BungeeSystem
-version: '1.1.6-BETA'
+version: '1.1.8-SNAPSHOT'
 main: me.dergamer09.bungeesystem.BungeeSystem
 author: 'DerGamer09'
 description: 'A BungeeCord plugin that provides various commands and features, including a report system with Discord webhook.'
@@ -73,10 +73,6 @@ commands:
     description: "Marks a player as AFK"
     usage: "/afk"
     permission: "bungeesystem.afk"
-  ignore:
-    description: "Blocks messages from a specific player"
-    usage: "/ignore <player>"
-    permission: "bungeesystem.ignore"
   nick:
     description: "Changes your nickname"
     usage: "/nick <name>"
@@ -85,3 +81,17 @@ commands:
     description: "Reveals a player's real username"
     usage: "/realname <nickname>"
     permission: "bungeesystem.realname"
+  maintenance:
+    description: "enabled/disable maintenance mode on your Server"
+    usage: "/maintenance"
+    permission: "bungeesystem.maintenance"
+  msg:
+    aliases: [ message, pm, tell ]
+    description: "Send a private message to a player"
+  reply:
+    aliases: [ r ]
+    description: "Reply to the last private message"
+  ignore:
+    description: "Blocks messages from a specific player"
+    usage: "/ignore <player>"
+    permission: "bungeesystem.ignore"

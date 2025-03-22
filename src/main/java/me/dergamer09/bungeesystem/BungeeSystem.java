@@ -28,13 +28,20 @@ import java.net.URL;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
 
 public final class BungeeSystem extends Plugin {
 
     private final String prefix = "&8| &cBungeeSystem &7» ";
     private String webhookUrl;
 
-    private final String currentVersion = "1.1.7";  // Deine aktuelle Version
+    public static final Map<UUID, UUID> lastMessageMap = new HashMap<>();
+    public static final Map<UUID, Set<UUID>> ignoredPlayers = new HashMap<>();
+
+    private final String currentVersion = "1.1.8-SNAPSHOT";  // Deine aktuelle Version
 
     private Configuration config;
     private File configFile;
@@ -68,6 +75,8 @@ public final class BungeeSystem extends Plugin {
         pm.registerCommand(this, new BroadcastCommand());
         pm.registerCommand(this, new MaintenanceCommand());
         pm.registerListener(this, new MotdListener());
+        pm.registerCommand(this, new MSGCommand());
+        pm.registerCommand(this, new ReplyCommand());
         getProxy().getPluginManager().registerCommand(this, new LobbyCommand("l"));
         getProxy().getPluginManager().registerCommand(this, new LobbyCommand("lobby"));
         getProxy().getPluginManager().registerCommand(this, new LobbyCommand("hub"));

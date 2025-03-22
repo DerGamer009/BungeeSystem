@@ -73,10 +73,6 @@ commands:
     description: "Marks a player as AFK"
     usage: "/afk"
     permission: "bungeesystem.afk"
-  ignore:
-    description: "Blocks messages from a specific player"
-    usage: "/ignore <player>"
-    permission: "bungeesystem.ignore"
   nick:
     description: "Changes your nickname"
     usage: "/nick <name>"
@@ -89,3 +85,13 @@ commands:
     description: "enabled/disable maintenance mode on your Server"
     usage: "/maintenance"
     permission: "bungeesystem.maintenance"
+  msg:
+    aliases: [ message, pm, tell ]
+    description: "Send a private message to a player"
+  reply:
+    aliases: [ r ]
+    description: "Reply to the last private message"
+  ignore:
+    description: "Blocks messages from a specific player"
+    usage: "/ignore <player>"
+    permission: "bungeesystem.ignore"
