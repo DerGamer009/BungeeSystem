@@ -60,6 +60,14 @@ public final class BungeeSystem extends Plugin {
             return;
         }
 
+        // Verbindung zur Datenbank herstellen
+        connectToDatabase();
+
+        if (connection == null) {
+            getLogger().severe("Database connection is null! Plugin will not fully work.");
+            return;
+        }
+
         // Registrierung der Befehle
         PluginManager pm = getProxy().getPluginManager();
         pm.registerCommand(this, new TeamChatCommand());
@@ -97,7 +105,6 @@ public final class BungeeSystem extends Plugin {
         getProxy().getPluginManager().registerListener(this, new PlayerEventListener(this));
 
         instance = this;
-        connectToDatabase();
 
         if (!getDataFolder().exists()) {
             getDataFolder().mkdir();
@@ -333,7 +340,7 @@ public final class BungeeSystem extends Plugin {
         return connection;
     }
 
-    // Verbindung zur MySQL-Datenbank herstellen
+    // Deine bereits vorhandene Methode
     private void connectToDatabase() {
         String host = config.getString("mysql.host");
         String port = config.getString("mysql.port");
@@ -341,7 +348,7 @@ public final class BungeeSystem extends Plugin {
         String username = config.getString("mysql.username");
         String password = config.getString("mysql.password");
 
-        String url = "jdbc:mysql://" + host + ":" + port + "/" + database;
+        String url = "jdbc:mysql://" + host + ":" + port + "/" + database + "?useSSL=false";
 
         try {
             connection = DriverManager.getConnection(url, username, password);
