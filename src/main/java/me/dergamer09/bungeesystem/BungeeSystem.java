@@ -1,13 +1,12 @@
 package me.dergamer09.bungeesystem;
 
+import me.dergamer09.bungeesystem.Managers.DatabaseManager;
+import me.dergamer09.bungeesystem.Runnables.OnlineTimeUpdater;
 import me.dergamer09.bungeesystem.commands.*;
-import me.dergamer09.bungeesystem.listeners.PlayerEventListener;
 import me.dergamer09.bungeesystem.listeners.MotdListener;
+import me.dergamer09.bungeesystem.listeners.PlayerEventListener;
 import net.md_5.bungee.api.ChatColor;
-import net.md_5.bungee.api.CommandSender;
-import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.*;
-import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.config.Configuration;
 import net.md_5.bungee.config.ConfigurationProvider;
 import net.md_5.bungee.config.YamlConfiguration;
@@ -25,13 +24,11 @@ import org.json.simple.parser.JSONParser;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 public final class BungeeSystem extends Plugin {
 
@@ -47,7 +44,8 @@ public final class BungeeSystem extends Plugin {
     private File configFile;
 
     private static BungeeSystem instance;
-    private Connection connection;
+
+    private DatabaseManager databaseManager;
 
     @Override
     public void onEnable() {
@@ -60,12 +58,12 @@ public final class BungeeSystem extends Plugin {
             return;
         }
 
-        // Verbindung zur Datenbank herstellen
-        connectToDatabase();
+        databaseManager = new DatabaseManager(getConfig());
+        databaseManager.connect();
+        databaseManager.setupTables();
 
-        if (connection == null) {
-            getLogger().severe("Database connection is null! Plugin will not fully work.");
-            return;
+        if (databaseManager.getConnection() == null) {
+            getLogger().severe("Database connection could not be established! Disabling plugin...");
         }
 
         // Registrierung der Befehle
@@ -86,23 +84,20 @@ public final class BungeeSystem extends Plugin {
         pm.registerCommand(this, new MSGCommand());
         pm.registerCommand(this, new ReplyCommand());
         pm.registerCommand(this, new IgnoreCommand());
-        getProxy().getPluginManager().registerCommand(this, new LobbyCommand("l"));
-        getProxy().getPluginManager().registerCommand(this, new LobbyCommand("lobby"));
-        getProxy().getPluginManager().registerCommand(this, new LobbyCommand("hub"));
-        getProxy().getPluginManager().registerCommand(this, new BlockBungeeCommand(this));
-        getProxy().getPluginManager().registerCommand(this, new ReportCommand());
-        getProxy().getPluginManager().registerCommand(this, new ListCommand(this));
-        getProxy().getPluginManager().registerCommand(this, new ToggleNotifyCommand());
+        pm.registerCommand(this, new BlockBungeeCommand(this));
+        pm.registerCommand(this, new ListCommand(this));
+        pm.registerCommand(this, new ToggleNotifyCommand());
+        pm.registerCommand(this, new OnlineTimeCommand());
+        pm.registerCommand(this, new LobbyCommand("lobby"));
+        pm.registerCommand(this, new LobbyCommand("hub"));
+        pm.registerCommand(this, new LobbyCommand("l"));
 
+        pm.registerListener(this, new PlayerEventListener());
 
-        // Registrierung des neuen OnlineTimeCommand
-        OnlineTimeCommand onlineTimeCommand = new OnlineTimeCommand(this);
-        getProxy().getPluginManager().registerCommand(this, onlineTimeCommand);
+        getProxy().getScheduler().schedule(this, new OnlineTimeUpdater(), 1L, 1L, TimeUnit.SECONDS);
 
         webhookUrl = getConfig().getString("webhookUrl");
         getLogger().info("Discord Webhook URL: " + webhookUrl);
-
-        getProxy().getPluginManager().registerListener(this, new PlayerEventListener(this));
 
         instance = this;
 
@@ -121,7 +116,9 @@ public final class BungeeSystem extends Plugin {
 
     @Override
     public void onDisable() {
-        closeDatabaseConnection();
+        if (databaseManager != null) {
+            databaseManager.close();
+        }
     }
 
     // Update Check from SpigotMC
@@ -178,97 +175,6 @@ public final class BungeeSystem extends Plugin {
             getLogger().severe(ChatColor.RED + "Fehler beim Extrahieren der Version aus der JSON-Antwort: " + e.getMessage());
         }
         return null;
-    }
-
-    // LobbyCommand Klasse für /l, /lobby und /hub
-    public class LobbyCommand extends Command {
-        public LobbyCommand(String name) {
-            super(name);
-        }
-
-        @Override
-        public void execute(CommandSender sender, String[] args) {
-            if (!(sender instanceof ProxiedPlayer)) {
-                sender.sendMessage(prefix + ChatColor.RED + "Dieser Befehl kann nur von einem Spieler ausgeführt werden.");
-                return;
-            }
-
-            ProxiedPlayer player = (ProxiedPlayer) sender;
-            ServerInfo lobby = getProxy().getServerInfo("Lobby");
-
-            if (lobby != null) {
-                player.connect(lobby);
-                player.sendMessage(prefix + ChatColor.GREEN + "Du wirst zur" + ChatColor.YELLOW + " Lobby" + ChatColor.GREEN + " teleportiert...");
-            } else {
-                player.sendMessage(prefix + ChatColor.RED + "Die" + ChatColor.YELLOW + " Lobby" + ChatColor.RED + " ist derzeit nicht verfügbar.");
-            }
-        }
-    }
-
-    // ReportCommand Klasse
-    public class ReportCommand extends Command {
-        public ReportCommand() {
-            super("report");
-        }
-
-        @Override
-        public void execute(CommandSender sender, String[] args) {
-            if (!(sender instanceof ProxiedPlayer)) {
-                sender.sendMessage(prefix + ChatColor.RED + "Dieser Befehl kann nur von einem Spieler ausgeführt werden.");
-                return;
-            }
-
-            ProxiedPlayer player = (ProxiedPlayer) sender;
-
-            if (args.length < 2) {
-                player.sendMessage(prefix + ChatColor.GRAY + "/report" + ChatColor.DARK_AQUA + " <Spieler>" + ChatColor.DARK_AQUA + " <Grund>");
-                return;
-            }
-
-            String reportedPlayer = args[0];
-            String reason = joinArray(args, 1, args.length);
-
-            player.sendMessage(prefix + ChatColor.GREEN + "Danke für deinen "+ ChatColor.YELLOW + "Report! " + ChatColor.GREEN + "Wir werden den Fall prüfen.");
-
-            // Nachricht an Discord Webhook senden
-            sendReportToDiscord(player.getName(), reportedPlayer, reason);
-        }
-
-        private void sendReportToDiscord(String reporter, String reportedPlayer, String reason) {
-            try {
-                URL url = new URL(webhookUrl);
-                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-                connection.setRequestMethod("POST");
-                connection.setRequestProperty("Content-Type", "application/json");
-                connection.setDoOutput(true);
-
-                String jsonPayload = String.format(
-                        "{\"content\": null, \"embeds\": [{\"title\": \"Neuer Report\",\"color\": 14177041,\"fields\": [" +
-                                "{\"name\": \"Reporter\",\"value\": \"%s\",\"inline\": true}," +
-                                "{\"name\": \"Gemeldeter Spieler\",\"value\": \"%s\",\"inline\": true}," +
-                                "{\"name\": \"Grund\",\"value\": \"%s\",\"inline\": false}]}]}",
-                        reporter, reportedPlayer, reason
-                );
-
-                try (OutputStream os = connection.getOutputStream()) {
-                    os.write(jsonPayload.getBytes());
-                    os.flush();
-                }
-
-                int responseCode = connection.getResponseCode();
-                if (responseCode == HttpURLConnection.HTTP_OK) {
-                    // Erfolg: Verbindung wird automatisch geschlossen
-                } else {
-                    // Fehlerbehandlung falls benötigt
-                    System.err.println(prefix + ChatColor.RED + "Fehler beim Senden des Reports. HTTP Fehlercode: " + responseCode);
-                }
-
-                connection.disconnect();
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
     }
 
     private void loadConfig() {
@@ -336,37 +242,8 @@ public final class BungeeSystem extends Plugin {
         return instance;
     }
 
-    public Connection getConnection() {
-        return connection;
-    }
-
-    // Deine bereits vorhandene Methode
-    private void connectToDatabase() {
-        String host = config.getString("mysql.host");
-        String port = config.getString("mysql.port");
-        String database = config.getString("mysql.database");
-        String username = config.getString("mysql.username");
-        String password = config.getString("mysql.password");
-
-        String url = "jdbc:mysql://" + host + ":" + port + "/" + database + "?useSSL=false";
-
-        try {
-            connection = DriverManager.getConnection(url, username, password);
-            getLogger().info("MySQL connection established.");
-        } catch (SQLException e) {
-            getLogger().severe("MySQL connection failed: " + e.getMessage());
-        }
-    }
-
-    private void closeDatabaseConnection() {
-        if (connection != null) {
-            try {
-                connection.close();
-                getLogger().info("MySQL connection closed.");
-            } catch (SQLException e) {
-                getLogger().severe("Failed to close MySQL connection: " + e.getMessage());
-            }
-        }
+    public DatabaseManager getDatabaseManager() {
+        return databaseManager;
     }
 
 }

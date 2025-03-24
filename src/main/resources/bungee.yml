@@ -4,26 +4,9 @@ main: me.dergamer09.bungeesystem.BungeeSystem
 author: 'DerGamer09'
 description: 'A BungeeCord plugin that provides various commands and features, including a report system with Discord webhook.'
 commands:
-  report:
-    description: 'Reports a player to the administrators.'
-    usage: '/report <player> <reason>'
-  l:
-    description: 'Teleports the player to the lobby.'
-    usage: '/l'
-  lobby:
-    description: 'Teleports the player to the lobby.'
-    usage: '/lobby'
-  hub:
-    description: 'Teleports the player to the lobby.'
-    usage: '/hub'
   bungee:
     description: 'A blocked command with permission check.'
     usage: '/bungee'
-  onlinetime:
-    description: "Shows the total online time of a player."
-    usage: "/onlinetime"
-    aliases: [ otime ]
-    permission: "bungeesystem.onlinetime"
   togglenotify:
     description: "Toggles all notifications"
     usage: "/togglenotify"
@@ -95,3 +78,12 @@ commands:
     description: "Blocks messages from a specific player"
     usage: "/ignore <player>"
     permission: "bungeesystem.ignore"
+  onlinetime:
+    aliases: [ otime ]
+    description: "Shows how long a player has been online"
+    usage: "/onlinetime [player]"
+    permission: "bungeesystem.onlinetime"
+  lobby:
+    aliases: [ hub, l ]
+    description: "Teleports the player to a random lobby server"
+    usage: "/lobby"

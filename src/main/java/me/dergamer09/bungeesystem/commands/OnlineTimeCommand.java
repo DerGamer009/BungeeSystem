@@ -5,60 +5,62 @@ import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.concurrent.TimeUnit;
-import java.util.logging.Level;
+import java.util.UUID;
 
 public class OnlineTimeCommand extends Command {
 
-    private final BungeeSystem plugin;
-
-    public OnlineTimeCommand(BungeeSystem plugin) {
-        super("onlinetime", "bungeesystem.onlinetime", "otime");
-        this.plugin = plugin;
+    public OnlineTimeCommand() {
+        super("onlinetime", null, "otime");
     }
 
     @Override
     public void execute(CommandSender sender, String[] args) {
-        if (!(sender instanceof ProxiedPlayer)) {
-            sender.sendMessage(plugin.getPrefix() + plugin.getErrorMessageColor() + "Dieser Befehl kann nur von einem Spieler ausgeführt werden.");
-            return;
-        }
+        UUID targetUUID;
+        String name;
 
-        ProxiedPlayer player = (ProxiedPlayer) sender;
-        String playerName = player.getName();
-
-        try (Connection connection = plugin.getConnection();
-             PreparedStatement statement = connection.prepareStatement("SELECT login_time FROM online_time WHERE player_name = ?")) {
-
-            statement.setString(1, playerName);
-            ResultSet resultSet = statement.executeQuery();
-
-            if (resultSet.next()) {
-                long loginTime = resultSet.getLong("login_time");
-                long currentTime = System.currentTimeMillis();
-                long onlineTimeMillis = currentTime - loginTime;
-
-                String formattedTime = formatTime(onlineTimeMillis);
-                player.sendMessage(plugin.getPrefix() + plugin.getSuccessMessageColor() + "Deine bisherige Online-Zeit: " + plugin.getUpdateMessageColor() + formattedTime);
-            } else {
-                player.sendMessage(plugin.getPrefix() + plugin.getErrorMessageColor() + "Es konnte keine Online-Zeit gefunden werden.");
+        if (args.length == 0) {
+            if (!(sender instanceof ProxiedPlayer)) {
+                sender.sendMessage("§cOnly players can use this command without arguments.");
+                return;
             }
-
-        } catch (SQLException e) {
-            plugin.getLogger().log(Level.SEVERE, "Fehler beim Abrufen der Online-Zeit aus der Datenbank: ", e);
-            player.sendMessage(plugin.getPrefix() + plugin.getErrorMessageColor() + "Ein Fehler ist aufgetreten.");
+            targetUUID = ((ProxiedPlayer) sender).getUniqueId();
+            name = ((ProxiedPlayer) sender).getName();
+        } else {
+            ProxiedPlayer target = BungeeSystem.getInstance().getProxy().getPlayer(args[0]);
+            if (target == null) {
+                sender.sendMessage("§cThat player is not online.");
+                return;
+            }
+            targetUUID = target.getUniqueId();
+            name = target.getName();
         }
-    }
 
-    private String formatTime(long millis) {
-        long hours = TimeUnit.MILLISECONDS.toHours(millis);
-        long minutes = TimeUnit.MILLISECONDS.toMinutes(millis) - TimeUnit.HOURS.toMinutes(hours);
-        long seconds = TimeUnit.MILLISECONDS.toSeconds(millis) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millis));
+        try (PreparedStatement ps = BungeeSystem.getInstance().getDatabaseManager().getConnection().prepareStatement(
+                "SELECT total_time FROM online_time WHERE player_uuid = ?")) {
+            ps.setString(1, targetUUID.toString());
 
-        return String.format("%02d Stunden, %02d Minuten, %02d Sekunden", hours, minutes, seconds);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    long millis = rs.getLong("total_time");
+                    long seconds = millis / 1000;
+                    long minutes = seconds / 60;
+                    long hours = minutes / 60;
+
+                    seconds %= 60;
+                    minutes %= 60;
+
+                    sender.sendMessage("§e" + name + " §7has been online for §a" +
+                            hours + "h " + minutes + "m " + seconds + "s§7.");
+                } else {
+                    sender.sendMessage("§cNo data found for that player.");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            sender.sendMessage("§cAn error occurred while retrieving data.");
+        }
     }
 }

@@ -1,5 +1,10 @@
 # config.yml
 
+lobbies:
+  - Lobby1
+  - Lobby2
+  - Lobby3
+
 prefix: "&8| &cBungeeSystem &7» "
 defaultMessageColor: "&7"
 updateMessageColor: "&e"

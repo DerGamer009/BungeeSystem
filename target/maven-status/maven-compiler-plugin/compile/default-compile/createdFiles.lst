@@ -1,11 +1,12 @@
 me\dergamer09\bungeesystem\commands\ReplyCommand.class
+me\dergamer09\bungeesystem\Managers\DatabaseManager.class
+me\dergamer09\bungeesystem\Runnables\OnlineTimeUpdater.class
 me\dergamer09\bungeesystem\commands\OnlineTimeCommand.class
 me\dergamer09\bungeesystem\commands\JoinMeCommand.class
 me\dergamer09\bungeesystem\commands\ServerListCommand.class
 me\dergamer09\bungeesystem\commands\TeamChatCommand.class
 me\dergamer09\bungeesystem\commands\ServerCommand.class
 me\dergamer09\bungeesystem\commands\FindCommand.class
-me\dergamer09\bungeesystem\BungeeSystem$LobbyCommand.class
 me\dergamer09\bungeesystem\BungeeSystem.class
 me\dergamer09\bungeesystem\commands\PingCommand.class
 me\dergamer09\bungeesystem\commands\SendCommand.class
@@ -13,11 +14,11 @@ me\dergamer09\bungeesystem\listeners\MotdListener.class
 me\dergamer09\bungeesystem\commands\BlockBungeeCommand.class
 me\dergamer09\bungeesystem\commands\VanishCommand.class
 me\dergamer09\bungeesystem\commands\PlayCommand.class
-me\dergamer09\bungeesystem\BungeeSystem$ReportCommand.class
 me\dergamer09\bungeesystem\commands\MSGCommand.class
 me\dergamer09\bungeesystem\commands\UptimeCommand.class
 me\dergamer09\bungeesystem\commands\MaintenanceCommand.class
 me\dergamer09\bungeesystem\commands\IgnoreCommand.class
+me\dergamer09\bungeesystem\commands\LobbyCommand.class
 me\dergamer09\bungeesystem\commands\ToggleNotifyCommand.class
 me\dergamer09\bungeesystem\listeners\PlayerEventListener.class
 me\dergamer09\bungeesystem\commands\BroadcastCommand.class
