@@ -1,0 +1,84 @@
+# Database configuration
+mysql:
+  host: "13.51.36.123"
+  port: "3306"
+  database: "s32_bungeesystem"
+  username: "u32_VejjxeK6M5"
+  password: "MYFf0eX!cK^JxuE^jZcDQeYV"
+  useSSL: false
+  autoReconnect: true
+  connectionTimeout: 30000
+  maxLifetime: 1800000
+  maximumPoolSize: 10
+  minimumIdle: 5
+
+lobbies:
+  - Lobby1
+  - Lobby2
+  - Lobby3
+
+prefix: "&8| &cBungeeSystem &7» "
+defaultMessageColor: "&7"
+updateMessageColor: "&e"
+successMessageColor: "&a"
+errorMessageColor: "&c"
+
+# Discord webhook configuration
+webhookUrl: "https://your-discord-webhook-url.com" #ReportSystem
+
+# Maintenance mode configuration
+maintenance:
+  enabled: false
+  whitelist:
+    - admin_uuid_here
+    - mod_uuid_here
+
+# Server restart command configuration
+restart:
+  enable_screen_command: true
+  screen_command_prefix: "screen -S mc_%server% -p 0 -X stuff"
+  restart_command: "stop\n"
+
+# Chat configuration
+chat:
+  # Global chat format with placeholders:
+  # %prefix%, %suffix%, %player%, %displayname%, %server%, %group%, %groupdisplay%, %message%
+  format: "%prefix%&r %player% &7» %message%"
+  global_prefix: "&6[G]"
+  
+  # Cooldown between global messages in seconds (0 to disable)
+  cooldown: 3
+  
+  # Team chat channel colors
+  channels:
+    admin: "&4"
+    support: "&6"
+    dev: "&b"
+    mod: "&2"
+    team: "&e"
+
+# Punishment system configuration
+punishments:
+  # Broadcast punishments to staff with this permission: bungeesystem.staff
+  broadcast_to_staff: true
+  
+  # Enable IP bans (bans all players connecting from the same IP)
+  enable_ip_bans: true
+  
+  # Auto-punishments based on warning count
+  auto_punish_warnings: true
+  warnings_to_mute: 3
+  warnings_to_ban: 5
+  
+  # Default durations and reasons for auto-punishments
+  auto_mute_reason_id: 2  # ID from the punishment_reasons table
+  auto_mute_duration: 86400000  # 1 day in milliseconds
+  auto_ban_reason_id: 1  # ID from the punishment_reasons table
+  auto_ban_duration: 604800000  # 7 days in milliseconds
+  
+  # Report system settings
+  report_cooldown_seconds: 60  # Cooldown between reports for the same player
+  notify_reporter_on_handled: true  # Notify the reporter when their report is handled
+  
+  # Punishment cleanup settings (removes expired punishments)
+  cleanup_interval_minutes: 5 

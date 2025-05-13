@@ -1,8 +1,9 @@
 name: BungeeSystem
-version: '${project.version}'
 main: me.dergamer09.bungeesystem.BungeeSystem
-author: 'DerGamer09'
-description: 'A BungeeCord plugin that provides various commands and features, including a report system with Discord webhook.'
+version: ${project.version}
+author: DerGamer09
+description: A comprehensive BungeeCord management system with team chat, global chat, and many administrative features
+softdepends: [LuckPerms]
 commands:
   bungee:
     description: 'A blocked command with permission check.'
@@ -17,6 +18,16 @@ commands:
     permission: "bungeesystem.teamchat.use"
     aliases: [ tc ]
     usage: "/teamchat"
+  staffchat:
+    description: 'Sends a message to all staff members'
+    permission: "bungeesystem.staffchat.use"
+    aliases: [ sc, staff ]
+    usage: "/staffchat <message>"
+  globalchat:
+    description: 'Sends a message to all players across all servers'
+    permission: "bungeesystem.globalchat.use"
+    aliases: [ g, global ]
+    usage: "/globalchat <message> or /g to toggle global chat mode"
   joinme:
     description: 'Broadcasts a message inviting players to join your server'
     permission: "bungeesystem.joinme.use"
@@ -58,15 +69,15 @@ commands:
     permission: "bungeesystem.afk"
   nick:
     description: "Changes your nickname"
-    usage: "/nick <name>"
+    usage: "/nick <n>"
     permission: "bungeesystem.nick"
   realname:
     description: "Reveals a player's real username"
     usage: "/realname <nickname>"
     permission: "bungeesystem.realname"
   maintenance:
-    description: "enabled/disable maintenance mode on your Server"
-    usage: "/maintenance"
+    description: "Enables/disables maintenance mode on your Server"
+    usage: "/maintenance [on|off]"
     permission: "bungeesystem.maintenance"
   msg:
     aliases: [ message, pm, tell ]
@@ -87,3 +98,59 @@ commands:
     aliases: [ hub, l ]
     description: "Teleports the player to a random lobby server"
     usage: "/lobby"
+  reloadconfig:
+    description: "Reloads configuration files (config.yml, messages.yml)"
+    usage: "/reloadconfig"
+    permission: "bungeesystem.admin.reload"
+  restart:
+    description: "Restarts a specified server"
+    usage: "/restart <server>"
+    permission: "bungeesystem.admin.restart"
+  seen:
+    description: "Shows when a player was last online"
+    usage: "/seen <player>"
+    permission: "bungeesystem.seen"
+  whois:
+    description: "Shows detailed information about a player"
+    usage: "/whois <player>"
+    permission: "bungeesystem.admin.whois"
+  stats:
+    description: "Shows player statistics like playtime, logins, and votes"
+    usage: "/stats [player]"
+    permission: "bungeesystem.stats.use"
+  top:
+    description: "Shows top players by various statistics"
+    usage: "/top [time|logins|votes] [limit]"
+    permission: "bungeesystem.top.use"
+  ban:
+    description: "Bans a player from the server"
+    usage: "/ban <player> <reason/id> [custom text]"
+    aliases: [ gban, tempban ]
+    permission: "bungeesystem.command.ban"
+  unban:
+    description: "Unbans a player from the server"
+    usage: "/unban <player> [reason]"
+    aliases: [ pardon ]
+    permission: "bungeesystem.command.unban"
+  mute:
+    description: "Prevents a player from chatting"
+    usage: "/mute <player> <reason/id> [custom text]"
+    aliases: [ gmute, tempmute ]
+    permission: "bungeesystem.command.mute"
+  unmute:
+    description: "Allows a player to chat again"
+    usage: "/unmute <player> [reason]"
+    permission: "bungeesystem.command.unmute"
+  warn:
+    description: "Issues a warning to a player"
+    usage: "/warn <player> <reason/id> [custom text]"
+    permission: "bungeesystem.command.warn"
+  report:
+    description: "Reports a player for breaking rules"
+    usage: "/report <player> <reason/id> [additional details]"
+    permission: "bungeesystem.command.report"
+  reports:
+    description: "Manages and views player reports"
+    usage: "/reports [handle|close <id> [comment]]"
+    aliases: [ reportlist ]
+    permission: "bungeesystem.command.reports"

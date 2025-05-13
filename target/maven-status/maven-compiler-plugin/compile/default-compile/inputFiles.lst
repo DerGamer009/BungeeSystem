@@ -1,11 +1,53 @@
-C:\Users\PhillippJäger\Documents\GitHub\BungeeSystem\src\main\java\me\dergamer09\bungeesystem\commands\TeamChatCommand.java
-C:\Users\PhillippJäger\Documents\GitHub\BungeeSystem\src\main\java\me\dergamer09\bungeesystem\commands\ToggleNotifyCommand.java
-C:\Users\PhillippJäger\Documents\GitHub\BungeeSystem\src\main\java\me\dergamer09\bungeesystem\listeners\PlayerEventListener.java
-C:\Users\PhillippJäger\Documents\GitHub\BungeeSystem\src\main\java\me\dergamer09\bungeesystem\commands\FindCommand.java
-C:\Users\PhillippJäger\Documents\GitHub\BungeeSystem\src\main\java\me\dergamer09\bungeesystem\commands\ServerListCommand.java
-C:\Users\PhillippJäger\Documents\GitHub\BungeeSystem\src\main\java\me\dergamer09\bungeesystem\commands\JoinMeCommand.java
-C:\Users\PhillippJäger\Documents\GitHub\BungeeSystem\src\main\java\me\dergamer09\bungeesystem\BungeeSystem.java
-C:\Users\PhillippJäger\Documents\GitHub\BungeeSystem\src\main\java\me\dergamer09\bungeesystem\commands\OnlineTimeCommand.java
-C:\Users\PhillippJäger\Documents\GitHub\BungeeSystem\src\main\java\me\dergamer09\bungeesystem\commands\ListCommand.java
-C:\Users\PhillippJäger\Documents\GitHub\BungeeSystem\src\main\java\me\dergamer09\bungeesystem\commands\BlockBungeeCommand.java
-C:\Users\PhillippJäger\Documents\GitHub\BungeeSystem\src\main\java\me\dergamer09\bungeesystem\commands\PingCommand.java
+C:\Users\PhillippJäger\OneDrive - HexNet Solutions\Dokumente\GitHub\BungeeSystem\src\main\java\me\dergamer09\bungeesystem\Managers\ConfigManager.java
+C:\Users\PhillippJäger\OneDrive - HexNet Solutions\Dokumente\GitHub\BungeeSystem\src\main\java\me\dergamer09\bungeesystem\BungeeSystem.java
+C:\Users\PhillippJäger\OneDrive - HexNet Solutions\Dokumente\GitHub\BungeeSystem\src\main\java\me\dergamer09\bungeesystem\Managers\PunishmentManager.java
+C:\Users\PhillippJäger\OneDrive - HexNet Solutions\Dokumente\GitHub\BungeeSystem\src\main\java\me\dergamer09\bungeesystem\commands\ServerListCommand.java
+C:\Users\PhillippJäger\OneDrive - HexNet Solutions\Dokumente\GitHub\BungeeSystem\src\main\java\me\dergamer09\bungeesystem\commands\IgnoreCommand.java
+C:\Users\PhillippJäger\OneDrive - HexNet Solutions\Dokumente\GitHub\BungeeSystem\src\main\java\me\dergamer09\bungeesystem\commands\SendCommand.java
+C:\Users\PhillippJäger\OneDrive - HexNet Solutions\Dokumente\GitHub\BungeeSystem\src\main\java\me\dergamer09\bungeesystem\commands\VanishCommand.java
+C:\Users\PhillippJäger\OneDrive - HexNet Solutions\Dokumente\GitHub\BungeeSystem\src\main\java\me\dergamer09\bungeesystem\commands\ServerCommand.java
+C:\Users\PhillippJäger\OneDrive - HexNet Solutions\Dokumente\GitHub\BungeeSystem\src\main\java\me\dergamer09\bungeesystem\commands\ToggleNotifyCommand.java
+C:\Users\PhillippJäger\OneDrive - HexNet Solutions\Dokumente\GitHub\BungeeSystem\src\main\java\me\dergamer09\bungeesystem\commands\MuteCommand.java
+C:\Users\PhillippJäger\OneDrive - HexNet Solutions\Dokumente\GitHub\BungeeSystem\src\main\java\me\dergamer09\bungeesystem\commands\ReloadConfigCommand.java
+C:\Users\PhillippJäger\OneDrive - HexNet Solutions\Dokumente\GitHub\BungeeSystem\src\main\java\me\dergamer09\bungeesystem\commands\ListCommand.java
+C:\Users\PhillippJäger\OneDrive - HexNet Solutions\Dokumente\GitHub\BungeeSystem\src\main\java\me\dergamer09\bungeesystem\commands\SeenCommand.java
+C:\Users\PhillippJäger\OneDrive - HexNet Solutions\Dokumente\GitHub\BungeeSystem\src\main\java\me\dergamer09\bungeesystem\commands\UptimeCommand.java
+C:\Users\PhillippJäger\OneDrive - HexNet Solutions\Dokumente\GitHub\BungeeSystem\src\main\java\me\dergamer09\bungeesystem\Managers\ChatManager.java
+C:\Users\PhillippJäger\OneDrive - HexNet Solutions\Dokumente\GitHub\BungeeSystem\src\main\java\me\dergamer09\bungeesystem\Runnables\OnlineTimeUpdater.java
+C:\Users\PhillippJäger\OneDrive - HexNet Solutions\Dokumente\GitHub\BungeeSystem\src\main\java\me\dergamer09\bungeesystem\commands\PlayCommand.java
+C:\Users\PhillippJäger\OneDrive - HexNet Solutions\Dokumente\GitHub\BungeeSystem\src\main\java\me\dergamer09\bungeesystem\Managers\UpdateManager.java
+C:\Users\PhillippJäger\OneDrive - HexNet Solutions\Dokumente\GitHub\BungeeSystem\src\main\java\me\dergamer09\bungeesystem\listeners\PunishmentListener.java
+C:\Users\PhillippJäger\OneDrive - HexNet Solutions\Dokumente\GitHub\BungeeSystem\src\main\java\me\dergamer09\bungeesystem\commands\BroadcastCommand.java
+C:\Users\PhillippJäger\OneDrive - HexNet Solutions\Dokumente\GitHub\BungeeSystem\src\main\java\me\dergamer09\bungeesystem\commands\ReportsCommand.java
+C:\Users\PhillippJäger\OneDrive - HexNet Solutions\Dokumente\GitHub\BungeeSystem\src\main\java\me\dergamer09\bungeesystem\commands\BlockBungeeCommand.java
+C:\Users\PhillippJäger\OneDrive - HexNet Solutions\Dokumente\GitHub\BungeeSystem\src\main\java\me\dergamer09\bungeesystem\Managers\StartupManager.java
+C:\Users\PhillippJäger\OneDrive - HexNet Solutions\Dokumente\GitHub\BungeeSystem\src\main\java\me\dergamer09\bungeesystem\commands\WarnCommand.java
+C:\Users\PhillippJäger\OneDrive - HexNet Solutions\Dokumente\GitHub\BungeeSystem\src\main\java\me\dergamer09\bungeesystem\commands\OnlineTimeCommand.java
+C:\Users\PhillippJäger\OneDrive - HexNet Solutions\Dokumente\GitHub\BungeeSystem\src\main\java\me\dergamer09\bungeesystem\listeners\ChatListener.java
+C:\Users\PhillippJäger\OneDrive - HexNet Solutions\Dokumente\GitHub\BungeeSystem\src\main\java\me\dergamer09\bungeesystem\Managers\CommandManager.java
+C:\Users\PhillippJäger\OneDrive - HexNet Solutions\Dokumente\GitHub\BungeeSystem\src\main\java\me\dergamer09\bungeesystem\commands\MaintenanceCommand.java
+C:\Users\PhillippJäger\OneDrive - HexNet Solutions\Dokumente\GitHub\BungeeSystem\src\main\java\me\dergamer09\bungeesystem\listeners\MotdListener.java
+C:\Users\PhillippJäger\OneDrive - HexNet Solutions\Dokumente\GitHub\BungeeSystem\src\main\java\me\dergamer09\bungeesystem\commands\GlobalChatCommand.java
+C:\Users\PhillippJäger\OneDrive - HexNet Solutions\Dokumente\GitHub\BungeeSystem\src\main\java\me\dergamer09\bungeesystem\commands\NickCommand.java
+C:\Users\PhillippJäger\OneDrive - HexNet Solutions\Dokumente\GitHub\BungeeSystem\src\main\java\me\dergamer09\bungeesystem\commands\AfkCommand.java
+C:\Users\PhillippJäger\OneDrive - HexNet Solutions\Dokumente\GitHub\BungeeSystem\src\main\java\me\dergamer09\bungeesystem\commands\ReportCommand.java
+C:\Users\PhillippJäger\OneDrive - HexNet Solutions\Dokumente\GitHub\BungeeSystem\src\main\java\me\dergamer09\bungeesystem\commands\UnbanCommand.java
+C:\Users\PhillippJäger\OneDrive - HexNet Solutions\Dokumente\GitHub\BungeeSystem\src\main\java\me\dergamer09\bungeesystem\commands\StatsCommand.java
+C:\Users\PhillippJäger\OneDrive - HexNet Solutions\Dokumente\GitHub\BungeeSystem\src\main\java\me\dergamer09\bungeesystem\commands\RestartCommand.java
+C:\Users\PhillippJäger\OneDrive - HexNet Solutions\Dokumente\GitHub\BungeeSystem\src\main\java\me\dergamer09\bungeesystem\Managers\StatsManager.java
+C:\Users\PhillippJäger\OneDrive - HexNet Solutions\Dokumente\GitHub\BungeeSystem\src\main\java\me\dergamer09\bungeesystem\commands\TeamChatCommand.java
+C:\Users\PhillippJäger\OneDrive - HexNet Solutions\Dokumente\GitHub\BungeeSystem\src\main\java\me\dergamer09\bungeesystem\commands\JoinMeCommand.java
+C:\Users\PhillippJäger\OneDrive - HexNet Solutions\Dokumente\GitHub\BungeeSystem\src\main\java\me\dergamer09\bungeesystem\commands\PingCommand.java
+C:\Users\PhillippJäger\OneDrive - HexNet Solutions\Dokumente\GitHub\BungeeSystem\src\main\java\me\dergamer09\bungeesystem\listeners\StatsListener.java
+C:\Users\PhillippJäger\OneDrive - HexNet Solutions\Dokumente\GitHub\BungeeSystem\src\main\java\me\dergamer09\bungeesystem\commands\FindCommand.java
+C:\Users\PhillippJäger\OneDrive - HexNet Solutions\Dokumente\GitHub\BungeeSystem\src\main\java\me\dergamer09\bungeesystem\Managers\ListenerManager.java
+C:\Users\PhillippJäger\OneDrive - HexNet Solutions\Dokumente\GitHub\BungeeSystem\src\main\java\me\dergamer09\bungeesystem\commands\BanCommand.java
+C:\Users\PhillippJäger\OneDrive - HexNet Solutions\Dokumente\GitHub\BungeeSystem\src\main\java\me\dergamer09\bungeesystem\commands\MSGCommand.java
+C:\Users\PhillippJäger\OneDrive - HexNet Solutions\Dokumente\GitHub\BungeeSystem\src\main\java\me\dergamer09\bungeesystem\commands\TopCommand.java
+C:\Users\PhillippJäger\OneDrive - HexNet Solutions\Dokumente\GitHub\BungeeSystem\src\main\java\me\dergamer09\bungeesystem\commands\LobbyCommand.java
+C:\Users\PhillippJäger\OneDrive - HexNet Solutions\Dokumente\GitHub\BungeeSystem\src\main\java\me\dergamer09\bungeesystem\commands\StaffChatCommand.java
+C:\Users\PhillippJäger\OneDrive - HexNet Solutions\Dokumente\GitHub\BungeeSystem\src\main\java\me\dergamer09\bungeesystem\commands\ReplyCommand.java
+C:\Users\PhillippJäger\OneDrive - HexNet Solutions\Dokumente\GitHub\BungeeSystem\src\main\java\me\dergamer09\bungeesystem\Managers\DatabaseManager.java
+C:\Users\PhillippJäger\OneDrive - HexNet Solutions\Dokumente\GitHub\BungeeSystem\src\main\java\me\dergamer09\bungeesystem\commands\WhoisCommand.java
+C:\Users\PhillippJäger\OneDrive - HexNet Solutions\Dokumente\GitHub\BungeeSystem\src\main\java\me\dergamer09\bungeesystem\commands\UnmuteCommand.java
+C:\Users\PhillippJäger\OneDrive - HexNet Solutions\Dokumente\GitHub\BungeeSystem\src\main\java\me\dergamer09\bungeesystem\listeners\PlayerEventListener.java

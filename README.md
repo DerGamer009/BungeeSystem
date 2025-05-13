@@ -9,6 +9,9 @@ Das **BungeeSystem** ist ein Plugin für BungeeCord, das verschiedene administra
 - **Bann- und Mutesystem**: Verwalte Bestrafungen direkt über BungeeCord.
 - **Automatische Nachrichten**: Ankündigungen und Auto-Broadcasts für Spieler.
 - **Proxy-übergreifender Chat**: Ermöglicht globale und private Nachrichten zwischen Servern.
+- **Spielerstatistiken**: Tracking von Spieleraktivitäten (Onlinezeit, Logins, Votes) mit Ranglisten.
+- **Quality-of-Life Funktionen**: AFK-Status, Nicknamen, Spielersuche und mehr.
+- **Verbesserte Datenbankverwaltung**: Effiziente Speicherung und Abruf von Daten mit Caching.
 
 ## Installation
 1. Lade das Plugin von [GitHub](https://github.com/DerGamer009/BungeeSystem) herunter.
@@ -19,12 +22,20 @@ Das **BungeeSystem** ist ein Plugin für BungeeCord, das verschiedene administra
 ## Befehle
 | Befehl                | Beschreibung                                |
 |----------------------|----------------------------------------|
-| `/bungee reload`    | Lädt das Plugin neu                    |
-| `/ban <Spieler>`    | Bannt einen Spieler                    |
-| `/unban <Spieler>`  | Entbannt einen Spieler                 |
-| `/mute <Spieler>`   | Mutet einen Spieler                    |
-| `/unmute <Spieler>` | Entmutet einen Spieler                 |
+| `/reloadconfig`      | Lädt die Plugin-Konfiguration neu      |
+| `/maintenance`       | Aktiviert/Deaktiviert den Wartungsmodus |
+| `/restart`           | Startet den BungeeCord-Proxy neu      |
+| `/ban <Spieler>`     | Bannt einen Spieler                    |
+| `/unban <Spieler>`   | Entbannt einen Spieler                 |
+| `/mute <Spieler>`    | Mutet einen Spieler                    |
+| `/unmute <Spieler>`  | Entmutet einen Spieler                 |
 | `/msg <Spieler> <Nachricht>` | Sendet eine private Nachricht |
+| `/stats [Spieler]`   | Zeigt Statistiken eines Spielers an    |
+| `/top <onlinetime/logins/votes>` | Zeigt Ranglisten der Spieler |
+| `/afk`               | Setzt den AFK-Status                   |
+| `/seen <Spieler>`    | Zeigt die letzte Aktivität eines Spielers |
+| `/nick <Nickname>`   | Ändert deinen Anzeigenamen             |
+| `/whois <Spieler>`   | Zeigt Informationen über einen Spieler |
 
 ## Berechtigungen
 | Permission             | Beschreibung |
@@ -32,12 +43,26 @@ Das **BungeeSystem** ist ein Plugin für BungeeCord, das verschiedene administra
 | `bungee.admin`      | Zugriff auf alle Admin-Befehle |
 | `bungee.moderator`  | Zugriff auf Moderations-Befehle |
 | `bungee.chat`       | Nutzung des globalen Chats |
+| `bungee.stats.view` | Statistiken anderer Spieler einsehen |
+| `bungee.stats.top`  | Zugriff auf Top-Ranglisten |
+
+## Architektur
+Das Plugin verwendet ein Manager-System für bessere Organisation:
+- **CommandManager**: Zentrale Verwaltung aller Befehle
+- **ListenerManager**: Verwaltet Event-Listener
+- **DatabaseManager**: Datenbankverbindungen und -abfragen
+- **StatsManager**: Verfolgt und verwaltet Spielerstatistiken
+- **ChatManager**: Verwaltet Chat-Funktionalitäten
+- **PunishmentManager**: Handhabt das Bestrafungssystem
 
 ## Konfiguration
 Die Konfigurationsdatei befindet sich unter `plugins/BungeeSystem/config.yml` und erlaubt die Anpassung von Nachrichten, Berechtigungen und weiteren Funktionen.
 
 ## Lizenz
 Dieses Plugin wird unter der **MIT-Lizenz** veröffentlicht. Mehr Details findest du in der `LICENSE`-Datei.
+
+## Änderungsprotokoll
+Eine vollständige Liste der Änderungen findest du in der [CHANGELOG.md](CHANGELOG.md) Datei.
 
 ## Kontakt
 Falls du Fragen oder Verbesserungsvorschläge hast, kannst du ein Issue im [GitHub-Repository](https://github.com/DerGamer009/BungeeSystem) erstellen oder den Entwickler direkt kontaktieren.
