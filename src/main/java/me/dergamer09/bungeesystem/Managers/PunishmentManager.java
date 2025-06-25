@@ -1298,6 +1298,20 @@ public class PunishmentManager {
         
         // Also log to console
         ProxyServer.getInstance().getConsole().sendMessage(new TextComponent(notification));
+
+        // Send notification to Discord webhook if configured
+        String webhookUrl = plugin.getWebhookUrl();
+        if (webhookUrl != null && !webhookUrl.isEmpty() && !webhookUrl.equals("https://your-discord-webhook-url.com")) {
+            String format = plugin.getConfig().getString("reportWebhookFormat",
+                    "New report #%id% against %player% by %reporter% on %server%: %reason%");
+            String webhookMessage = format
+                    .replace("%id%", String.valueOf(reportId))
+                    .replace("%player%", playerName)
+                    .replace("%reporter%", reporterName)
+                    .replace("%server%", serverName)
+                    .replace("%reason%", formattedReason);
+            me.dergamer09.bungeesystem.util.WebhookUtil.sendWebhook(webhookUrl, webhookMessage, plugin);
+        }
     }
     
     /**
