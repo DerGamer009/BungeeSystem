@@ -240,6 +240,16 @@ public class ChatManager {
     public boolean hasGlobalChatEnabled(ProxiedPlayer player) {
         return globalChatEnabled.contains(player.getUniqueId());
     }
+
+    /**
+     * Remove a player's chat state when they disconnect to avoid memory leaks.
+     *
+     * @param uuid The UUID of the disconnecting player
+     */
+    public void handlePlayerDisconnect(UUID uuid) {
+        playerChannels.remove(uuid);
+        globalChatEnabled.remove(uuid);
+    }
     
     /**
      * Send a global chat message to all players on the network
