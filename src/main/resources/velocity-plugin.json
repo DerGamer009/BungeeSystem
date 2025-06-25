@@ -1,0 +1,7 @@
+{
+  "id": "bungeesystem",
+  "name": "BungeeSystem",
+  "version": "${project.version}",
+  "main": "me.dergamer09.bungeesystem.velocity.VelocitySystem",
+  "author": "DerGamer09"
+}

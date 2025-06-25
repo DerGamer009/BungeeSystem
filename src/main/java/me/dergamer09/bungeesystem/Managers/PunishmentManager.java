@@ -1214,9 +1214,13 @@ public class PunishmentManager {
                     "reason", reasonName,
                     "id", String.valueOf(reportId))));
             
+
             // Notify online staff members
             notifyStaffOfReport(targetName, senderName, reasonName, customReason, serverName, reportId);
-            
+
+            // Send Discord webhook if configured
+            sendReportToWebhook(targetName, senderName, reasonName, customReason, serverName, reportId);
+
             return true;
             
         } catch (SQLException e) {
@@ -1274,7 +1278,7 @@ public class PunishmentManager {
      * @param serverName Server where the reported player is
      * @param reportId Report ID
      */
-    private void notifyStaffOfReport(String playerName, String reporterName, String reasonName, 
+    private void notifyStaffOfReport(String playerName, String reporterName, String reasonName,
             String customReason, String serverName, int reportId) {
         
         String formattedReason = reasonName;
@@ -1298,6 +1302,47 @@ public class PunishmentManager {
         
         // Also log to console
         ProxyServer.getInstance().getConsole().sendMessage(new TextComponent(notification));
+    }
+
+    /**
+     * Send a Discord webhook notification about a new report if configured.
+     */
+    private void sendReportToWebhook(String playerName, String reporterName, String reasonName, String customReason,
+                                     String serverName, int reportId) {
+        String webhook = plugin.getWebhookUrl();
+        if (webhook == null || webhook.isEmpty() || webhook.contains("your-discord-webhook-url")) {
+            return; // webhook not configured
+        }
+
+        String formattedReason = reasonName;
+        if (customReason != null && !customReason.isEmpty()) {
+            formattedReason += ": " + customReason;
+        }
+
+        String content = "**Neuer Report**\n" +
+                "Spieler: " + playerName + "\n" +
+                "Reporter: " + reporterName + "\n" +
+                "Grund: " + formattedReason + "\n" +
+                "Server: " + serverName + "\n" +
+                "ID: " + reportId;
+
+        try {
+            java.net.URL url = new java.net.URL(webhook);
+            java.net.HttpURLConnection conn = (java.net.HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("POST");
+            conn.setRequestProperty("Content-Type", "application/json");
+            conn.setDoOutput(true);
+
+            String payload = "{\"content\":\"" + content.replace("\"", "\\\"") + "\"}";
+            try (java.io.OutputStream os = conn.getOutputStream()) {
+                os.write(payload.getBytes(java.nio.charset.StandardCharsets.UTF_8));
+            }
+
+            conn.getResponseCode();
+            conn.disconnect();
+        } catch (Exception e) {
+            plugin.getLogger().warning("Failed to send Discord webhook: " + e.getMessage());
+        }
     }
     
     /**
