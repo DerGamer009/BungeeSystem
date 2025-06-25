@@ -4,6 +4,19 @@ Alle bemerkenswerten Änderungen an diesem Projekt werden in dieser Datei dokume
 
 Das Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.0.0/).
 
+## [1.2.1] - 2025
+
+### Hinzugefügt
+- Unterstützung für Velocity-Proxys mit einfachem Version-Befehl
+
+### Behoben
+- Aufräumen von Chat- und Nachrichten-Daten beim Spieleraustritt
+
+## [1.2.2] - 2025
+
+### Hinzugefügt
+- Benachrichtigung neuer Reports über Discord-Webhook
+
 ## [1.2.0] - 2023
 
 ### Hinzugefügt

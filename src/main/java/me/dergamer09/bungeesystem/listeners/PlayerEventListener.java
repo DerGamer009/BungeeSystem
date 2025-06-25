@@ -92,7 +92,15 @@ public class PlayerEventListener implements Listener {
             
             // Clear AFK status
             AfkCommand.clearAfk(uuid);
-            
+
+            // Cleanup chat state
+            plugin.getChatManager().handlePlayerDisconnect(uuid);
+
+            // Remove messaging data to avoid memory leaks
+            BungeeSystem.lastMessageMap.remove(uuid);
+            BungeeSystem.lastMessageMap.entrySet().removeIf(e -> uuid.equals(e.getValue()));
+            BungeeSystem.ignoredPlayers.remove(uuid);
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
