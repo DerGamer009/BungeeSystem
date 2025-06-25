@@ -12,6 +12,11 @@ Das Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.0.0/).
 ### Behoben
 - Aufräumen von Chat- und Nachrichten-Daten beim Spieleraustritt
 
+## [1.2.2] - 2025
+
+### Hinzugefügt
+- Benachrichtigung neuer Reports über Discord-Webhook
+
 ## [1.2.0] - 2023
 
 ### Hinzugefügt

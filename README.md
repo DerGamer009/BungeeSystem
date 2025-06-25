@@ -12,6 +12,7 @@ Das **BungeeSystem** ist ein Plugin für BungeeCord und seit Version 1.2.1 auch 
 - **Spielerstatistiken**: Tracking von Spieleraktivitäten (Onlinezeit, Logins, Votes) mit Ranglisten.
 - **Quality-of-Life Funktionen**: AFK-Status, Nicknamen, Spielersuche und mehr.
 - **Verbesserte Datenbankverwaltung**: Effiziente Speicherung und Abruf von Daten mit Caching.
+- **Report-System**: Spieler können Regelverstöße melden; optionaler Discord-Webhook zur Benachrichtigung.
 
 ## Installation
 1. Lade das Plugin von [GitHub](https://github.com/DerGamer009/BungeeSystem) herunter.
@@ -58,6 +59,7 @@ Das Plugin verwendet ein Manager-System für bessere Organisation:
 
 ## Konfiguration
 Die Konfigurationsdatei befindet sich unter `plugins/BungeeSystem/config.yml` und erlaubt die Anpassung von Nachrichten, Berechtigungen und weiteren Funktionen.
+Um Discord-Benachrichtigungen für neue Reports zu aktivieren, setze dort die Option `webhookUrl` auf deinen Webhook-Link.
 
 ## Lizenz
 Dieses Plugin wird unter der **MIT-Lizenz** veröffentlicht. Mehr Details findest du in der `LICENSE`-Datei.

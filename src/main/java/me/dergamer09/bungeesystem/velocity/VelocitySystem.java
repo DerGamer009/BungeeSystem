@@ -20,6 +20,7 @@ public class VelocitySystem {
 
     private final ProxyServer server;
     private final Logger logger;
+    private String webhookUrl = "";
 
     @Inject
     public VelocitySystem(ProxyServer server, Logger logger) {
@@ -29,16 +30,40 @@ public class VelocitySystem {
 
     @Subscribe
     public void onProxyInit(ProxyInitializeEvent event) {
+        webhookUrl = loadWebhook();
         logger.info("BungeeSystem loaded (Velocity compatibility mode).");
-        // Register a simple version command
+        // Register commands
         server.getCommandManager().register(
                 server.getCommandManager().metaBuilder("bsversion").plugin(this).build(),
                 new VersionCommand(VERSION)
+        );
+        server.getCommandManager().register(
+                server.getCommandManager().metaBuilder("report").plugin(this).build(),
+                new ReportCommand(server, webhookUrl)
         );
     }
 
     @Subscribe
     public void onProxyShutdown(ProxyShutdownEvent event) {
         logger.info("BungeeSystem disabled (Velocity compatibility mode).");
+    }
+
+    private String loadWebhook() {
+        java.nio.file.Path path = java.nio.file.Paths.get("plugins", "BungeeSystem", "config.yml");
+        if (!java.nio.file.Files.exists(path)) {
+            return "";
+        }
+        java.util.regex.Pattern p = java.util.regex.Pattern.compile("webhookUrl:\\s*\"?(.*?)\"?$");
+        try {
+            for (String line : java.nio.file.Files.readAllLines(path)) {
+                java.util.regex.Matcher m = p.matcher(line.trim());
+                if (m.find()) {
+                    return m.group(1);
+                }
+            }
+        } catch (Exception e) {
+            logger.warn("Failed to read webhookUrl: {}", e.getMessage());
+        }
+        return "";
     }
 }
