@@ -58,6 +58,7 @@ Das Plugin verwendet ein Manager-System für bessere Organisation:
 
 ## Konfiguration
 Die Konfigurationsdatei befindet sich unter `plugins/BungeeSystem/config.yml` und erlaubt die Anpassung von Nachrichten, Berechtigungen und weiteren Funktionen.
+Trage dort deine Discord **webhookUrl** ein, damit neue Reports automatisch an deinen Discord-Channel gemeldet werden. Über **reportWebhookFormat** kannst du das Nachrichtenformat festlegen. Änderungen an der URL oder dem Format werden erst nach `/reloadconfig` wirksam.
 
 ## Lizenz
 Dieses Plugin wird unter der **MIT-Lizenz** veröffentlicht. Mehr Details findest du in der `LICENSE`-Datei.
