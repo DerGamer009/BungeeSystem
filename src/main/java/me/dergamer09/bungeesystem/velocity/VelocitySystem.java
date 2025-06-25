@@ -13,10 +13,10 @@ import org.slf4j.Logger;
  * It currently only logs a startup message, but allows the
  * plugin jar to be loaded on Velocity proxies.
  */
-@Plugin(id = "bungeesystem", name = "BungeeSystem", version = "1.2.0-SNAPSHOT")
+@Plugin(id = "bungeesystem", name = "BungeeSystem", version = "1.2.2-SNAPSHOT")
 public class VelocitySystem {
 
-    private static final String VERSION = "1.2.0-SNAPSHOT";
+    private static final String VERSION = "1.2.2-SNAPSHOT";
 
     private final ProxyServer server;
     private final Logger logger;

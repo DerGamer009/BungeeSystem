@@ -1,7 +1,7 @@
 # BungeeSystem
 
 ## Beschreibung
-Das **BungeeSystem** ist ein Plugin für BungeeCord und seit Version 1.2.1 auch für Velocity, das verschiedene administrative und spielerbezogene Funktionen bietet. Es ermöglicht eine zentrale Steuerung des Netzwerks mit nützlichen Befehlen und Automatisierungen.
+Das **BungeeSystem** ist ein Plugin für BungeeCord und seit Version 1.2.2 auch für Velocity, das verschiedene administrative und spielerbezogene Funktionen bietet. Es ermöglicht eine zentrale Steuerung des Netzwerks mit nützlichen Befehlen und Automatisierungen.
 
 ## Funktionen
 - **Netzwerkweite Verwaltung**: Steuere dein BungeeCord- oder Velocity-Netzwerk mit einfachen Befehlen.

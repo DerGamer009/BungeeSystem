@@ -19,7 +19,7 @@ public final class BungeeSystem extends Plugin {
     private static BungeeSystem instance;
     
     // Version information
-    private final String currentVersion = "1.2.0-SNAPSHOT";
+    private final String currentVersion = "1.2.2-SNAPSHOT";
     
     // Management systems
     private DatabaseManager databaseManager;
