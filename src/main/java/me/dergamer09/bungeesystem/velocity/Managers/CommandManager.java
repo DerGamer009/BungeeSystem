@@ -16,7 +16,7 @@ public class CommandManager {
     }
 
     public void registerCommands() {
-        var cm = plugin.getServer().getCommandManager();
+        com.velocitypowered.api.command.CommandManager cm = plugin.getServer().getCommandManager();
         cm.register(cm.metaBuilder("bsversion").plugin(plugin).build(), new VersionCommand(plugin.getVersion()));
         cm.register(cm.metaBuilder("ping").plugin(plugin).build(), new PingCommand());
 
