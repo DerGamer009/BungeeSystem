@@ -23,10 +23,10 @@ public class PingCommand implements SimpleCommand {
         CommandSource source = invocation.source();
         if (source instanceof Player) {
             Player player = (Player) source;
-            String msg = configManager.getMessage("system.ping", "ping", String.valueOf(player.getPing()));
-            player.sendMessage(Component.text(msg));
+            Component msg = configManager.getMessageComponent("system.ping", "ping", String.valueOf(player.getPing()));
+            player.sendMessage(msg);
         } else {
-            source.sendMessage(Component.text(configManager.getMessage("general.player_only")));
+            source.sendMessage(configManager.getMessageComponent("general.player_only"));
         }
     }
 }
