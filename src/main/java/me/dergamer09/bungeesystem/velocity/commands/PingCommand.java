@@ -5,19 +5,28 @@ import com.velocitypowered.api.command.CommandSource;
 import com.velocitypowered.api.command.SimpleCommand.Invocation;
 import com.velocitypowered.api.proxy.Player;
 import net.kyori.adventure.text.Component;
+import me.dergamer09.bungeesystem.velocity.VelocitySystem;
+import me.dergamer09.bungeesystem.velocity.Managers.ConfigManager;
 
 /**
  * Simple ping command for Velocity.
  */
 public class PingCommand implements SimpleCommand {
+    private final ConfigManager configManager;
+
+    public PingCommand(VelocitySystem plugin) {
+        this.configManager = plugin.getConfigManager();
+    }
+
     @Override
     public void execute(Invocation invocation) {
         CommandSource source = invocation.source();
         if (source instanceof Player) {
             Player player = (Player) source;
-            player.sendMessage(Component.text("Pong: " + player.getPing() + "ms"));
+            String msg = configManager.getMessage("system.ping", "ping", String.valueOf(player.getPing()));
+            player.sendMessage(Component.text(msg));
         } else {
-            source.sendMessage(Component.text("This command can only be used by players."));
+            source.sendMessage(Component.text(configManager.getMessage("general.player_only")));
         }
     }
 }

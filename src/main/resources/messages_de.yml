@@ -16,6 +16,8 @@ system:
   server_not_found: "&cServer &e%server% &cnicht gefunden."
   server_restart_success: "&aStarte Server &e%server% &aneu..."
   server_restart_failed: "&cKonnte Server &e%server% &cnicht neu starten: &7%error%"
+  version: "&aBungeeSystem Version &e%version%"
+  ping: "&aPong: &e%ping%ms"
   
 whitelist:
   player_added: "&aPlayer &e%player% &ahas been added to the maintenance whitelist."
@@ -115,6 +117,43 @@ teamchat:
 staffchat:
   usage: "&eUsage: &f/staffchat <message> or /sc <message>"
   no_recipients: "&cNo staff members are online to receive your message."
+
+# Broadcast command messages
+broadcast:
+  usage: "&eBenutzung: &f/broadcast <Nachricht>"
+  prefix: "&6[Broadcast] &f"
+
+# Uptime command messages
+uptime:
+  server_uptime: "&aServer-Laufzeit: &e%seconds% Sekunden"
+
+# List command messages
+list:
+  online_players: "&aAktuell online (%count%): &e%players%"
+
+# Server command messages
+server:
+  list: "&aVerf\u00fcgbare Server: &e%servers%"
+
+serverlist:
+  list: "&aOnline-Server: &e%servers%"
+
+# Send command messages
+send:
+  usage: "&eVerwendung: &f/send <Spieler> <Server>"
+  success: "&a%player% wurde zu &e%server% &ageschickt"
+  player_or_server_not_found: "&cSpieler oder Server nicht gefunden."
+
+# Find command messages
+find:
+  usage: "&eVerwendung: &f/find <Spieler>"
+  player_location: "&e%player% &aist momentan auf &e%server%"
+  player_not_found: "&cSpieler %player% nicht gefunden oder offline."
+
+# BlockBungee command messages
+blockbungee:
+  allowed: "&aDu hast die Berechtigung. Proxy-Version: &e%version%"
+  not_allowed: "&cEntschuldigung, dieser Befehl ist nicht erlaubt."
 
 # Global Chat command messages
 globalchat:
