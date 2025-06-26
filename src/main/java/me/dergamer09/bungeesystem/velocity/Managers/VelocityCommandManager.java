@@ -1,6 +1,7 @@
 package me.dergamer09.bungeesystem.velocity.Managers;
 
 import com.velocitypowered.api.command.CommandManager;
+import com.velocitypowered.api.command.SimpleCommand;
 import me.dergamer09.bungeesystem.velocity.VelocitySystem;
 import me.dergamer09.bungeesystem.velocity.VersionCommand;
 import me.dergamer09.bungeesystem.velocity.commands.*;
@@ -59,7 +60,7 @@ public class VelocityCommandManager {
         registerPlaceholder(cm, "whois", new WhoisCommand());
     }
 
-    private void registerPlaceholder(CommandManager cm, String name, BaseVelocityCommand command) {
+    private void registerPlaceholder(CommandManager cm, String name, SimpleCommand command) {
         cm.register(cm.metaBuilder(name).plugin(plugin).build(), command);
     }
 }
