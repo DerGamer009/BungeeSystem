@@ -11,6 +11,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 /**
  * Simplified configuration manager for Velocity.
@@ -78,6 +81,11 @@ public class ConfigManager {
         return config;
     }
 
+    public void reloadAll() throws IOException {
+        loadConfig();
+        loadMessages();
+    }
+
     public String getMessage(String path) {
         if (messages == null) {
             return "§cMessages configuration not loaded.";
@@ -87,5 +95,57 @@ public class ConfigManager {
             return "§cMessage not found: " + path;
         }
         return ChatColor.translateAlternateColorCodes('&', message);
+    }
+
+    public String getMessage(String path, String... replacements) {
+        String message = getMessage(path);
+        if (replacements.length % 2 != 0) {
+            return message;
+        }
+        for (int i = 0; i < replacements.length; i += 2) {
+            message = message.replace("%" + replacements[i] + "%", replacements[i + 1]);
+        }
+        return message;
+    }
+
+    public List<UUID> getMaintenanceWhitelist() {
+        List<String> list = config.getStringList("maintenance.whitelist");
+        List<UUID> uuids = new ArrayList<>();
+        for (String uuidStr : list) {
+            try {
+                uuids.add(UUID.fromString(uuidStr));
+            } catch (IllegalArgumentException ignored) {
+            }
+        }
+        return uuids;
+    }
+
+    public void saveConfig() {
+        try {
+            ConfigurationProvider.getProvider(YamlConfiguration.class).save(config, configFile);
+        } catch (IOException e) {
+            logger.error("Error saving config", e);
+        }
+    }
+
+    public void addToWhitelist(UUID uuid) {
+        List<String> whitelist = config.getStringList("maintenance.whitelist");
+        if (!whitelist.contains(uuid.toString())) {
+            whitelist.add(uuid.toString());
+            config.set("maintenance.whitelist", whitelist);
+            saveConfig();
+        }
+    }
+
+    public void removeFromWhitelist(UUID uuid) {
+        List<String> whitelist = config.getStringList("maintenance.whitelist");
+        whitelist.remove(uuid.toString());
+        config.set("maintenance.whitelist", whitelist);
+        saveConfig();
+    }
+
+    public boolean isInWhitelist(UUID uuid) {
+        List<String> whitelist = config.getStringList("maintenance.whitelist");
+        return whitelist.contains(uuid.toString());
     }
 }
