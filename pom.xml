@@ -63,6 +63,10 @@
           <id>luck-repo</id>
           <url>https://repo.lucko.me/</url>
       </repository>
+      <repository>
+          <id>velocitypowered</id>
+          <url>https://nexus.velocitypowered.com/repository/maven-public/</url>
+      </repository>
   </repositories>
 
   <dependencies>
