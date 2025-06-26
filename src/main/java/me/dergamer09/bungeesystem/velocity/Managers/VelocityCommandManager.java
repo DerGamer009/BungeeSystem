@@ -8,10 +8,10 @@ import me.dergamer09.bungeesystem.velocity.commands.*;
 /**
  * Registers placeholder commands for Velocity.
  */
-public class CommandManager {
+public class VelocityCommandManager {
     private final VelocitySystem plugin;
 
-    public CommandManager(VelocitySystem plugin) {
+    public VelocityCommandManager(VelocitySystem plugin) {
         this.plugin = plugin;
     }
 
