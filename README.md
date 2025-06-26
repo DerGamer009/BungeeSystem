@@ -12,6 +12,8 @@ Das **BungeeSystem** ist ein Plugin für BungeeCord und seit Version 1.2.1 auch 
 - **Spielerstatistiken**: Tracking von Spieleraktivitäten (Onlinezeit, Logins, Votes) mit Ranglisten.
 - **Quality-of-Life Funktionen**: AFK-Status, Nicknamen, Spielersuche und mehr.
 - **Verbesserte Datenbankverwaltung**: Effiziente Speicherung und Abruf von Daten mit Caching.
+- **Mehrsprachiger Support**: Nachrichten stehen auf Deutsch und Englisch zur Verfügung ("language" in der Config).
+- **Individuelle Nachrichtendateien**: Passe Texte über `messages_en.yml` bzw. `messages_de.yml` an.
 
 ## Installation
 1. Lade das Plugin von [GitHub](https://github.com/DerGamer009/BungeeSystem) herunter.
@@ -36,7 +38,10 @@ Das **BungeeSystem** ist ein Plugin für BungeeCord und seit Version 1.2.1 auch 
 | `/seen <Spieler>`    | Zeigt die letzte Aktivität eines Spielers |
 | `/nick <Nickname>`   | Ändert deinen Anzeigenamen             |
 | `/whois <Spieler>`   | Zeigt Informationen über einen Spieler |
+| `/ping`              | Zeigt deinen Ping (Velocity) |
 | `/bsversion`         | Zeigt die aktuell installierte Version (Velocity) |
+
+Bei Verwendung mit Velocity sind die meisten Befehle derzeit Platzhalter und geben nur einfache Meldungen aus.
 
 ## Berechtigungen
 | Permission             | Beschreibung |

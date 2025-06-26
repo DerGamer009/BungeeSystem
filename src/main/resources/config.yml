@@ -18,6 +18,7 @@ lobbies:
   - Lobby3
 
 prefix: "&8| &cBungeeSystem &7» "
+language: "en" # Available: en, de
 defaultMessageColor: "&7"
 updateMessageColor: "&e"
 successMessageColor: "&a"

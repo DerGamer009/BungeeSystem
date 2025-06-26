@@ -55,24 +55,26 @@ public class ConfigManager {
     }
 
     public void loadMessages() {
-        messagesFile = new File(plugin.getDataFolder(), "messages.yml");
+        String lang = config.getString("language", "en");
+        messagesFile = new File(plugin.getDataFolder(), "messages_" + lang + ".yml");
 
         if (!messagesFile.exists()) {
-            try (InputStream in = plugin.getResourceAsStream("messages.yml")) {
+            String resourceName = "messages_" + lang + ".yml";
+            try (InputStream in = plugin.getResourceAsStream(resourceName)) {
                 if (in != null) {
                     Files.copy(in, messagesFile.toPath());
                 } else {
-                    plugin.getLogger().severe("Could not find messages.yml inside the plugin jar!");
+                    plugin.getLogger().severe("Could not find " + resourceName + " inside the plugin jar!");
                 }
             } catch (IOException e) {
-                plugin.getLogger().severe("Error creating messages.yml: " + e.getMessage());
+                plugin.getLogger().severe("Error creating " + resourceName + ": " + e.getMessage());
             }
         }
 
         try {
             messages = ConfigurationProvider.getProvider(YamlConfiguration.class).load(messagesFile);
         } catch (IOException e) {
-            plugin.getLogger().severe("Error loading messages.yml: " + e.getMessage());
+            plugin.getLogger().severe("Error loading messages file: " + e.getMessage());
         }
     }
 
@@ -81,7 +83,7 @@ public class ConfigManager {
     }
 
     public void reloadMessages() throws IOException {
-        messages = ConfigurationProvider.getProvider(YamlConfiguration.class).load(messagesFile);
+        loadMessages();
     }
 
     public void reloadAll() throws IOException {
