@@ -1,0 +1,124 @@
+# Messages configuration file for BungeeSystem
+# All color codes use the & symbol (e.g., &a for green)
+
+general:
+  prefix: "&8| &cBungeeSystem &7» "
+  no_permission: "&cDu hast keine Berechtigung für diesen Befehl."
+  player_only: "&cDieser Befehl kann nur von Spielern genutzt werden."
+  unknown_command: "&cUnbekannter Befehl."
+  
+system:
+  reload_success: "&aKonfigurationsdateien wurden erfolgreich neu geladen."
+  reload_failed: "&cFehler beim Neuladen der Konfiguration: &7%error%"
+  maintenance_enabled: "&aWartungsmodus wurde &eaktiviert&a. Nur Whitelist-Spieler können joinen."
+  maintenance_disabled: "&aWartungsmodus wurde &edeaktiviert&a."
+  player_not_found: "&cSpieler &e%player% &cnicht gefunden."
+  server_not_found: "&cServer &e%server% &cnicht gefunden."
+  server_restart_success: "&aStarte Server &e%server% &aneu..."
+  server_restart_failed: "&cKonnte Server &e%server% &cnicht neu starten: &7%error%"
+  
+whitelist:
+  player_added: "&aPlayer &e%player% &ahas been added to the maintenance whitelist."
+  player_removed: "&aPlayer &e%player% &ahas been removed from the maintenance whitelist."
+  
+# Connection messages
+join:
+  maintenance_kick: "&cThe server is currently in maintenance mode."
+  maintenance_kick_info: "&7Please try again later."
+
+# AFK command messages
+afk:
+  usage: "&eUsage: &f/afk"
+  player_now_afk: "&7%player% &eis now AFK."
+  player_no_longer_afk: "&7%player% &eis no longer AFK."
+
+# Seen command messages
+seen:
+  usage: "&eUsage: &f/seen <player>"
+  currently_online: "&7%player% &ais currently online."
+  player_never_joined: "&7%player% &chas never joined this server."
+  no_last_seen_data: "&cNo last seen data found for &7%player%&c."
+  last_seen: "&7%player% &ewas last seen on &7%date% &e(&7%time_ago%&e)"
+  database_error: "&cDatabase error: &7%error%"
+
+# Nick command messages
+nick:
+  usage: "&eUsage: &f/nick <nickname> or /nick off"
+  invalid_format: "&cInvalid nickname format. Use 3-16 alphanumeric characters."
+  already_taken: "&cThat nickname is already taken by another player."
+  changed: "&aYour nickname has been changed to &e%nickname%&a."
+  reset: "&aYour nickname has been reset to your original name."
+
+# Whois command messages
+whois:
+  usage: "&eUsage: &f/whois <player>"
+  player_not_found: "&cPlayer &e%player% &cnot found."
+  no_additional_info: "&cNo additional information found for &e%player%&c."
+  database_error: "&cDatabase error: &7%error%"
+  header: "&8=== &e&lPlayer Info: &f%player% &8==="
+  uuid: "&eUUID: &7%uuid%"
+  online_status: "&eStatus: &7%status%"
+  ip: "&eIP Address: &7%ip%"
+  current_server: "&eServer: &7%server%"
+  nickname: "&eNickname: &7%nickname%"
+  afk_status: "&eAFK: &7%status%"
+  first_joined: "&eFirst joined: &7%date%"
+  last_seen: "&eLast seen: &7%date% &e(&7%time_ago%&e)"
+  total_online_time: "&eTotal online time: &7%time%"
+  footer: "&8================================="
+
+# Stats command messages
+stats:
+  usage: "&eUsage: &f/stats [player]"
+  console_must_specify_player: "&cConsole must specify a player name."
+  player_not_found: "&cPlayer &e%player% &cnot found."
+  no_stats_found: "&cNo statistics found for &e%player%&c."
+  database_error: "&cDatabase error: &7%error%"
+  header: "&8=== &e&lStatistics: &f%player% &8==="
+  first_joined: "&eFirst joined: &7%date%"
+  last_seen: "&eLast seen: &7%date%"
+  online_time: "&eTime played: &7%time%"
+  login_count: "&eLogins: &7%count%"
+  votes: "&eVotes: &7%count%"
+  messages: "&eMessages sent: &7%count%"
+  footer: "&8================================="
+
+# Top players command messages
+top:
+  usage: "&eUsage: &f/top [time|logins|votes] [limit]"
+  invalid_stat_type: "&cInvalid statistic type: &e%type%"
+  invalid_limit: "&cInvalid limit: &e%limit%"
+  no_data: "&cNo player data found."
+  header: "&8=== &e&lTop %limit% Players by %stat_type% &8==="
+  stat_type:
+    online_time: "Time Played"
+    login_count: "Logins"
+    votes: "Votes"
+  entry: "&e#%rank%. &f%player% &7- &e%value%"
+  footer: "&8================================="
+
+# Team Chat command messages
+teamchat:
+  usage_header: "&8=== &e&lTeam Chat Help &8==="
+  usage_message: "&e/tc <message> &7- Send a message to the team chat"
+  usage_channel: "&e/tc channel <channel> &7- Switch to a specific channel"
+  usage_direct: "&e/tc <channel> <message> &7- Send directly to a channel"
+  available_channels: "&eAvailable channels: &7%channels%"
+  no_permission: "&cYou don't have permission to use this chat channel."
+  player_only: "&cOnly players can switch chat channels."
+  current_channel: "&eYou are currently in the &7%channel% &echannel."
+  channel_set: "&eYou have switched to the &7%channel% &echannel."
+  channel_no_permission: "&cYou don't have permission to use that channel."
+  invalid_channel: "&cInvalid channel. Use one of the available channels."
+
+# Staff Chat command messages
+staffchat:
+  usage: "&eUsage: &f/staffchat <message> or /sc <message>"
+  no_recipients: "&cNo staff members are online to receive your message."
+
+# Global Chat command messages
+globalchat:
+  usage: "&eUsage: &f/g <message> or /g to toggle global chat mode"
+  enabled: "&aGlobal chat mode &eenabled&a. All your messages will be sent to global chat."
+  disabled: "&aGlobal chat mode &edisabled&a. Your messages will be sent to server chat."
+  cooldown: "&cPlease wait before sending another global message."

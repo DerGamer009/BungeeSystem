@@ -7,11 +7,16 @@ import com.velocitypowered.api.event.proxy.ProxyShutdownEvent;
 import com.velocitypowered.api.plugin.Plugin;
 import com.velocitypowered.api.proxy.ProxyServer;
 import org.slf4j.Logger;
+import org.slf4j.event.Level;
+import java.nio.file.Path;
+
+import me.dergamer09.bungeesystem.velocity.Managers.CommandManager;
+import me.dergamer09.bungeesystem.velocity.Managers.ConfigManager;
+import me.dergamer09.bungeesystem.velocity.Managers.ListenerManager;
+import me.dergamer09.bungeesystem.velocity.Runnables.OnlineTimeUpdater;
 
 /**
- * Minimal Velocity entry point for BungeeSystem.
- * It currently only logs a startup message, but allows the
- * plugin jar to be loaded on Velocity proxies.
+ * Velocity entry point for BungeeSystem.
  */
 @Plugin(id = "bungeesystem", name = "BungeeSystem", version = "1.2.0-SNAPSHOT")
 public class VelocitySystem {
@@ -20,25 +25,40 @@ public class VelocitySystem {
 
     private final ProxyServer server;
     private final Logger logger;
+    private final Path dataDirectory;
+
+    private ConfigManager configManager;
+    private CommandManager commandManager;
+    private ListenerManager listenerManager;
 
     @Inject
-    public VelocitySystem(ProxyServer server, Logger logger) {
+    public VelocitySystem(ProxyServer server, Logger logger, @com.google.inject.name.Named("dataDirectory") Path dataDirectory) {
         this.server = server;
         this.logger = logger;
+        this.dataDirectory = dataDirectory;
     }
+
+    public ProxyServer getServer() { return server; }
+    public String getVersion() { return VERSION; }
 
     @Subscribe
     public void onProxyInit(ProxyInitializeEvent event) {
         logger.info("BungeeSystem loaded (Velocity compatibility mode).");
-        // Register a simple version command
-        server.getCommandManager().register(
-                server.getCommandManager().metaBuilder("bsversion").plugin(this).build(),
-                new VersionCommand(VERSION)
-        );
+        configManager = new ConfigManager(logger, getClass().getClassLoader(), dataDirectory);
+        commandManager = new CommandManager(this);
+        listenerManager = new ListenerManager(this, logger);
+
+        commandManager.registerCommands();
+        listenerManager.registerListeners();
+
+        // Schedule placeholder task
+        server.getScheduler().buildTask(this, new OnlineTimeUpdater(this)).repeat(1L).schedule();
     }
 
     @Subscribe
     public void onProxyShutdown(ProxyShutdownEvent event) {
         logger.info("BungeeSystem disabled (Velocity compatibility mode).");
     }
+
+    public ConfigManager getConfigManager() { return configManager; }
 }
