@@ -18,6 +18,7 @@ lobbies:
   - Lobby3
 
 prefix: "&8| &cBungeeSystem &7» "
+language: "en" # Available: en, de
 defaultMessageColor: "&7"
 updateMessageColor: "&e"
 successMessageColor: "&a"
@@ -25,6 +26,7 @@ errorMessageColor: "&c"
 
 # Discord webhook configuration
 webhookUrl: "https://your-discord-webhook-url.com" #ReportSystem
+reportWebhookFormat: "New report #%id% against %player% by %reporter% on %server%: %reason%"
 
 # Maintenance mode configuration
 maintenance:

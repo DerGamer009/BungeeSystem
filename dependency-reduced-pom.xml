@@ -4,7 +4,7 @@
   <groupId>me.dergamer09</groupId>
   <artifactId>BungeeSystem</artifactId>
   <name>BungeeSystem</name>
-  <version>1.2.0-SNAPSHOT</version>
+  <version>1.2.1-BETA</version>
   <build>
     <defaultGoal>clean package</defaultGoal>
     <resources>
@@ -49,6 +49,10 @@
       <id>luck-repo</id>
       <url>https://repo.lucko.me/</url>
     </repository>
+    <repository>
+      <id>velocitypowered</id>
+      <url>https://nexus.velocitypowered.com/repository/maven-public/</url>
+    </repository>
   </repositories>
   <dependencies>
     <dependency>
@@ -61,6 +65,12 @@
       <groupId>net.luckperms</groupId>
       <artifactId>api</artifactId>
       <version>5.4</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.velocitypowered</groupId>
+      <artifactId>velocity-api</artifactId>
+      <version>3.1.1</version>
       <scope>provided</scope>
     </dependency>
   </dependencies>
