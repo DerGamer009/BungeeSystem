@@ -10,7 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.event.Level;
 import java.nio.file.Path;
 
-import me.dergamer09.bungeesystem.velocity.Managers.CommandManager;
+import me.dergamer09.bungeesystem.velocity.Managers.VelocityCommandManager;
 import me.dergamer09.bungeesystem.velocity.Managers.ConfigManager;
 import me.dergamer09.bungeesystem.velocity.Managers.ListenerManager;
 import me.dergamer09.bungeesystem.velocity.Runnables.OnlineTimeUpdater;
@@ -28,7 +28,7 @@ public class VelocitySystem {
     private final Path dataDirectory;
 
     private ConfigManager configManager;
-    private CommandManager commandManager;
+    private VelocityCommandManager commandManager;
     private ListenerManager listenerManager;
 
     @Inject
@@ -45,7 +45,7 @@ public class VelocitySystem {
     public void onProxyInit(ProxyInitializeEvent event) {
         logger.info("BungeeSystem loaded (Velocity compatibility mode).");
         configManager = new ConfigManager(logger, getClass().getClassLoader(), dataDirectory);
-        commandManager = new CommandManager(this);
+        commandManager = new VelocityCommandManager(this);
         listenerManager = new ListenerManager(this, logger);
 
         commandManager.registerCommands();
