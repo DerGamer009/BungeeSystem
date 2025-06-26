@@ -6,7 +6,6 @@ import com.velocitypowered.api.command.SimpleCommand.Invocation;
 import com.velocitypowered.api.proxy.Player;
 import me.dergamer09.bungeesystem.velocity.Managers.ConfigManager;
 import me.dergamer09.bungeesystem.velocity.VelocitySystem;
-import net.kyori.adventure.text.Component;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -31,7 +30,7 @@ public class NickCommand implements SimpleCommand {
         CommandSource source = invocation.source();
         String[] args = invocation.arguments();
         if (!(source instanceof Player)) {
-            source.sendMessage(Component.text(configManager.getMessage("general.player_only")));
+            source.sendMessage(configManager.getMessageComponent("general.player_only"));
             return;
         }
         Player player = (Player) source;
@@ -48,12 +47,12 @@ public class NickCommand implements SimpleCommand {
         }
 
         if (!VALID_NICKNAME.matcher(nickname).matches()) {
-            player.sendMessage(Component.text(configManager.getMessage("nick.invalid_format")));
+            player.sendMessage(configManager.getMessageComponent("nick.invalid_format"));
             return;
         }
 
         if (isNicknameTaken(nickname, player.getUniqueId())) {
-            player.sendMessage(Component.text(configManager.getMessage("nick.already_taken")));
+            player.sendMessage(configManager.getMessageComponent("nick.already_taken"));
             return;
         }
 
@@ -63,12 +62,12 @@ public class NickCommand implements SimpleCommand {
         }
 
         if (player.hasPermission("bungeesystem.nick.color")) {
-            nickname = net.md_5.bungee.api.ChatColor.translateAlternateColorCodes('&', nickname);
+            nickname = ConfigManager.translateColorCodes(nickname);
         }
 
         nicknames.put(player.getUniqueId(), nickname);
         nicknameToUUID.put(nickname.toLowerCase(), player.getUniqueId());
-        player.sendMessage(Component.text(configManager.getMessage("nick.changed", "nickname", nickname)));
+        player.sendMessage(configManager.getMessageComponent("nick.changed", "nickname", nickname));
     }
 
     private void resetNickname(Player player) {
@@ -76,11 +75,11 @@ public class NickCommand implements SimpleCommand {
         if (oldNick != null) {
             nicknameToUUID.remove(oldNick.toLowerCase());
         }
-        player.sendMessage(Component.text(configManager.getMessage("nick.reset")));
+        player.sendMessage(configManager.getMessageComponent("nick.reset"));
     }
 
     private boolean isNicknameTaken(String nickname, UUID uuid) {
-        nickname = net.md_5.bungee.api.ChatColor.translateAlternateColorCodes('&', nickname).toLowerCase();
+        nickname = ConfigManager.translateColorCodes(nickname).toLowerCase();
         UUID existing = nicknameToUUID.get(nickname);
         return existing != null && !existing.equals(uuid);
     }

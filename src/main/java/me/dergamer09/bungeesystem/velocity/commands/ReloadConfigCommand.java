@@ -5,7 +5,6 @@ import com.velocitypowered.api.command.CommandSource;
 import com.velocitypowered.api.command.SimpleCommand.Invocation;
 import me.dergamer09.bungeesystem.velocity.VelocitySystem;
 import me.dergamer09.bungeesystem.velocity.Managers.ConfigManager;
-import net.kyori.adventure.text.Component;
 
 import java.io.IOException;
 
@@ -21,10 +20,10 @@ public class ReloadConfigCommand implements SimpleCommand {
         CommandSource source = invocation.source();
         try {
             configManager.reloadAll();
-            source.sendMessage(Component.text(configManager.getMessage("system.reload_success")));
+            source.sendMessage(configManager.getMessageComponent("system.reload_success"));
         } catch (IOException e) {
-            source.sendMessage(Component.text(
-                    configManager.getMessage("system.reload_failed", "error", e.getMessage())
+            source.sendMessage(configManager.getMessageComponent(
+                    "system.reload_failed", "error", e.getMessage()
             ));
         }
     }

@@ -1,10 +1,11 @@
 package me.dergamer09.bungeesystem.velocity.Managers;
 
-import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.config.Configuration;
 import net.md_5.bungee.config.ConfigurationProvider;
 import net.md_5.bungee.config.YamlConfiguration;
 import org.slf4j.Logger;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 
 import java.io.File;
 import java.io.IOException;
@@ -94,7 +95,7 @@ public class ConfigManager {
         if (message == null) {
             return "§cMessage not found: " + path;
         }
-        return ChatColor.translateAlternateColorCodes('&', message);
+        return translateColorCodes(message);
     }
 
     public String getMessage(String path, String... replacements) {
@@ -108,6 +109,11 @@ public class ConfigManager {
         return message;
     }
 
+    public Component getMessageComponent(String path, String... replacements) {
+        String msg = getMessage(path, replacements);
+        return LegacyComponentSerializer.legacySection().deserialize(msg);
+    }
+
     public List<UUID> getMaintenanceWhitelist() {
         List<String> list = config.getStringList("maintenance.whitelist");
         List<UUID> uuids = new ArrayList<>();
@@ -118,6 +124,31 @@ public class ConfigManager {
             }
         }
         return uuids;
+    }
+
+    public static String translateColorCodes(String text) {
+        return translateColorCodes('&', text);
+    }
+
+    public static String translateColorCodes(char altColorChar, String text) {
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < text.length(); i++) {
+            char c = text.charAt(i);
+            if (c == altColorChar && i + 1 < text.length()) {
+                char next = text.charAt(i + 1);
+                if (isColorCode(next)) {
+                    builder.append('\u00A7').append(Character.toLowerCase(next));
+                    i++;
+                    continue;
+                }
+            }
+            builder.append(c);
+        }
+        return builder.toString();
+    }
+
+    private static boolean isColorCode(char c) {
+        return "0123456789AaBbCcDdEeFfKkLlMmNnOoRr".indexOf(c) >= 0;
     }
 
     public void saveConfig() {
