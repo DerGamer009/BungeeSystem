@@ -6,6 +6,7 @@ import com.velocitypowered.api.event.proxy.ProxyInitializeEvent;
 import com.velocitypowered.api.event.proxy.ProxyShutdownEvent;
 import com.velocitypowered.api.plugin.Plugin;
 import com.velocitypowered.api.proxy.ProxyServer;
+import com.velocitypowered.api.plugin.annotation.DataDirectory;
 import org.slf4j.Logger;
 import org.slf4j.event.Level;
 import java.nio.file.Path;
@@ -32,7 +33,7 @@ public class VelocitySystem {
     private ListenerManager listenerManager;
 
     @Inject
-    public VelocitySystem(ProxyServer server, Logger logger, @com.google.inject.name.Named("dataDirectory") Path dataDirectory) {
+    public VelocitySystem(ProxyServer server, Logger logger, @DataDirectory Path dataDirectory) {
         this.server = server;
         this.logger = logger;
         this.dataDirectory = dataDirectory;
