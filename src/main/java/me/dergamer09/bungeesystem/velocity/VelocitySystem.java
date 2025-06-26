@@ -52,7 +52,8 @@ public class VelocitySystem {
         listenerManager.registerListeners();
 
         // Schedule placeholder task
-        server.getScheduler().buildTask(this, new OnlineTimeUpdater(this)).repeat(1L).schedule();
+        server.getScheduler().buildTask(this, new OnlineTimeUpdater(this))
+                .repeat(java.time.Duration.ofSeconds(1)).schedule();
     }
 
     @Subscribe

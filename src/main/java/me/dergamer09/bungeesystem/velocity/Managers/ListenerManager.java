@@ -1,7 +1,7 @@
 package me.dergamer09.bungeesystem.velocity.Managers;
 
 import com.velocitypowered.api.event.Subscribe;
-import com.velocitypowered.api.event.player.PlayerDisconnectEvent;
+import com.velocitypowered.api.event.connection.DisconnectEvent;
 import me.dergamer09.bungeesystem.velocity.VelocitySystem;
 import org.slf4j.Logger;
 
@@ -23,7 +23,7 @@ public class ListenerManager {
 
     // Example listener for disconnects
     @Subscribe
-    public void onDisconnect(PlayerDisconnectEvent event) {
+    public void onDisconnect(DisconnectEvent event) {
         logger.info(event.getPlayer().getUsername() + " disconnected.");
     }
 }
