@@ -24,7 +24,11 @@ public class BlockBungeeCommand implements SimpleCommand {
     public void execute(Invocation invocation) {
         CommandSource source = invocation.source();
         if (source.hasPermission("bungeesystem.allow.bungee")) {
-            String msg = configManager.getMessage("blockbungee.allowed", "version", server.getVersion());
+            String msg = configManager.getMessage(
+                    "blockbungee.allowed",
+                    "version",
+                    server.getVersion().getVersion()
+            );
             source.sendMessage(Component.text(msg));
         } else if (source.hasPermission("bungeesystem.notallowd.bungee")) {
             source.sendMessage(Component.text(configManager.getMessage("blockbungee.not_allowed")));
