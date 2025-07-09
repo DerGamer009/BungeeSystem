@@ -15,6 +15,7 @@ import org.bstats.velocity.Metrics;
 import me.dergamer09.bungeesystem.velocity.Managers.VelocityCommandManager;
 import me.dergamer09.bungeesystem.velocity.Managers.ConfigManager;
 import me.dergamer09.bungeesystem.velocity.Managers.ListenerManager;
+import me.dergamer09.bungeesystem.velocity.Managers.MotdManager;
 import me.dergamer09.bungeesystem.velocity.Runnables.OnlineTimeUpdater;
 
 /**
@@ -33,8 +34,10 @@ public class VelocitySystem {
     private ConfigManager configManager;
     private VelocityCommandManager commandManager;
     private ListenerManager listenerManager;
+    private MotdManager motdManager;
     private Metrics metrics;
-    private static final int BSTATS_PLUGIN_ID = 26442;
+    // Use the dedicated bStats plugin ID for Velocity
+    private static final int BSTATS_PLUGIN_ID = 26443;
 
     @Inject
     public VelocitySystem(ProxyServer server, Logger logger, @DataDirectory Path dataDirectory, Metrics.Factory metricsFactory) {
@@ -52,6 +55,7 @@ public class VelocitySystem {
         logger.info("BungeeSystem loaded (Velocity compatibility mode).");
         metrics = metricsFactory.make(this, BSTATS_PLUGIN_ID);
         configManager = new ConfigManager(logger, getClass().getClassLoader(), dataDirectory);
+        motdManager = new MotdManager(configManager);
         commandManager = new VelocityCommandManager(this);
         listenerManager = new ListenerManager(this, logger);
 
@@ -69,4 +73,5 @@ public class VelocitySystem {
     }
 
     public ConfigManager getConfigManager() { return configManager; }
+    public MotdManager getMotdManager() { return motdManager; }
 }
