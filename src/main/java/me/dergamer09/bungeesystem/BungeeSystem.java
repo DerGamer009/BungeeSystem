@@ -1,6 +1,7 @@
 package me.dergamer09.bungeesystem;
 
 import me.dergamer09.bungeesystem.Managers.*;
+import org.bstats.bungeecord.Metrics;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.config.Configuration;
 
@@ -31,6 +32,10 @@ public final class BungeeSystem extends Plugin {
     private StatsManager statsManager;
     private ChatManager chatManager;
     private PunishmentManager punishmentManager;
+
+    // bStats metrics
+    private Metrics metrics;
+    private static final int BSTATS_PLUGIN_ID = 26442;
     
     // Plugin data
     private Configuration config;
@@ -47,6 +52,9 @@ public final class BungeeSystem extends Plugin {
         
         // Initialize managers
         initializeManagers();
+
+        // Start bStats metrics
+        metrics = new Metrics(this, BSTATS_PLUGIN_ID);
         
         // Initialize database with detailed diagnostics and retry
         if (!initializeDatabase()) {

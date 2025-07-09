@@ -10,6 +10,7 @@ import com.velocitypowered.api.plugin.annotation.DataDirectory;
 import org.slf4j.Logger;
 import org.slf4j.event.Level;
 import java.nio.file.Path;
+import org.bstats.velocity.Metrics;
 
 import me.dergamer09.bungeesystem.velocity.Managers.VelocityCommandManager;
 import me.dergamer09.bungeesystem.velocity.Managers.ConfigManager;
@@ -27,16 +28,20 @@ public class VelocitySystem {
     private final ProxyServer server;
     private final Logger logger;
     private final Path dataDirectory;
+    private final Metrics.Factory metricsFactory;
 
     private ConfigManager configManager;
     private VelocityCommandManager commandManager;
     private ListenerManager listenerManager;
+    private Metrics metrics;
+    private static final int BSTATS_PLUGIN_ID = 26442;
 
     @Inject
-    public VelocitySystem(ProxyServer server, Logger logger, @DataDirectory Path dataDirectory) {
+    public VelocitySystem(ProxyServer server, Logger logger, @DataDirectory Path dataDirectory, Metrics.Factory metricsFactory) {
         this.server = server;
         this.logger = logger;
         this.dataDirectory = dataDirectory;
+        this.metricsFactory = metricsFactory;
     }
 
     public ProxyServer getServer() { return server; }
@@ -45,6 +50,7 @@ public class VelocitySystem {
     @Subscribe
     public void onProxyInit(ProxyInitializeEvent event) {
         logger.info("BungeeSystem loaded (Velocity compatibility mode).");
+        metrics = metricsFactory.make(this, BSTATS_PLUGIN_ID);
         configManager = new ConfigManager(logger, getClass().getClassLoader(), dataDirectory);
         commandManager = new VelocityCommandManager(this);
         listenerManager = new ListenerManager(this, logger);
