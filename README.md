@@ -65,6 +65,9 @@ Das Plugin verwendet ein Manager-System für bessere Organisation:
 Die Konfigurationsdatei befindet sich unter `plugins/BungeeSystem/config.yml` und erlaubt die Anpassung von Nachrichten, Berechtigungen und weiteren Funktionen.
 Trage dort deine Discord **webhookUrl** ein, damit neue Reports automatisch an deinen Discord-Channel gemeldet werden. Über **reportWebhookFormat** kannst du das Nachrichtenformat festlegen. Änderungen an der URL oder dem Format werden erst nach `/reloadconfig` wirksam.
 
+## bStats
+Dieses Plugin verwendet [bStats](https://bstats.org/), um anonyme Nutzungsstatistiken zu sammeln. Über die globale bStats-Konfigurationsdatei kann das Tracking jederzeit deaktiviert werden.
+
 ## Lizenz
 Dieses Plugin wird unter der **MIT-Lizenz** veröffentlicht. Mehr Details findest du in der `LICENSE`-Datei.
 
