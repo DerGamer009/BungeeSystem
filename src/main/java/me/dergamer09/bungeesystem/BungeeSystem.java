@@ -32,6 +32,7 @@ public final class BungeeSystem extends Plugin {
     private StatsManager statsManager;
     private ChatManager chatManager;
     private PunishmentManager punishmentManager;
+    private MotdManager motdManager;
 
     // bStats metrics
     private Metrics metrics;
@@ -113,6 +114,7 @@ public final class BungeeSystem extends Plugin {
         updateManager = new UpdateManager(this, currentVersion);
         startupManager = new StartupManager(this, currentVersion);
         chatManager = new ChatManager(this);
+        motdManager = new MotdManager(this);
         
         // Set webhook URL from config
         webhookUrl = config.getString("webhookUrl", "");
@@ -216,6 +218,13 @@ public final class BungeeSystem extends Plugin {
      */
     public ChatManager getChatManager() {
         return chatManager;
+    }
+
+    /**
+     * Get the MOTD manager
+     */
+    public MotdManager getMotdManager() {
+        return motdManager;
     }
     
     /**

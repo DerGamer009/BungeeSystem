@@ -29,7 +29,7 @@ public class ListenerManager {
         PluginManager pm = plugin.getProxy().getPluginManager();
         
         // Register listeners
-        pm.registerListener(plugin, new MotdListener());
+        pm.registerListener(plugin, new MotdListener(plugin));
         pm.registerListener(plugin, new PlayerEventListener());
         pm.registerListener(plugin, new StatsListener(plugin));
         pm.registerListener(plugin, new ChatListener(plugin));
@@ -48,5 +48,4 @@ public class ListenerManager {
             1L, 
             TimeUnit.SECONDS
         );
-    }
-} 
+    }} 
