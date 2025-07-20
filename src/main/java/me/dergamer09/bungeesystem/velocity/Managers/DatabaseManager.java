@@ -118,4 +118,48 @@ public class DatabaseManager {
         }
         return list;
     }
+
+    /**
+     * Retrieve a player's UUID from the database using their name.
+     *
+     * @param playerName the player's name
+     * @return UUID of the player or null if not found
+     */
+    public UUID getUUIDFromName(String playerName) {
+        if (connection == null) {
+            return null;
+        }
+        try {
+            PreparedStatement ps = connection.prepareStatement(
+                    "SELECT uuid FROM player_data WHERE name = ? LIMIT 1");
+            ps.setString(1, playerName);
+
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                UUID uuid = UUID.fromString(rs.getString("uuid"));
+                rs.close();
+                ps.close();
+                return uuid;
+            }
+            rs.close();
+            ps.close();
+
+            ps = connection.prepareStatement(
+                    "SELECT uuid FROM player_stats WHERE name = ? LIMIT 1");
+            ps.setString(1, playerName);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                UUID uuid = UUID.fromString(rs.getString("uuid"));
+                rs.close();
+                ps.close();
+                return uuid;
+            }
+            rs.close();
+            ps.close();
+            return null;
+        } catch (SQLException e) {
+            logger.error("Failed to get UUID for player {}: {}", playerName, e.getMessage());
+            return null;
+        }
+    }
 }

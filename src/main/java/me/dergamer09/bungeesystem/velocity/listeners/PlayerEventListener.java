@@ -1,7 +1,7 @@
 package me.dergamer09.bungeesystem.velocity.listeners;
 
 import com.velocitypowered.api.event.Subscribe;
-import com.velocitypowered.api.event.player.PostLoginEvent;
+import com.velocitypowered.api.event.connection.PostLoginEvent;
 import com.velocitypowered.api.proxy.Player;
 import me.dergamer09.bungeesystem.velocity.VelocitySystem;
 import me.dergamer09.bungeesystem.velocity.commands.MaintenanceCommand;

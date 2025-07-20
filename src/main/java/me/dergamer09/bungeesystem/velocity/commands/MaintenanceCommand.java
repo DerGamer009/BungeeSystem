@@ -83,25 +83,43 @@ public class MaintenanceCommand implements SimpleCommand {
     private void handleWhitelist(CommandSource sender, String[] args) {
         if (args[1].equalsIgnoreCase("add") && args.length >= 3) {
             Player target = server.getPlayer(args[2]).orElse(null);
-            if (target == null) {
-                sender.sendMessage(Component.text(configManager.getMessage("system.player_not_found", "player", args[2])));
-                return;
+            UUID uuid;
+            String name = args[2];
+
+            if (target != null) {
+                uuid = target.getUniqueId();
+                name = target.getUsername();
+            } else {
+                uuid = plugin.getDatabaseManager().getUUIDFromName(name);
+                if (uuid == null) {
+                    sender.sendMessage(Component.text(configManager.getMessage("system.player_not_found", "player", name)));
+                    return;
+                }
             }
-            UUID uuid = target.getUniqueId();
+
             configManager.addToWhitelist(uuid);
-            sender.sendMessage(Component.text(configManager.getMessage("whitelist.player_added", "player", target.getUsername())));
+            sender.sendMessage(Component.text(configManager.getMessage("whitelist.player_added", "player", name)));
             return;
         }
         if (args[1].equalsIgnoreCase("remove") && args.length >= 3) {
             Player target = server.getPlayer(args[2]).orElse(null);
-            if (target == null) {
-                sender.sendMessage(Component.text(configManager.getMessage("system.player_not_found", "player", args[2])));
-                return;
+            UUID uuid;
+            String name = args[2];
+
+            if (target != null) {
+                uuid = target.getUniqueId();
+                name = target.getUsername();
+            } else {
+                uuid = plugin.getDatabaseManager().getUUIDFromName(name);
+                if (uuid == null) {
+                    sender.sendMessage(Component.text(configManager.getMessage("system.player_not_found", "player", name)));
+                    return;
+                }
             }
-            UUID uuid = target.getUniqueId();
+
             configManager.removeFromWhitelist(uuid);
-            sender.sendMessage(Component.text(configManager.getMessage("whitelist.player_removed", "player", target.getUsername())));
-            if (maintenanceMode && target.isActive()) {
+            sender.sendMessage(Component.text(configManager.getMessage("whitelist.player_removed", "player", name)));
+            if (maintenanceMode && target != null && target.isActive()) {
                 target.disconnect(Component.text(configManager.getMessage("join.maintenance_kick") + "\n" +
                         configManager.getMessage("join.maintenance_kick_info")));
             }
