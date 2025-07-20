@@ -47,6 +47,20 @@ public class MaintenanceCommand extends Command {
             return;
         }
 
+        if (args.length >= 2 && args[0].equalsIgnoreCase("whitelist") && args[1].equalsIgnoreCase("list")) {
+            StringBuilder list = new StringBuilder("§aWhitelisted players: §e");
+            for (UUID uuid : configManager.getMaintenanceWhitelist()) {
+                ProxiedPlayer p = ProxyServer.getInstance().getPlayer(uuid);
+                String name = (p != null) ? p.getName() : uuid.toString();
+                list.append(name).append(", ");
+            }
+            if (list.lastIndexOf(", ") == list.length() - 2) {
+                list.setLength(list.length() - 2);
+            }
+            sender.sendMessage(new TextComponent(list.toString()));
+            return;
+        }
+
         if (args.length >= 1) {
             if (args[0].equalsIgnoreCase("on")) {
                 maintenanceMode = true;
@@ -106,6 +120,7 @@ public class MaintenanceCommand extends Command {
         sender.sendMessage(new TextComponent("§eUsage: §f/maintenance [on|off]"));
         sender.sendMessage(new TextComponent("§eUsage: §f/maintenance whitelist add <player>"));
         sender.sendMessage(new TextComponent("§eUsage: §f/maintenance whitelist remove <player>"));
+        sender.sendMessage(new TextComponent("§eUsage: §f/maintenance whitelist list"));
     }
 
     private void kickNonWhitelistedPlayers() {

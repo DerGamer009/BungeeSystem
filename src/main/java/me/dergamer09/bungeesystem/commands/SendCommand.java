@@ -15,6 +15,23 @@ public class SendCommand extends Command {
 
     @Override
     public void execute(CommandSender sender, String[] args) {
+        if (args.length == 1) {
+            // /send <server> - send the command sender to the server
+            if (!(sender instanceof ProxiedPlayer)) {
+                sender.sendMessage(ChatColor.RED + "This command can only be used by players!");
+                return;
+            }
+
+            ServerInfo server = BungeeSystem.getInstance().getProxy().getServerInfo(args[0]);
+            if (server != null) {
+                ((ProxiedPlayer) sender).connect(server);
+                sender.sendMessage(ChatColor.GREEN + "Connecting you to " + ChatColor.YELLOW + server.getName() + ChatColor.GREEN + "...");
+            } else {
+                sender.sendMessage(ChatColor.RED + "Server not found!");
+            }
+            return;
+        }
+
         if (args.length < 2) {
             sender.sendMessage(ChatColor.RED + "Usage: /send <player> <server>");
             return;
