@@ -82,30 +82,45 @@ public class MaintenanceCommand extends Command {
             if (args[0].equalsIgnoreCase("whitelist") && args.length >= 3) {
                 if (args[1].equalsIgnoreCase("add") && args.length >= 3) {
                     ProxiedPlayer target = ProxyServer.getInstance().getPlayer(args[2]);
-                    if (target == null) {
-                        sender.sendMessage(new TextComponent(configManager.getMessage("system.player_not_found", "player", args[2])));
-                        return;
+                    UUID uuid;
+                    String name = args[2];
+
+                    if (target != null) {
+                        uuid = target.getUniqueId();
+                        name = target.getName();
+                    } else {
+                        uuid = plugin.getDatabaseManager().getUUIDFromName(name);
+                        if (uuid == null) {
+                            sender.sendMessage(new TextComponent(configManager.getMessage("system.player_not_found", "player", name)));
+                            return;
+                        }
                     }
-                    
-                    UUID uuid = target.getUniqueId();
+
                     configManager.addToWhitelist(uuid);
-                    sender.sendMessage(new TextComponent(configManager.getMessage("whitelist.player_added", "player", target.getName())));
+                    sender.sendMessage(new TextComponent(configManager.getMessage("whitelist.player_added", "player", name)));
                     return;
                 }
                 
                 if (args[1].equalsIgnoreCase("remove") && args.length >= 3) {
                     ProxiedPlayer target = ProxyServer.getInstance().getPlayer(args[2]);
-                    if (target == null) {
-                        sender.sendMessage(new TextComponent(configManager.getMessage("system.player_not_found", "player", args[2])));
-                        return;
+                    UUID uuid;
+                    String name = args[2];
+
+                    if (target != null) {
+                        uuid = target.getUniqueId();
+                        name = target.getName();
+                    } else {
+                        uuid = plugin.getDatabaseManager().getUUIDFromName(name);
+                        if (uuid == null) {
+                            sender.sendMessage(new TextComponent(configManager.getMessage("system.player_not_found", "player", name)));
+                            return;
+                        }
                     }
-                    
-                    UUID uuid = target.getUniqueId();
+
                     configManager.removeFromWhitelist(uuid);
-                    sender.sendMessage(new TextComponent(configManager.getMessage("whitelist.player_removed", "player", target.getName())));
-                    
-                    // If maintenance is active, kick the player who was just removed from whitelist
-                    if (maintenanceMode && target.isConnected()) {
+                    sender.sendMessage(new TextComponent(configManager.getMessage("whitelist.player_removed", "player", name)));
+
+                    if (maintenanceMode && target != null && target.isConnected()) {
                         target.disconnect(new TextComponent(
                                 configManager.getMessage("join.maintenance_kick") + "\n" +
                                 configManager.getMessage("join.maintenance_kick_info")
