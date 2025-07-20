@@ -12,6 +12,8 @@ system:
   reload_failed: "&cFailed to reload configuration: &7%error%"
   maintenance_enabled: "&aServer maintenance mode has been &eenabled&a. Only whitelisted players can join."
   maintenance_disabled: "&aServer maintenance mode has been &edisabled&a."
+  maintenance_status_on: "&aMaintenance mode is currently &eenabled&a."
+  maintenance_status_off: "&aMaintenance mode is currently &cdisabled&a."
   player_not_found: "&cPlayer &e%player% &cnot found."
   server_not_found: "&cServer &e%server% &cnot found."
   server_restart_success: "&aRestarting server &e%server%&a..."

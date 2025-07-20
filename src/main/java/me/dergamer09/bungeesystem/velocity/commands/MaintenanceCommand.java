@@ -32,6 +32,12 @@ public class MaintenanceCommand implements SimpleCommand {
             return;
         }
 
+        if (args.length == 1 && args[0].equalsIgnoreCase("status")) {
+            String key = maintenanceMode ? "system.maintenance_status_on" : "system.maintenance_status_off";
+            sender.sendMessage(Component.text(configManager.getMessage(key)));
+            return;
+        }
+
         if (args[0].equalsIgnoreCase("on")) {
             setMaintenance(sender, true);
             return;

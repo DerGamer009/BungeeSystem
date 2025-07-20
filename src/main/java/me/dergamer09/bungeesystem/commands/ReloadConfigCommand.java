@@ -23,8 +23,11 @@ public class ReloadConfigCommand extends Command {
     public void execute(CommandSender sender, String[] args) {
         try {
             configManager.reloadAll();
-            // Refresh webhook URL and other runtime values
             plugin.setWebhookUrl(configManager.getConfig().getString("webhookUrl", ""));
+            // Update cached config and MOTD
+            plugin.getMotdManager().loadFromConfig();
+            // Replace plugin's config reference so other components use latest values
+            plugin.setConfig(configManager.getConfig());
 
             sender.sendMessage(new TextComponent(configManager.getMessage("system.reload_success")));
         } catch (IOException e) {

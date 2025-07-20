@@ -26,6 +26,7 @@ Das **BungeeSystem** ist ein Plugin für BungeeCord und seit Version 1.2.1 auch 
 |----------------------|----------------------------------------|
 | `/reloadconfig`      | Lädt die Plugin-Konfiguration neu      |
 | `/maintenance`       | Aktiviert/Deaktiviert den Wartungsmodus |
+| `/maintenance status`| Zeigt den aktuellen Wartungsmodus an    |
 | `/restart`           | Startet den BungeeCord-Proxy neu      |
 | `/ban <Spieler>`     | Bannt einen Spieler                    |
 | `/unban <Spieler>`   | Entbannt einen Spieler                 |
