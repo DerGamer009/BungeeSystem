@@ -84,6 +84,7 @@ public class DatabaseManager {
         createPlayerDataTable();
         createPunishmentReasonsTable();
         createWarningsTable();
+        createMaintenanceWhitelistTable();
     }
 
     public void close() {
@@ -325,6 +326,19 @@ public class DatabaseManager {
             ProxyServer.getInstance().getLogger().info("§a[BungeeSystem] Player data table created or verified.");
         } catch (SQLException e) {
             ProxyServer.getInstance().getLogger().severe("§c[BungeeSystem] Failed to create player data table: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    private void createMaintenanceWhitelistTable() {
+        try (PreparedStatement ps = connection.prepareStatement(
+                "CREATE TABLE IF NOT EXISTS maintenance_whitelist (" +
+                        "uuid VARCHAR(36) PRIMARY KEY," +
+                        "added BIGINT NOT NULL)")) {
+            ps.executeUpdate();
+            ProxyServer.getInstance().getLogger().info("§a[BungeeSystem] Maintenance whitelist table created or verified.");
+        } catch (SQLException e) {
+            ProxyServer.getInstance().getLogger().severe("§c[BungeeSystem] Failed to create maintenance whitelist table: " + e.getMessage());
             e.printStackTrace();
         }
     }
@@ -573,5 +587,61 @@ public class DatabaseManager {
         }
         
         return connection != null;
+    }
+
+    public void addToMaintenanceWhitelist(UUID uuid) {
+        if (connection == null) return;
+        try (PreparedStatement ps = connection.prepareStatement(
+                "REPLACE INTO maintenance_whitelist (uuid, added) VALUES (?, ?)")) {
+            ps.setString(1, uuid.toString());
+            ps.setLong(2, System.currentTimeMillis());
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            ProxyServer.getInstance().getLogger().severe("§c[BungeeSystem] Failed to add whitelist entry: " + e.getMessage());
+        }
+    }
+
+    public void removeFromMaintenanceWhitelist(UUID uuid) {
+        if (connection == null) return;
+        try (PreparedStatement ps = connection.prepareStatement(
+                "DELETE FROM maintenance_whitelist WHERE uuid = ?")) {
+            ps.setString(1, uuid.toString());
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            ProxyServer.getInstance().getLogger().severe("§c[BungeeSystem] Failed to remove whitelist entry: " + e.getMessage());
+        }
+    }
+
+    public boolean isInMaintenanceWhitelist(UUID uuid) {
+        if (connection == null) return false;
+        try (PreparedStatement ps = connection.prepareStatement(
+                "SELECT uuid FROM maintenance_whitelist WHERE uuid = ? LIMIT 1")) {
+            ps.setString(1, uuid.toString());
+            try (ResultSet rs = ps.executeQuery()) {
+                return rs.next();
+            }
+        } catch (SQLException e) {
+            ProxyServer.getInstance().getLogger().severe("§c[BungeeSystem] Failed to check whitelist: " + e.getMessage());
+            return false;
+        }
+    }
+
+    public java.util.List<UUID> getMaintenanceWhitelist() {
+        java.util.List<UUID> list = new java.util.ArrayList<>();
+        if (connection == null) return list;
+        try (PreparedStatement ps = connection.prepareStatement(
+                "SELECT uuid FROM maintenance_whitelist")) {
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    try {
+                        list.add(UUID.fromString(rs.getString("uuid")));
+                    } catch (IllegalArgumentException ignored) {
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            ProxyServer.getInstance().getLogger().severe("§c[BungeeSystem] Failed to read whitelist: " + e.getMessage());
+        }
+        return list;
     }
 }

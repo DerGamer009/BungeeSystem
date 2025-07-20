@@ -25,13 +25,15 @@ public class ConfigManager {
     private final Logger logger;
     private final ClassLoader classLoader;
     private final Path dataDirectory;
+    private final me.dergamer09.bungeesystem.velocity.VelocitySystem plugin;
 
     private Configuration config;
     private Configuration messages;
     private File configFile;
     private File messagesFile;
 
-    public ConfigManager(Logger logger, ClassLoader classLoader, Path dataDirectory) {
+    public ConfigManager(me.dergamer09.bungeesystem.velocity.VelocitySystem plugin, Logger logger, ClassLoader classLoader, Path dataDirectory) {
+        this.plugin = plugin;
         this.logger = logger;
         this.classLoader = classLoader;
         this.dataDirectory = dataDirectory;
@@ -115,15 +117,7 @@ public class ConfigManager {
     }
 
     public List<UUID> getMaintenanceWhitelist() {
-        List<String> list = config.getStringList("maintenance.whitelist");
-        List<UUID> uuids = new ArrayList<>();
-        for (String uuidStr : list) {
-            try {
-                uuids.add(UUID.fromString(uuidStr));
-            } catch (IllegalArgumentException ignored) {
-            }
-        }
-        return uuids;
+        return plugin.getDatabaseManager().getWhitelist();
     }
 
     public static String translateColorCodes(String text) {
@@ -160,23 +154,14 @@ public class ConfigManager {
     }
 
     public void addToWhitelist(UUID uuid) {
-        List<String> whitelist = config.getStringList("maintenance.whitelist");
-        if (!whitelist.contains(uuid.toString())) {
-            whitelist.add(uuid.toString());
-            config.set("maintenance.whitelist", whitelist);
-            saveConfig();
-        }
+        plugin.getDatabaseManager().addToWhitelist(uuid);
     }
 
     public void removeFromWhitelist(UUID uuid) {
-        List<String> whitelist = config.getStringList("maintenance.whitelist");
-        whitelist.remove(uuid.toString());
-        config.set("maintenance.whitelist", whitelist);
-        saveConfig();
+        plugin.getDatabaseManager().removeFromWhitelist(uuid);
     }
 
     public boolean isInWhitelist(UUID uuid) {
-        List<String> whitelist = config.getStringList("maintenance.whitelist");
-        return whitelist.contains(uuid.toString());
+        return plugin.getDatabaseManager().isInWhitelist(uuid);
     }
 }

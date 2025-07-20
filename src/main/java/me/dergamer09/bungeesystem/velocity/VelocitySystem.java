@@ -16,6 +16,7 @@ import me.dergamer09.bungeesystem.velocity.Managers.VelocityCommandManager;
 import me.dergamer09.bungeesystem.velocity.Managers.ConfigManager;
 import me.dergamer09.bungeesystem.velocity.Managers.ListenerManager;
 import me.dergamer09.bungeesystem.velocity.Managers.MotdManager;
+import me.dergamer09.bungeesystem.velocity.Managers.DatabaseManager;
 import me.dergamer09.bungeesystem.velocity.Runnables.OnlineTimeUpdater;
 
 /**
@@ -32,6 +33,7 @@ public class VelocitySystem {
     private final Metrics.Factory metricsFactory;
 
     private ConfigManager configManager;
+    private DatabaseManager databaseManager;
     private VelocityCommandManager commandManager;
     private ListenerManager listenerManager;
     private MotdManager motdManager;
@@ -54,7 +56,9 @@ public class VelocitySystem {
     public void onProxyInit(ProxyInitializeEvent event) {
         logger.info("BungeeSystem loaded (Velocity compatibility mode).");
         metrics = metricsFactory.make(this, BSTATS_PLUGIN_ID);
-        configManager = new ConfigManager(logger, getClass().getClassLoader(), dataDirectory);
+        configManager = new ConfigManager(this, logger, getClass().getClassLoader(), dataDirectory);
+        databaseManager = new DatabaseManager(configManager.getConfig(), logger, server);
+        databaseManager.initialize();
         motdManager = new MotdManager(configManager);
         commandManager = new VelocityCommandManager(this);
         listenerManager = new ListenerManager(this, logger);
@@ -73,5 +77,6 @@ public class VelocitySystem {
     }
 
     public ConfigManager getConfigManager() { return configManager; }
+    public DatabaseManager getDatabaseManager() { return databaseManager; }
     public MotdManager getMotdManager() { return motdManager; }
 }

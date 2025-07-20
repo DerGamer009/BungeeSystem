@@ -44,6 +44,15 @@ public class ServerCommand extends Command {
             return;
         }
 
+        ProxiedPlayer p = (ProxiedPlayer) sender;
+        if (MaintenanceCommand.isMaintenanceMode()
+                && !p.hasPermission("bungeesystem.maintenance.bypass")
+                && !BungeeSystem.getInstance().getConfigManager().isInWhitelist(p.getUniqueId())) {
+            p.disconnect(new TextComponent(BungeeSystem.getInstance().getConfigManager().getMessage("join.maintenance_kick")
+                    + "\n" + BungeeSystem.getInstance().getConfigManager().getMessage("join.maintenance_kick_info")));
+            return;
+        }
+
         String serverName = args[0];
         ServerInfo server = serverMap.get(serverName);
 
