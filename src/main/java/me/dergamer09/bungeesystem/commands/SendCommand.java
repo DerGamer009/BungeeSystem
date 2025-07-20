@@ -22,9 +22,18 @@ public class SendCommand extends Command {
                 return;
             }
 
+            ProxiedPlayer player = (ProxiedPlayer) sender;
+            if (MaintenanceCommand.isMaintenanceMode()
+                    && !player.hasPermission("bungeesystem.maintenance.bypass")
+                    && !BungeeSystem.getInstance().getConfigManager().isInWhitelist(player.getUniqueId())) {
+                player.disconnect(new TextComponent(BungeeSystem.getInstance().getConfigManager().getMessage("join.maintenance_kick")
+                        + "\n" + BungeeSystem.getInstance().getConfigManager().getMessage("join.maintenance_kick_info")));
+                return;
+            }
+
             ServerInfo server = BungeeSystem.getInstance().getProxy().getServerInfo(args[0]);
             if (server != null) {
-                ((ProxiedPlayer) sender).connect(server);
+                player.connect(server);
                 sender.sendMessage(ChatColor.GREEN + "Connecting you to " + ChatColor.YELLOW + server.getName() + ChatColor.GREEN + "...");
             } else {
                 sender.sendMessage(ChatColor.RED + "Server not found!");
@@ -41,6 +50,13 @@ public class SendCommand extends Command {
         ServerInfo server = BungeeSystem.getInstance().getProxy().getServerInfo(args[1]);
 
         if (target != null && server != null) {
+            if (MaintenanceCommand.isMaintenanceMode()
+                    && !target.hasPermission("bungeesystem.maintenance.bypass")
+                    && !BungeeSystem.getInstance().getConfigManager().isInWhitelist(target.getUniqueId())) {
+                target.disconnect(new TextComponent(BungeeSystem.getInstance().getConfigManager().getMessage("join.maintenance_kick")
+                        + "\n" + BungeeSystem.getInstance().getConfigManager().getMessage("join.maintenance_kick_info")));
+                return;
+            }
             target.connect(server);
             sender.sendMessage(ChatColor.GREEN + "Sent " + target.getName() + " to " + server.getName());
         } else {

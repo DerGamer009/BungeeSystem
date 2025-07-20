@@ -127,18 +127,7 @@ public class ConfigManager {
     }
 
     public List<UUID> getMaintenanceWhitelist() {
-        List<String> stringList = config.getStringList("maintenance.whitelist");
-        List<UUID> uuidList = new ArrayList<>();
-        
-        for (String uuidStr : stringList) {
-            try {
-                uuidList.add(UUID.fromString(uuidStr));
-            } catch (IllegalArgumentException e) {
-                plugin.getLogger().warning("Invalid UUID in maintenance whitelist: " + uuidStr);
-            }
-        }
-        
-        return uuidList;
+        return plugin.getDatabaseManager().getMaintenanceWhitelist();
     }
 
     public void saveConfig() {
@@ -150,23 +139,14 @@ public class ConfigManager {
     }
 
     public void addToWhitelist(UUID uuid) {
-        List<String> whitelist = config.getStringList("maintenance.whitelist");
-        if (!whitelist.contains(uuid.toString())) {
-            whitelist.add(uuid.toString());
-            config.set("maintenance.whitelist", whitelist);
-            saveConfig();
-        }
+        plugin.getDatabaseManager().addToMaintenanceWhitelist(uuid);
     }
 
     public void removeFromWhitelist(UUID uuid) {
-        List<String> whitelist = config.getStringList("maintenance.whitelist");
-        whitelist.remove(uuid.toString());
-        config.set("maintenance.whitelist", whitelist);
-        saveConfig();
+        plugin.getDatabaseManager().removeFromMaintenanceWhitelist(uuid);
     }
 
     public boolean isInWhitelist(UUID uuid) {
-        List<String> whitelist = config.getStringList("maintenance.whitelist");
-        return whitelist.contains(uuid.toString());
+        return plugin.getDatabaseManager().isInMaintenanceWhitelist(uuid);
     }
-} 
+}
