@@ -247,6 +247,13 @@ public final class BungeeSystem extends Plugin {
     public void setWebhookUrl(String webhookUrl) {
         this.webhookUrl = webhookUrl;
     }
+
+    /**
+     * Replace the loaded configuration (used after reload).
+     */
+    public void setConfig(Configuration config) {
+        this.config = config;
+    }
     
     /**
      * Initialize the database connection with detailed diagnostics and retry logic

@@ -30,7 +30,7 @@ public class MaintenanceCommand extends Command {
             maintenanceMode = !maintenanceMode;
             configManager.getConfig().set("maintenance.enabled", maintenanceMode);
             configManager.saveConfig();
-            
+
             if (maintenanceMode) {
                 sender.sendMessage(new TextComponent(configManager.getMessage("system.maintenance_enabled")));
                 // Kick non-whitelisted players
@@ -38,6 +38,12 @@ public class MaintenanceCommand extends Command {
             } else {
                 sender.sendMessage(new TextComponent(configManager.getMessage("system.maintenance_disabled")));
             }
+            return;
+        }
+
+        if (args.length == 1 && args[0].equalsIgnoreCase("status")) {
+            String key = maintenanceMode ? "system.maintenance_status_on" : "system.maintenance_status_off";
+            sender.sendMessage(new TextComponent(configManager.getMessage(key)));
             return;
         }
 

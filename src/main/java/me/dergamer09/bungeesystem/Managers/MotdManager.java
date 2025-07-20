@@ -1,7 +1,8 @@
 package me.dergamer09.bungeesystem.Managers;
 
 import me.dergamer09.bungeesystem.BungeeSystem;
-import net.md_5.bungee.api.ChatColor;
+import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.md_5.bungee.config.Configuration;
 
 /**
@@ -20,11 +21,12 @@ public class MotdManager {
     /** Reload MOTD values from config. */
     public void loadFromConfig() {
         Configuration cfg = plugin.getConfig();
-        normalMotd = ChatColor.translateAlternateColorCodes('&',
-                cfg.getString("motd.normal", "Welcome to the BungeeSystem Server!"));
-        maintenanceMotd = ChatColor.translateAlternateColorCodes('&',
-                cfg.getString("motd.maintenance",
-                        "&c\uD83D\uDEA7 Maintenance Mode - Server is currently under maintenance! \uD83D\uDEA7"));
+        MiniMessage mm = MiniMessage.miniMessage();
+        normalMotd = LegacyComponentSerializer.legacySection().serialize(
+                mm.deserialize(cfg.getString("motd.normal", "Welcome to the BungeeSystem Server!")));
+        maintenanceMotd = LegacyComponentSerializer.legacySection().serialize(
+                mm.deserialize(cfg.getString("motd.maintenance",
+                        "&c\uD83D\uDEA7 Maintenance Mode - Server is currently under maintenance! \uD83D\uDEA7")));
     }
 
     /**

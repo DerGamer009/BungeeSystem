@@ -30,8 +30,8 @@ reportWebhookFormat: "New report #%id% against %player% by %reporter% on %server
 
 # Server MOTD configuration
 motd:
-  normal: "Welcome to the BungeeSystem Server!"
-  maintenance: "&c\uD83D\uDEA7 Maintenance Mode - Server is currently under maintenance! \uD83D\uDEA7"
+  normal: "<gradient:#00ffff:#ff00ff><bold>LUNARISMC.de</bold></gradient>\n<#aaaaaa>[<#ffffff>1.8 - 1.21<#aaaaaa><#00ff00>✔ Neuer CityBuild v2 · <#ffcc00>Minigames · <#ff5555>Events starten bald!"
+  maintenance: "<gradient:#00ffff:#ff00ff><bold>LUNARISMC.de</bold></gradient>\n<#aaaaaa>[<#ffffff>1.8 - 1.21<#aaaaaa><#ff5555>Server in Wartung! Bitte später wiederkommen."
 
 # Maintenance mode configuration
 maintenance:

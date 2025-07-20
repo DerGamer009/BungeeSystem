@@ -9,9 +9,11 @@ import me.dergamer09.bungeesystem.velocity.Managers.ConfigManager;
 import java.io.IOException;
 
 public class ReloadConfigCommand implements SimpleCommand {
+    private final VelocitySystem plugin;
     private final ConfigManager configManager;
 
     public ReloadConfigCommand(VelocitySystem plugin) {
+        this.plugin = plugin;
         this.configManager = plugin.getConfigManager();
     }
 
@@ -20,6 +22,7 @@ public class ReloadConfigCommand implements SimpleCommand {
         CommandSource source = invocation.source();
         try {
             configManager.reloadAll();
+            plugin.getMotdManager().loadFromConfig();
             source.sendMessage(configManager.getMessageComponent("system.reload_success"));
         } catch (IOException e) {
             source.sendMessage(configManager.getMessageComponent(
