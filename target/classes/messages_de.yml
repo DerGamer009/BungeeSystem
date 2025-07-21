@@ -12,6 +12,8 @@ system:
   reload_failed: "&cFehler beim Neuladen der Konfiguration: &7%error%"
   maintenance_enabled: "&aWartungsmodus wurde &eaktiviert&a. Nur Whitelist-Spieler können joinen."
   maintenance_disabled: "&aWartungsmodus wurde &edeaktiviert&a."
+  maintenance_status_on: "&aDer Wartungsmodus ist derzeit &eaktiviert&a."
+  maintenance_status_off: "&aDer Wartungsmodus ist derzeit &cdeaktiviert&a."
   player_not_found: "&cSpieler &e%player% &cnicht gefunden."
   server_not_found: "&cServer &e%server% &cnicht gefunden."
   server_restart_success: "&aStarte Server &e%server% &aneu..."

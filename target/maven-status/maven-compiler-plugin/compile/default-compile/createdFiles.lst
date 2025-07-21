@@ -4,10 +4,12 @@ me\dergamer09\bungeesystem\velocity\commands\OnlineTimeCommand.class
 me\dergamer09\bungeesystem\commands\ServerListCommand.class
 me\dergamer09\bungeesystem\Managers\ConfigManager.class
 me\dergamer09\bungeesystem\velocity\commands\ServerCommand.class
+me\dergamer09\bungeesystem\velocity\listeners\PlayerEventListener.class
 me\dergamer09\bungeesystem\velocity\commands\SeenCommand.class
 me\dergamer09\bungeesystem\commands\TeamChatCommand.class
 me\dergamer09\bungeesystem\Managers\UpdateManager.class
 me\dergamer09\bungeesystem\listeners\StatsListener.class
+me\dergamer09\bungeesystem\Managers\MotdManager.class
 me\dergamer09\bungeesystem\velocity\commands\MuteCommand.class
 me\dergamer09\bungeesystem\velocity\commands\BroadcastCommand.class
 me\dergamer09\bungeesystem\velocity\commands\ListCommand.class
@@ -65,6 +67,9 @@ me\dergamer09\bungeesystem\velocity\commands\PingCommand.class
 me\dergamer09\bungeesystem\Managers\StatsManager$StatType.class
 me\dergamer09\bungeesystem\commands\SeenCommand.class
 me\dergamer09\bungeesystem\listeners\PunishmentListener.class
+me\dergamer09\bungeesystem\velocity\Managers\MotdManager.class
+me\dergamer09\bungeesystem\velocity\listeners\MotdListener.class
+me\dergamer09\bungeesystem\velocity\Managers\DatabaseManager.class
 me\dergamer09\bungeesystem\velocity\Managers\ListenerManager.class
 me\dergamer09\bungeesystem\velocity\commands\TopCommand.class
 me\dergamer09\bungeesystem\commands\SendCommand.class
