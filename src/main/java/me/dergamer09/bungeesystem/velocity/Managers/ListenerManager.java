@@ -21,6 +21,7 @@ public class ListenerManager {
         plugin.getServer().getEventManager().register(plugin, this);
         plugin.getServer().getEventManager().register(plugin, new me.dergamer09.bungeesystem.velocity.listeners.MotdListener(plugin));
         plugin.getServer().getEventManager().register(plugin, new me.dergamer09.bungeesystem.velocity.listeners.PlayerEventListener(plugin));
+        plugin.getServer().getEventManager().register(plugin, new me.dergamer09.bungeesystem.velocity.listeners.StatsListener(plugin));
     }
 
     // Example listener for disconnects
