@@ -25,6 +25,9 @@ public class DatabaseManager {
         connect();
         if (connection != null) {
             createMaintenanceWhitelistTable();
+            createPlayerStatsTable();
+            createOnlineTimeTable();
+            createPlayerDataTable();
         }
         return connection != null;
     }
@@ -61,6 +64,52 @@ public class DatabaseManager {
             logger.info("Maintenance whitelist table created or verified.");
         } catch (SQLException e) {
             logger.error("Failed to create maintenance whitelist table: {}", e.getMessage());
+        }
+    }
+
+    private void createPlayerStatsTable() {
+        try (PreparedStatement ps = connection.prepareStatement(
+                "CREATE TABLE IF NOT EXISTS player_stats (" +
+                        "uuid VARCHAR(36) PRIMARY KEY," +
+                        "name VARCHAR(16) NOT NULL," +
+                        "first_join BIGINT," +
+                        "last_join BIGINT," +
+                        "login_count INT DEFAULT 0," +
+                        "votes INT DEFAULT 0," +
+                        "messages_sent INT DEFAULT 0" +
+                        ")")) {
+            ps.executeUpdate();
+            logger.info("Player stats table created or verified.");
+        } catch (SQLException e) {
+            logger.error("Failed to create player stats table: {}", e.getMessage());
+        }
+    }
+
+    private void createOnlineTimeTable() {
+        try (PreparedStatement ps = connection.prepareStatement(
+                "CREATE TABLE IF NOT EXISTS online_time (" +
+                        "player_uuid VARCHAR(36) NOT NULL PRIMARY KEY," +
+                        "total_time BIGINT NOT NULL DEFAULT 0," +
+                        "last_login BIGINT DEFAULT 0)")) {
+            ps.executeUpdate();
+            logger.info("Online time table created or verified.");
+        } catch (SQLException e) {
+            logger.error("Failed to create online time table: {}", e.getMessage());
+        }
+    }
+
+    private void createPlayerDataTable() {
+        try (PreparedStatement ps = connection.prepareStatement(
+                "CREATE TABLE IF NOT EXISTS player_data (" +
+                        "uuid VARCHAR(36) PRIMARY KEY, " +
+                        "name VARCHAR(16) NOT NULL, " +
+                        "ip VARCHAR(45), " +
+                        "first_join BIGINT, " +
+                        "last_seen BIGINT)")) {
+            ps.executeUpdate();
+            logger.info("Player data table created or verified.");
+        } catch (SQLException e) {
+            logger.error("Failed to create player data table: {}", e.getMessage());
         }
     }
 
@@ -161,5 +210,9 @@ public class DatabaseManager {
             logger.error("Failed to get UUID for player {}: {}", playerName, e.getMessage());
             return null;
         }
+    }
+
+    public Connection getConnection() {
+        return connection;
     }
 }

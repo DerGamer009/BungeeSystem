@@ -48,10 +48,10 @@ public class VelocityCommandManager {
         registerPlaceholder(cm, "server", new ServerCommand(plugin));
         registerPlaceholder(cm, "serverlist", new ServerListCommand(plugin));
         registerPlaceholder(cm, "staffchat", new StaffChatCommand());
-        registerPlaceholder(cm, "stats", new StatsCommand());
+        registerPlaceholder(cm, "stats", new StatsCommand(plugin));
         registerPlaceholder(cm, "teamchat", new TeamChatCommand());
         registerPlaceholder(cm, "togglenotify", new ToggleNotifyCommand());
-        registerPlaceholder(cm, "top", new TopCommand());
+        registerPlaceholder(cm, "top", new TopCommand(plugin));
         registerPlaceholder(cm, "unban", new UnbanCommand());
         registerPlaceholder(cm, "unmute", new UnmuteCommand());
         registerPlaceholder(cm, "uptime", new UptimeCommand(plugin));

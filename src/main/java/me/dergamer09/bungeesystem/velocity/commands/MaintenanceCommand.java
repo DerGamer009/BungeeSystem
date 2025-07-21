@@ -13,10 +13,12 @@ import java.util.UUID;
 
 public class MaintenanceCommand implements SimpleCommand {
     private static boolean maintenanceMode;
+    private final VelocitySystem plugin;
     private final ProxyServer server;
     private final ConfigManager configManager;
 
     public MaintenanceCommand(VelocitySystem plugin) {
+        this.plugin = plugin;
         this.server = plugin.getServer();
         this.configManager = plugin.getConfigManager();
         maintenanceMode = configManager.getConfig().getBoolean("maintenance.enabled", false);
