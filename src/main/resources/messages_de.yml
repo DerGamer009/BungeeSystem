@@ -38,12 +38,12 @@ afk:
 
 # Seen command messages
 seen:
-  usage: "&eUsage: &f/seen <player>"
-  currently_online: "&7%player% &ais currently online."
-  player_never_joined: "&7%player% &chas never joined this server."
-  no_last_seen_data: "&cNo last seen data found for &7%player%&c."
-  last_seen: "&7%player% &ewas last seen on &7%date% &e(&7%time_ago%&e)"
-  database_error: "&cDatabase error: &7%error%"
+  usage: "&eVerwendung: &f/seen <Spieler>"
+  currently_online: "&7%player% &aist momentan online."
+  player_never_joined: "&7%player% &chat den Server noch nie betreten."
+  no_last_seen_data: "&cKeine Last-Seen-Daten für &7%player%&c gefunden."
+  last_seen: "&7%player% &ewar zuletzt online am &7%date% &e(&7%time_ago%&e)"
+  database_error: "&cDatenbankfehler: &7%error%"
 
 # Nick command messages
 nick:
@@ -128,6 +128,7 @@ broadcast:
 # Uptime command messages
 uptime:
   server_uptime: "&aServer-Laufzeit: &e%seconds% Sekunden"
+  server_uptime_full: "&aServer-Laufzeit: &e%uptime% &7(Neustart: %restart%)"
 
 # List command messages
 list:
@@ -163,3 +164,48 @@ globalchat:
   enabled: "&aGlobal chat mode &eenabled&a. All your messages will be sent to global chat."
   disabled: "&aGlobal chat mode &edisabled&a. Your messages will be sent to server chat."
   cooldown: "&cPlease wait before sending another global message."
+
+lobby:
+  player_only: "&cDieser Befehl kann nur von Spielern verwendet werden."
+  no_lobbies: "&cKeine Lobby in der config.yml definiert."
+  already_on_lobby: "&eDu bist bereits auf der Lobby &a%lobby%&e."
+  connecting: "&aVerbinde dich zur Lobby &e%lobby%&a..."
+  not_found: "&cDie Lobby &e%lobby% &ckonnte nicht gefunden werden."
+
+msg:
+  usage: "&cBenutzung: /msg <Spieler> <Nachricht>"
+  not_online: "&cDieser Spieler ist nicht online!"
+  ignored_by: "&cDieser Spieler ignoriert dich."
+  to_format: "&7[&bDu &7→ &a%target%&7] &f%message%"
+  from_format: "&7[&a%sender% &7→ &bDu&7] &f%message%"
+
+reply:
+  usage: "&cBenutzung: /reply <Nachricht>"
+  no_one: "&cEs gibt niemanden, dem du antworten kannst."
+  not_online: "&cDieser Spieler ist nicht online!"
+
+ignore:
+  usage: "&cBenutzung: /ignore <Spieler>"
+  not_online: "&cDieser Spieler ist nicht online!"
+  cant_ignore_self: "&cDu kannst dich nicht selbst ignorieren."
+  ignored: "&cDu ignorierst jetzt %player%."
+  unignored: "&aDu ignorierst %player% nicht mehr."
+
+reports:
+  header: "&8=== &e&lAktive Reports &8==="
+  footer: "&8==============================="
+  none: "&aEs gibt keine offenen Reports."
+  help: "&e/reports - Zeigt offene Reports\n/reports handle <id> [Kommentar] - Schließt einen Report\n/reports help - Zeigt diese Hilfe."
+  handle_usage: "&cBenutzung: /reports handle <id> [Kommentar]"
+  invalid_id: "&cUngültige Report-ID."
+  handle_success: "&aReport &e#%id% &awurde geschlossen."
+  handle_failed: "&cReport &e#%id% &ckonnte nicht geschlossen werden (vielleicht schon erledigt?)."
+  not_implemented: "&cDiese Funktion ist noch nicht implementiert."
+
+report:
+  usage: "&cBenutzung: /report <Spieler> <Grund/ID> [Details]"
+  cannot_report_self: "&cDu kannst dich nicht selbst melden."
+  player_not_found: "&cSpieler nicht gefunden. Stelle sicher, dass der Name korrekt ist."
+  unknown_reason: "&cUnbekannter Meldegrund: &e%reason%"
+  success: "&aReport gegen &e%player% &awurde erfolgreich mit Grund &e%reason% &aerstellt."
+  failed: "&cReport konnte nicht erstellt werden. Versuche es erneut."

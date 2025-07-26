@@ -1,6 +1,6 @@
 name: BungeeSystem
 main: me.dergamer09.bungeesystem.BungeeSystem
-version: 1.2.1-BETA
+version: 1.2.2-SNAPSHOT
 author: DerGamer09
 description: A comprehensive BungeeCord management system with team chat, global chat, and many administrative features
 softdepends: [LuckPerms]

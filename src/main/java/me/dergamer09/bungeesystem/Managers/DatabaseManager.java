@@ -165,6 +165,7 @@ public class DatabaseManager {
                         "reason TEXT," +
                         "server VARCHAR(64)," +
                         "timestamp BIGINT NOT NULL," +
+                        "status ENUM('OPEN','CLOSED') NOT NULL DEFAULT 'OPEN'," +
                         "resolved BOOLEAN DEFAULT FALSE," +
                         "resolved_by VARCHAR(36)," +
                         "resolved_by_name VARCHAR(16)," +
@@ -177,6 +178,18 @@ public class DatabaseManager {
         } catch (SQLException e) {
             ProxyServer.getInstance().getLogger().severe("§c[BungeeSystem] Failed to create reports table: " + e.getMessage());
             e.printStackTrace();
+        }
+        // Migration: Add status column if it does not exist
+        try (PreparedStatement ps = connection.prepareStatement(
+                "ALTER TABLE reports ADD COLUMN status ENUM('OPEN','CLOSED') NOT NULL DEFAULT 'OPEN'")) {
+            ps.executeUpdate();
+            ProxyServer.getInstance().getLogger().info("§a[BungeeSystem] Reports table migrated: 'status' column added.");
+        } catch (SQLException e) {
+            // Ignore error if column already exists
+            if (!e.getMessage().contains("Duplicate column name") && !e.getMessage().contains("exists")) {
+                ProxyServer.getInstance().getLogger().severe("§c[BungeeSystem] Failed to migrate reports table: " + e.getMessage());
+                e.printStackTrace();
+            }
         }
     }
 

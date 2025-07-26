@@ -23,10 +23,10 @@ import me.dergamer09.bungeesystem.velocity.Runnables.OnlineTimeUpdater;
 /**
  * Velocity entry point for BungeeSystem.
  */
-@Plugin(id = "bungeesystem", name = "BungeeSystem", version = "1.2.1-BETA", authors = "DerGamer09")
+@Plugin(id = "bungeesystem", name = "BungeeSystem", version = "1.2.2-SNAPSHOT", authors = "DerGamer09")
 public class VelocitySystem {
 
-    private static final String VERSION = "1.2.1-BETA";
+    private static final String VERSION = "1.2.2-SNAPSHOT";
 
     private final ProxyServer server;
     private final Logger logger;

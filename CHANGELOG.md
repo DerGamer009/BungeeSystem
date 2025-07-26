@@ -67,3 +67,29 @@ Das Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.0.0/).
 - Private Nachrichten-Funktionen mit `/msg` und `/reply`
 - Datenbank-Integration für dauerhafte Speicherung
 - Konfigurierbare Präfixe und Farben 
+
+## [1.2.1-BETA] - 2025
+
+### Hinzugefügt
+- **Velocity-Kompatibilität:** Fast alle BungeeCord-Features jetzt auch auf Velocity nutzbar!
+- **/report & /reports:**
+  - Reports werden in der Datenbank gespeichert (mit Grund-ID, Name, Zeit, Server, etc.).
+  - Gründe für Reports werden aus der Datenbank geladen und können per Name oder ID angegeben werden.
+  - Tab-Completion für Spielernamen und Gründe.
+  - Schöne, formatierte Grundauflistung bei Fehlern.
+  - `/reports` zeigt offene Reports, `/reports handle <id> [Kommentar]` schließt sie.
+- **Discord-Webhook:** Nach jedem Report wird (sofern in der config.yml gesetzt) eine Discord-Embed-Nachricht an den Webhook gesendet.
+- **Automatische Tabellenerstellung:** Alle benötigten Tabellen (inkl. punishment_reasons & reports) werden beim ersten Start automatisch angelegt.
+- **Default-Report-Gründe:** Werden automatisch eingefügt, falls noch keine vorhanden sind.
+- **Vollständige Mehrsprachigkeit:** Alle Nachrichten (Commands, Fehler, Reports, etc.) sind über messages_xx.yml anpassbar (deutsch & englisch enthalten).
+- **Komfortable Aliase:** `/l`, `/hub`, `/lobby` funktionieren identisch. `/msg`, `/pm`, `/tell`, `/reply`, `/r`, `/ignore` etc. mit Aliasen.
+
+### Behoben
+- Fehlerhafte oder fehlende Tabellen auf Velocity werden jetzt automatisch erstellt.
+- Fehler beim Registrieren von Commands mit Parametern behoben.
+- Verbesserte Fehlerausgaben und Nutzerführung bei falscher Benutzung.
+
+### Hinweise
+- **Datenbankzugang (MySQL/MariaDB) ist Pflicht!**
+- Für Discord-Integration muss ein gültiger Webhook in der config.yml (`webhookUrl`) gesetzt sein.
+- Bei Update: Bitte die neuen Nachrichten-Keys in messages_xx.yml übernehmen! 

@@ -28,14 +28,19 @@ public class ServerCommand extends Command {
 
         // List servers when no argument or "list" is provided
         if (args.length == 0 || (args.length == 1 && args[0].equalsIgnoreCase("list"))) {
-            StringBuilder servers = new StringBuilder(ChatColor.AQUA + "Available Servers: ");
+            TextComponent header = new TextComponent(ChatColor.AQUA + "Available Servers: ");
+            sender.sendMessage(header);
             for (String server : serverMap.keySet()) {
-                servers.append(ChatColor.YELLOW).append(server).append(ChatColor.GRAY).append(", ");
+                TextComponent serverComponent = new TextComponent(ChatColor.YELLOW + server);
+                serverComponent.setHoverEvent(new net.md_5.bungee.api.chat.HoverEvent(
+                        net.md_5.bungee.api.chat.HoverEvent.Action.SHOW_TEXT,
+                        new net.md_5.bungee.api.chat.ComponentBuilder("Click to connect to " + server).create()
+                ));
+                serverComponent.setClickEvent(new net.md_5.bungee.api.chat.ClickEvent(
+                        net.md_5.bungee.api.chat.ClickEvent.Action.RUN_COMMAND, "/server " + server
+                ));
+                sender.sendMessage(serverComponent);
             }
-            if (servers.lastIndexOf(", ") == servers.length() - 2) {
-                servers.setLength(servers.length() - 2);
-            }
-            sender.sendMessage(servers.toString());
             return;
         }
 

@@ -30,8 +30,12 @@ reportWebhookFormat: "New report #%id% against %player% by %reporter% on %server
 
 # Server MOTD configuration
 motd:
-  normal: "<gradient:#00ffff:#ff00ff><bold>LUNARISMC.de</bold></gradient>\n<#aaaaaa>[<#ffffff>1.8 - 1.21<#aaaaaa><#00ff00>✔ Neuer CityBuild v2 · <#ffcc00>Minigames · <#ff5555>Events starten bald!"
-  maintenance: "<gradient:#00ffff:#ff00ff><bold>LUNARISMC.de</bold></gradient>\n<#aaaaaa>[<#ffffff>1.8 - 1.21<#aaaaaa><#ff5555>Server in Wartung! Bitte später wiederkommen."
+  normal: |
+    <center><gradient:#00ffff:#ff00ff><bold>LUNARISMC CITYBUILD 1.21</bold></gradient></center>
+    <center>✦ <gradient:#00c3ff:#00ffb3><bold>NEUER START</bold></gradient> – <green><bold>JETZT SPIELEN</bold></green> ✦</center>
+  maintenance: |
+    <center><gradient:#ffaa00:#ff0000><bold>LUNARISMC WARTUNG</bold></gradient></center>
+    <center>✦ <red><bold>SERVER OFFLINE</bold></red> – <aqua><bold>SCHAU SPÄTER WIEDER VORBEI</bold></aqua> ✦</center>
 
 # Maintenance mode configuration
 maintenance:

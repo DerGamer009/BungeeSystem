@@ -32,7 +32,7 @@ public class StatsListener {
     public void onPostLogin(PostLoginEvent event) {
         Player player = event.getPlayer();
         UUID uuid = player.getUniqueId();
-        String name = player.getName();
+        String name = player.getUsername();
         
         // Record player login in stats
         statsManager.recordLogin(uuid, name);
@@ -72,7 +72,7 @@ public class StatsListener {
     @Subscribe
     public void onChat(PlayerChatEvent event) {
         // Ignore commands
-        if (event.isCommand() || event.isCancelled()) {
+        if (event.getMessage().startsWith("/") || !event.getResult().isAllowed()) {
             return;
         }
         
@@ -134,7 +134,7 @@ public class StatsListener {
                 ps.close();
                 
             } catch (Exception e) {
-                plugin.getLogger().severe("Error updating online time: " + e.getMessage());
+                plugin.getLogger().error("Error updating online time: " + e.getMessage());
                 e.printStackTrace();
             }
         }).schedule();

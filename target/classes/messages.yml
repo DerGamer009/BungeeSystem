@@ -124,3 +124,22 @@ globalchat:
   enabled: "&aGlobal chat mode &eenabled&a. All your messages will be sent to global chat."
   disabled: "&aGlobal chat mode &edisabled&a. Your messages will be sent to server chat."
   cooldown: "&cPlease wait before sending another global message."
+
+msg:
+  usage: "&cUsage: /msg <player> <message>"
+  not_online: "&cThat player is not online!"
+  ignored_by: "&cThat player is ignoring you."
+  to_format: "&7[&bYou &7→ &a%target%&7] &f%message%"
+  from_format: "&7[&a%sender% &7→ &bYou&7] &f%message%"
+
+reply:
+  usage: "&cUsage: /reply <message>"
+  no_one: "&cThere is no one to reply to."
+  not_online: "&cThat player is not online!"
+
+ignore:
+  usage: "&cUsage: /ignore <player>"
+  not_online: "&cThat player is not online!"
+  cant_ignore_self: "&cYou can't ignore yourself."
+  ignored: "&cYou are now ignoring %player%."
+  unignored: "&aYou have unignored %player%."

@@ -128,6 +128,7 @@ broadcast:
 # Uptime command messages
 uptime:
   server_uptime: "&aServer Uptime: &e%seconds% seconds"
+  server_uptime_full: "&aServer Uptime: &e%uptime% &7(Restart: %restart%)"
 
 # List command messages
 list:
@@ -163,3 +164,29 @@ globalchat:
   enabled: "&aGlobal chat mode &eenabled&a. All your messages will be sent to global chat."
   disabled: "&aGlobal chat mode &edisabled&a. Your messages will be sent to server chat."
   cooldown: "&cPlease wait before sending another global message."
+
+lobby:
+  player_only: "&cThis command can only be used by players."
+  no_lobbies: "&cNo lobbies have been defined in the config.yml."
+  already_on_lobby: "&eYou are already on the lobby &a%lobby%&e."
+  connecting: "&aConnecting you to the lobby &e%lobby%&a..."
+  not_found: "&cThe lobby &e%lobby% &ccould not be found."
+
+reports:
+  header: "&8=== &e&lActive Reports &8==="
+  footer: "&8==============================="
+  none: "&aThere are no open reports."
+  help: "&e/reports - Shows open reports\n/reports handle <id> [comment] - Closes a report\n/reports help - Shows this help."
+  handle_usage: "&cUsage: /reports handle <id> [comment]"
+  invalid_id: "&cInvalid report ID."
+  handle_success: "&aReport &e#%id% &ahas been closed."
+  handle_failed: "&cReport &e#%id% &ccould not be closed (maybe already handled?)."
+  not_implemented: "&cThis feature is not yet implemented."
+
+report:
+  usage: "&cUsage: /report <player> <reason/id> [details]"
+  cannot_report_self: "&cYou cannot report yourself."
+  player_not_found: "&cPlayer not found. Make sure the name is spelled correctly."
+  unknown_reason: "&cUnknown report reason: &e%reason%"
+  success: "&aReport against &e%player% &awas successfully created with reason &e%reason%&a."
+  failed: "&cFailed to create report. Please try again."

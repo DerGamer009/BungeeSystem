@@ -53,7 +53,7 @@ public class StatsManager {
             
             plugin.getLogger().info("Statistics tables have been set up.");
         } catch (SQLException e) {
-            plugin.getLogger().severe("Error setting up stats tables: " + e.getMessage());
+            plugin.getLogger().error("Error setting up stats tables: " + e.getMessage());
             e.printStackTrace();
         }
     }
@@ -107,7 +107,7 @@ public class StatsManager {
                 invalidateCache(uuid);
                 
             } catch (SQLException e) {
-                plugin.getLogger().severe("Error recording player login: " + e.getMessage());
+                plugin.getLogger().error("Error recording player login: " + e.getMessage());
                 e.printStackTrace();
             }
         }).schedule();
@@ -134,7 +134,7 @@ public class StatsManager {
                 invalidateCache(uuid);
                 
             } catch (SQLException e) {
-                plugin.getLogger().severe("Error recording player vote: " + e.getMessage());
+                plugin.getLogger().error("Error recording player vote: " + e.getMessage());
                 e.printStackTrace();
             }
         }).schedule();
@@ -161,7 +161,7 @@ public class StatsManager {
                 invalidateCache(uuid);
                 
             } catch (SQLException e) {
-                plugin.getLogger().severe("Error recording player message: " + e.getMessage());
+                plugin.getLogger().error("Error recording player message: " + e.getMessage());
                 e.printStackTrace();
             }
         }).schedule();
@@ -228,7 +228,7 @@ public class StatsManager {
             return stats;
             
         } catch (SQLException e) {
-            plugin.getLogger().severe("Error fetching player stats: " + e.getMessage());
+            plugin.getLogger().error("Error fetching player stats: " + e.getMessage());
             e.printStackTrace();
             return null;
         }
@@ -293,7 +293,7 @@ public class StatsManager {
             ps.close();
             
         } catch (SQLException e) {
-            plugin.getLogger().severe("Error fetching top players: " + e.getMessage());
+            plugin.getLogger().error("Error fetching top players: " + e.getMessage());
             e.printStackTrace();
         }
         
