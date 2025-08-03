@@ -33,6 +33,7 @@ public final class BungeeSystem extends Plugin {
     private ChatManager chatManager;
     private PunishmentManager punishmentManager;
     private MotdManager motdManager;
+    private ApiManager apiManager;
 
     // bStats metrics
     private Metrics metrics;
@@ -88,6 +89,11 @@ public final class BungeeSystem extends Plugin {
         
         // Check for updates
         updateManager.checkForUpdates();
+        
+        // Check API health if enabled
+        if (apiManager.isApiEnabled()) {
+            apiManager.checkApiHealth();
+        }
     }
 
     @Override
@@ -115,6 +121,7 @@ public final class BungeeSystem extends Plugin {
         startupManager = new StartupManager(this, currentVersion);
         chatManager = new ChatManager(this);
         motdManager = new MotdManager(this);
+        apiManager = new ApiManager(this);
         
         // Set webhook URL from config
         webhookUrl = config.getString("webhookUrl", "");
@@ -227,13 +234,20 @@ public final class BungeeSystem extends Plugin {
         return motdManager;
     }
     
-    /**
+        /**
      * Get the punishment manager
      */
     public PunishmentManager getPunishmentManager() {
         return punishmentManager;
     }
-    
+
+    /**
+     * Get the API manager
+     */
+    public ApiManager getApiManager() {
+        return apiManager;
+    }
+
     /**
      * Get the webhook URL
      */

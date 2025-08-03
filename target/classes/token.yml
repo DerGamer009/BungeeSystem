@@ -1,0 +1,19 @@
+# Server Token Configuration for BungeeSystem API
+# This token is used to authenticate with the dashboard API
+
+server:
+  token: "your_server_token_here"
+  api_url: "http://45.86.155.38:25664"
+  
+# API Configuration
+api:
+  enabled: true
+  timeout: 5000  # milliseconds
+  retry_attempts: 3
+  
+# Endpoints
+endpoints:
+  health: "/health"
+  bans: "/api/bans"
+  mutes: "/api/mutes"
+  reports: "/api/reports" 

@@ -306,6 +306,11 @@ public class PunishmentManager {
                         "id", String.valueOf(banId)));
             }
             
+            // Send to API for dashboard
+            if (plugin.getApiManager().isApiEnabled()) {
+                plugin.getApiManager().sendBan(targetName, reasonName, senderName, duration);
+            }
+            
             return true;
             
         } catch (SQLException e) {
@@ -668,6 +673,11 @@ public class PunishmentManager {
                         "duration", durationStr,
                         "staff", senderName,
                         "id", String.valueOf(muteId)));
+            }
+            
+            // Send to API for dashboard
+            if (plugin.getApiManager().isApiEnabled()) {
+                plugin.getApiManager().sendMute(targetName, reasonName, senderName, duration);
             }
             
             return true;
@@ -1216,6 +1226,11 @@ public class PunishmentManager {
             
             // Notify online staff members
             notifyStaffOfReport(targetName, senderName, reasonName, customReason, serverName, reportId);
+            
+            // Send to API for dashboard
+            if (plugin.getApiManager().isApiEnabled()) {
+                plugin.getApiManager().sendReport(senderName, targetName, reasonName, serverName);
+            }
             
             return true;
             

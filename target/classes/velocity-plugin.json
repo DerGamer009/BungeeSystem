@@ -1,1 +1,1 @@
-{"id":"bungeesystem","name":"BungeeSystem","version":"1.2.2-SNAPSHOT","authors":["DerGamer09"],"dependencies":[],"main":"me.dergamer09.bungeesystem.velocity.VelocitySystem"}
+{"id":"bungeesystem","name":"BungeeSystem","version":"1.2.1-BETA","authors":["DerGamer09"],"dependencies":[],"main":"me.dergamer09.bungeesystem.velocity.VelocitySystem"}
