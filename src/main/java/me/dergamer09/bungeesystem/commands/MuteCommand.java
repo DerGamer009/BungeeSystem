@@ -77,7 +77,17 @@ public class MuteCommand extends Command implements TabExecutor {
         // Execute the mute
         boolean success = punishmentManager.mutePlayer(sender, targetName, reasonId, customReason, duration);
         
-        if (!success) {
+        if (success) {
+            // Log admin action to API
+            if (plugin.getApiManager().isApiEnabled()) {
+                String adminName = sender instanceof ProxiedPlayer ? ((ProxiedPlayer) sender).getName() : "Console";
+                String reasonName = punishmentManager.getReasonName(reasonId);
+                String details = customReason != null && !customReason.isEmpty() ? 
+                        reasonName + ": " + customReason : reasonName;
+                
+                plugin.getApiManager().sendAdminLog(adminName, "mute", targetName, details);
+            }
+        } else {
             // The punishmentManager will send appropriate error messages
         }
     }

@@ -9,6 +9,7 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.event.PlayerDisconnectEvent;
 import net.md_5.bungee.api.event.PostLoginEvent;
 import net.md_5.bungee.api.event.PreLoginEvent;
+import net.md_5.bungee.api.event.ServerConnectEvent;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
 import net.md_5.bungee.event.EventPriority;
@@ -67,6 +68,23 @@ public class PlayerEventListener implements Listener {
             // Update or create player_data entry for seen/whois commands
             updatePlayerData(player, now);
             
+            // Send player join event to API
+            if (plugin.getApiManager().isApiEnabled()) {
+                String serverName = player.getServer() != null ? player.getServer().getInfo().getName() : "unknown";
+                plugin.getApiManager().sendPlayerJoin(player.getName(), uuid.toString(), serverName);
+                
+                // Check for bans via API
+                if (plugin.getConfig().getBoolean("features.punishment_checks", true)) {
+                    if (plugin.getApiManager().checkPlayerBan(player.getName(), uuid.toString())) {
+                        player.disconnect(new TextComponent(
+                                configManager.getMessage("punishment.ban_kick_message",
+                                        "reason", "You are banned from this server",
+                                        "expire", "Permanent")));
+                        return;
+                    }
+                }
+            }
+            
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -101,8 +119,31 @@ public class PlayerEventListener implements Listener {
             BungeeSystem.lastMessageMap.entrySet().removeIf(e -> uuid.equals(e.getValue()));
             BungeeSystem.ignoredPlayers.remove(uuid);
 
+            // Send player quit event to API
+            if (plugin.getApiManager().isApiEnabled()) {
+                String serverName = player.getServer() != null ? player.getServer().getInfo().getName() : "unknown";
+                plugin.getApiManager().sendPlayerQuit(player.getName(), uuid.toString(), serverName);
+            }
+
         } catch (SQLException e) {
             e.printStackTrace();
+        }
+    }
+    
+    @EventHandler
+    public void onServerSwitch(ServerConnectEvent event) {
+        ProxiedPlayer player = event.getPlayer();
+        UUID uuid = player.getUniqueId();
+        
+        // Only track server switches (not initial connections)
+        if (player.getServer() != null && event.getTarget() != null) {
+            String fromServer = player.getServer().getInfo().getName();
+            String toServer = event.getTarget().getName();
+            
+            // Send player switch event to API
+            if (plugin.getApiManager().isApiEnabled()) {
+                plugin.getApiManager().sendPlayerSwitch(player.getName(), uuid.toString(), fromServer, toServer);
+            }
         }
     }
     

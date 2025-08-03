@@ -72,9 +72,9 @@ public class TokenGenerator {
             config.set("api.timeout", 5000);
             config.set("api.retry_attempts", 3);
             config.set("endpoints.health", "/health");
-            config.set("endpoints.bans", "/api/bans");
-            config.set("endpoints.mutes", "/api/mutes");
-            config.set("endpoints.reports", "/api/reports");
+                    config.set("endpoints.bans", "/auth/punishments/bans");
+        config.set("endpoints.mutes", "/auth/punishments/mutes");
+        config.set("endpoints.reports", "/auth/reports");
             
             // Save the configuration
             ConfigurationProvider.getProvider(YamlConfiguration.class).save(config, tokenFile);

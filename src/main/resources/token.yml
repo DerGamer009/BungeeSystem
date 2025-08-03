@@ -3,7 +3,8 @@
 
 server:
   token: "your_server_token_here"
-  api_url: "http://45.86.155.38:25664"
+  api_url: "https://api.devvoxel.net/"
+  server_id: ""  # Will be cached after successful connection
   
 # API Configuration
 api:
@@ -11,9 +12,31 @@ api:
   timeout: 5000  # milliseconds
   retry_attempts: 3
   
-# Endpoints
+# Connection endpoints
 endpoints:
   health: "/health"
-  bans: "/api/bans"
-  mutes: "/api/mutes"
-  reports: "/api/reports" 
+  server_connect: "/auth/server/connect"
+  server_token: "/auth/server/token"
+  
+# Punishment endpoints
+  bans: "/auth/punishments/bans"
+  mutes: "/auth/punishments/mutes"
+  kicks: "/auth/punishments/kicks"
+  warns: "/auth/punishments/warns"
+  
+# Report endpoints
+  reports: "/auth/reports"
+  reports_open: "/auth/reports/open"
+  
+# Player endpoints
+  players_join: "/auth/players/join"
+  players_quit: "/auth/players/quit"
+  players_switch: "/auth/players/switch"
+  players_info: "/auth/players/:uuid"
+  players_history: "/auth/players/:uuid/history"
+  
+# Server endpoints
+  server_stats: "/auth/servers/:id/status"
+  
+# Logging endpoints
+  logs: "/auth/logs" 

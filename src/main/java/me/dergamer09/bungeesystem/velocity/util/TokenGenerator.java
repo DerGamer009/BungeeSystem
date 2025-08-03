@@ -72,7 +72,7 @@ public class TokenGenerator {
                 "\n" +
                 "server:\n" +
                 "  token: \"" + token + "\"\n" +
-                "  api_url: \"http://45.86.155.38:25664\"\n" +
+                "  api_url: \"https://api.devvoxel.net/\"\n" +
                 "  \n" +
                 "# API Configuration\n" +
                 "api:\n" +
@@ -83,9 +83,9 @@ public class TokenGenerator {
                 "# Endpoints\n" +
                 "endpoints:\n" +
                 "  health: \"/health\"\n" +
-                "  bans: \"/api/bans\"\n" +
-                "  mutes: \"/api/mutes\"\n" +
-                "  reports: \"/api/reports\"\n";
+                "  bans: \"/auth/punishments/bans\"\n" +
+                "  mutes: \"/auth/punishments/mutes\"\n" +
+                "  reports: \"/auth/reports\"\n";
             
             // Write configuration to file
             Files.write(tokenFile, defaultConfig.getBytes());

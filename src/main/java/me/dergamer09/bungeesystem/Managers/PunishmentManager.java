@@ -512,7 +512,7 @@ public class PunishmentManager {
      * @param reasonId The reason ID
      * @return The reason name, or "Unknown reason" if not found
      */
-    private String getReasonName(int reasonId) {
+    public String getReasonName(int reasonId) {
         try {
             Connection conn = plugin.getDatabaseManager().getConnection();
             PreparedStatement ps = conn.prepareStatement(
@@ -942,10 +942,107 @@ public class PunishmentManager {
                         "id", String.valueOf(warnId)));
             }
             
+            // Send to API for dashboard
+            if (plugin.getApiManager().isApiEnabled()) {
+                plugin.getApiManager().sendWarn(targetName, reasonName, senderName);
+            }
+            
             return true;
             
         } catch (SQLException e) {
             plugin.getLogger().severe("Failed to warn player: " + e.getMessage());
+            e.printStackTrace();
+            sender.sendMessage(new TextComponent(configManager.getMessage("punishment.error",
+                    "error", e.getMessage())));
+            return false;
+        }
+    }
+    
+    /**
+     * Kick a player
+     * 
+     * @param sender Who issued the kick
+     * @param targetName Name of the player to kick
+     * @param reasonId ID of the kick reason (from punishment_reasons table)
+     * @param customReason Optional custom reason text
+     * @return true if successful, false if player not found
+     */
+    public boolean kickPlayer(CommandSender sender, String targetName, int reasonId, String customReason) {
+        // Get the player
+        ProxiedPlayer target = ProxyServer.getInstance().getPlayer(targetName);
+        
+        if (target == null) {
+            sender.sendMessage(new TextComponent(configManager.getMessage("punishment.player_not_found", 
+                    "player", targetName)));
+            return false;
+        }
+        
+        String senderName = sender instanceof ProxiedPlayer ? ((ProxiedPlayer) sender).getName() : "Console";
+        String senderUUID = sender instanceof ProxiedPlayer ? ((ProxiedPlayer) sender).getUniqueId().toString() : "CONSOLE";
+        
+        long now = System.currentTimeMillis();
+        
+        try {
+            Connection conn = plugin.getDatabaseManager().getConnection();
+            PreparedStatement ps = conn.prepareStatement(
+                    "INSERT INTO kicks (player_uuid, player_name, kicked_by, kicked_by_name, reason_id, reason, timestamp) " +
+                    "VALUES (?, ?, ?, ?, ?, ?, ?)",
+                    Statement.RETURN_GENERATED_KEYS);
+            
+            ps.setString(1, target.getUniqueId().toString());
+            ps.setString(2, targetName);
+            ps.setString(3, senderUUID);
+            ps.setString(4, senderName);
+            ps.setInt(5, reasonId);
+            ps.setString(6, customReason);
+            ps.setLong(7, now);
+            
+            ps.executeUpdate();
+            
+            ResultSet rs = ps.getGeneratedKeys();
+            int kickId = rs.next() ? rs.getInt(1) : -1;
+            
+            rs.close();
+            ps.close();
+            
+            // Get the reason name
+            String reasonName = getReasonName(reasonId);
+            
+            // Build kick message
+            String reason = customReason != null && !customReason.isEmpty() ? 
+                    reasonName + ": " + customReason : reasonName;
+            
+            String kickMessage = configManager.getMessage("punishment.kick_message",
+                    "reason", reason,
+                    "staff", senderName);
+            
+            // Kick the player
+            target.disconnect(new TextComponent(kickMessage));
+            
+            // Notify the sender
+            sender.sendMessage(new TextComponent(configManager.getMessage("punishment.kick_success",
+                    "player", targetName,
+                    "reason", reasonName,
+                    "id", String.valueOf(kickId))));
+            
+            // Broadcast to staff if enabled
+            if (plugin.getConfig().getBoolean("punishments.broadcast_to_staff", true)) {
+                broadcastToStaff(configManager.getMessage("punishment.kick_broadcast",
+                        "player", targetName,
+                        "reason", reasonName,
+                        "staff", senderName,
+                        "id", String.valueOf(kickId)));
+            }
+            
+            // Send to API for dashboard
+            if (plugin.getApiManager().isApiEnabled()) {
+                plugin.getApiManager().sendKick(targetName, reasonName, senderName);
+            }
+            
+            return true;
+            
+        } catch (SQLException e) {
+            plugin.getLogger().severe("Failed to kick player: " + e.getMessage());
             e.printStackTrace();
             sender.sendMessage(new TextComponent(configManager.getMessage("punishment.error",
                     "error", e.getMessage())));

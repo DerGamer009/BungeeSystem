@@ -72,8 +72,13 @@ public class CommandManager {
         pm.registerCommand(plugin, new UnbanCommand(plugin));
         pm.registerCommand(plugin, new MuteCommand(plugin));
         pm.registerCommand(plugin, new UnmuteCommand(plugin));
+        pm.registerCommand(plugin, new KickCommand(plugin));
         pm.registerCommand(plugin, new WarnCommand(plugin));
         pm.registerCommand(plugin, new ReportCommand(plugin));
         pm.registerCommand(plugin, new ReportsCommand(plugin));
+        
+        // API integration commands
+        pm.registerCommand(plugin, new PlayerInfoCommand(plugin));
+        pm.registerCommand(plugin, new ServerStatsCommand(plugin));
     }
 } 

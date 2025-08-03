@@ -49,7 +49,7 @@ public class ChatListener implements Listener {
         ProxiedPlayer player = (ProxiedPlayer) event.getSender();
         String message = event.getMessage();
         
-        // Check if player is muted
+        // Check if player is muted (local database)
         if (punishmentManager.isPlayerMuted(player.getUniqueId())) {
             // Get mute details
             Map<String, Object> muteInfo = punishmentManager.getPlayerMute(player.getUniqueId());
@@ -79,6 +79,19 @@ public class ChatListener implements Listener {
                 // Notify the player they are muted
                 player.sendMessage(new TextComponent(plugin.getPrefix() + plugin.getErrorMessageColor() + 
                         "You are muted " + expiryStr + " for: " + reason));
+                
+                // Cancel the chat message
+                event.setCancelled(true);
+                return;
+            }
+        }
+        
+        // Check if player is muted via API
+        if (plugin.getConfig().getBoolean("features.punishment_checks", true) && 
+            plugin.getApiManager().isApiEnabled()) {
+            if (plugin.getApiManager().checkPlayerMute(player.getName(), player.getUniqueId().toString())) {
+                player.sendMessage(new TextComponent(plugin.getPrefix() + plugin.getErrorMessageColor() + 
+                        "You are muted via the dashboard. Please contact staff for assistance."));
                 
                 // Cancel the chat message
                 event.setCancelled(true);
