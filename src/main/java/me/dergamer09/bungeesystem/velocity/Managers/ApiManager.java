@@ -117,7 +117,7 @@ public class ApiManager {
         } catch (IOException e) {
             plugin.getLogger().error("Failed to load token.yml: " + e.getMessage());
             // Set defaults
-            this.apiUrl = "http://45.86.155.38:25664";
+            this.apiUrl = "http://api.devvoxel.net/";
             this.serverToken = "";
             this.apiEnabled = true;
             this.timeout = 5000;
@@ -131,24 +131,57 @@ public class ApiManager {
     private void initializeServerConnection() {
         CompletableFuture.runAsync(() -> {
             try {
+                // First, test if the API is reachable
+                if (!testApiConnection()) {
+                    plugin.getLogger().warn("API server is not reachable. API features will be disabled.");
+                    this.apiEnabled = false;
+                    return;
+                }
+                
                 // Step 1: Send Server-IP + Port to POST /auth/server/connect
                 if (!connectServer()) {
-                    plugin.getLogger().warn("Failed to connect server to API");
-                    return;
+                    plugin.getLogger().warn("Failed to connect server to API - server registration not implemented");
+                    // Don't disable API completely, just skip server registration
                 }
                 
                 // Step 2: Send Token to POST /auth/server/token
                 if (!authenticateToken()) {
-                    plugin.getLogger().warn("Failed to authenticate token with API");
-                    return;
+                    plugin.getLogger().warn("Failed to authenticate token with API - token authentication not implemented");
+                    // Don't disable API completely, just skip token authentication
                 }
                 
-                plugin.getLogger().info("✅ Server successfully connected and authenticated with API");
+                plugin.getLogger().info("✅ API connection test completed");
                 
             } catch (Exception e) {
                 plugin.getLogger().warn("Error during server connection initialization: " + e.getMessage());
             }
         });
+    }
+    
+    /**
+     * Test if the API is reachable
+     */
+    private boolean testApiConnection() {
+        try {
+            URL url = new URL(apiUrl + "/auth/servers");
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("GET");
+            connection.setConnectTimeout(timeout);
+            connection.setReadTimeout(timeout);
+            
+            int responseCode = connection.getResponseCode();
+            if (responseCode == 200) {
+                plugin.getLogger().info("✅ API server is reachable");
+                return true;
+            } else {
+                plugin.getLogger().warn("❌ API server returned HTTP " + responseCode);
+                return false;
+            }
+            
+        } catch (Exception e) {
+            plugin.getLogger().warn("❌ API connection test failed: " + e.getMessage());
+            return false;
+        }
     }
     
     /**

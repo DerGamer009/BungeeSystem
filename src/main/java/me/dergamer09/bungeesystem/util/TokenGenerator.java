@@ -67,14 +67,14 @@ public class TokenGenerator {
             
             // Update the token
             config.set("server.token", token);
-            config.set("server.api_url", "http://45.86.155.38:25664");
+            config.set("server.api_url", "http://api.devvoxel.net/");
             config.set("api.enabled", true);
             config.set("api.timeout", 5000);
             config.set("api.retry_attempts", 3);
-            config.set("endpoints.health", "/health");
-                    config.set("endpoints.bans", "/auth/punishments/bans");
-        config.set("endpoints.mutes", "/auth/punishments/mutes");
-        config.set("endpoints.reports", "/auth/reports");
+            config.set("endpoints.health", "/auth/health");
+            config.set("endpoints.bans", "/auth/punishments/bans");
+            config.set("endpoints.mutes", "/auth/punishments/mutes");
+            config.set("endpoints.reports", "/auth/reports");
             
             // Save the configuration
             ConfigurationProvider.getProvider(YamlConfiguration.class).save(config, tokenFile);

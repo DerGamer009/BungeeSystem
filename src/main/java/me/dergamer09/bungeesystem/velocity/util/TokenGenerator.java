@@ -72,7 +72,7 @@ public class TokenGenerator {
                 "\n" +
                 "server:\n" +
                 "  token: \"" + token + "\"\n" +
-                "  api_url: \"https://api.devvoxel.net/\"\n" +
+                "  api_url: \"http://api.devvoxel.net/\"\n" +
                 "  \n" +
                 "# API Configuration\n" +
                 "api:\n" +
@@ -82,7 +82,7 @@ public class TokenGenerator {
                 "  \n" +
                 "# Endpoints\n" +
                 "endpoints:\n" +
-                "  health: \"/health\"\n" +
+                "  health: \"/auth/health\"\n" +
                 "  bans: \"/auth/punishments/bans\"\n" +
                 "  mutes: \"/auth/punishments/mutes\"\n" +
                 "  reports: \"/auth/reports\"\n";
