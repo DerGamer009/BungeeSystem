@@ -70,9 +70,23 @@ public class ApiManager {
      */
     private void loadApiConfig() {
         try {
-            // Load from the same config.yml that BungeeCord uses
-            Path configFile = Path.of("src/main/resources/config.yml");
-            if (Files.exists(configFile)) {
+            // Try multiple possible paths for the config file
+            Path[] possiblePaths = {
+                Path.of("src/main/resources/config.yml"),
+                Path.of("config.yml"),
+                Path.of("plugins/BungeeSystem/config.yml"),
+                Path.of("plugins/velocity/config.yml")
+            };
+            
+            Path configFile = null;
+            for (Path path : possiblePaths) {
+                if (Files.exists(path)) {
+                    configFile = path;
+                    break;
+                }
+            }
+            
+            if (configFile != null) {
                 String content = new String(Files.readAllBytes(configFile));
                 String[] lines = content.split("\n");
                 
@@ -117,13 +131,16 @@ public class ApiManager {
                         inApiSection = false;
                     }
                 }
+                
+                plugin.getLogger().info("Loaded API config from: " + configFile.toString());
+                plugin.getLogger().info("API enabled: " + this.apiEnabled);
             } else {
                 // If config file doesn't exist, use hardcoded defaults
                 this.apiUrl = "http://api.devvoxel.net/";
                 this.apiEnabled = true; // Enable by default for Velocity
                 this.timeout = 5000;
                 this.retryAttempts = 3;
-                plugin.getLogger().info("Config file not found, using default API settings");
+                plugin.getLogger().info("Config file not found in any location, using default API settings");
             }
         } catch (IOException e) {
             plugin.getLogger().warn("Failed to load config.yml: " + e.getMessage());
