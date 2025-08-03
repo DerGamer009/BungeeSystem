@@ -34,10 +34,13 @@ public class ApiManager {
     public ApiManager(VelocitySystem plugin) {
         this.plugin = plugin;
         
+        // Load API configuration from config.yml (Velocity uses the same config structure)
+        loadApiConfig();
+        
         // Load token configuration
         loadTokenConfig();
         
-        // Auto-generate token if none exists
+        // Auto-generate token if none exists and API is enabled
         if (apiEnabled && (serverToken.isEmpty() || serverToken.equals("your_server_token_here"))) {
             plugin.getLogger().info("No valid token found. Generating new server token...");
             String newToken = TokenGenerator.generateAndSaveToken(plugin);
@@ -50,13 +53,77 @@ public class ApiManager {
             }
         } else if (apiEnabled && !serverToken.isEmpty()) {
             plugin.getLogger().info("API Manager initialized with existing token: " + maskToken(serverToken));
+        } else if (!apiEnabled) {
+            plugin.getLogger().info("API Manager disabled - API features are disabled in config.yml");
         } else {
-            plugin.getLogger().warn("API Manager disabled - no token configured or API disabled");
+            plugin.getLogger().warn("API Manager disabled - no token configured");
         }
         
         // Initialize server connection if API is enabled
         if (apiEnabled && !serverToken.isEmpty()) {
             initializeServerConnection();
+        }
+    }
+    
+    /**
+     * Load API configuration from config.yml
+     */
+    private void loadApiConfig() {
+        try {
+            Path configFile = plugin.getDataDirectory().resolve("config.yml");
+            if (Files.exists(configFile)) {
+                String content = new String(Files.readAllBytes(configFile));
+                String[] lines = content.split("\n");
+                
+                // Default values
+                this.apiUrl = "http://api.devvoxel.net/";
+                this.apiEnabled = false;
+                this.timeout = 5000;
+                this.retryAttempts = 3;
+                
+                // Parse configuration
+                boolean inApiSection = false;
+                for (String line : lines) {
+                    line = line.trim();
+                    if (line.startsWith("api:")) {
+                        inApiSection = true;
+                    } else if (inApiSection && line.startsWith("url:")) {
+                        this.apiUrl = line.substring(line.indexOf(":") + 1).trim().replace("\"", "").replace("'", "");
+                    } else if (inApiSection && line.startsWith("enabled:")) {
+                        this.apiEnabled = line.contains("true");
+                    } else if (inApiSection && line.startsWith("timeout:")) {
+                        try {
+                            String timeoutStr = line.substring(line.indexOf(":") + 1).trim();
+                            if (timeoutStr.contains("#")) {
+                                timeoutStr = timeoutStr.substring(0, timeoutStr.indexOf("#")).trim();
+                            }
+                            this.timeout = Integer.parseInt(timeoutStr);
+                        } catch (NumberFormatException e) {
+                            // Use default
+                        }
+                    } else if (inApiSection && line.startsWith("retry_attempts:")) {
+                        try {
+                            String retryStr = line.substring(line.indexOf(":") + 1).trim();
+                            if (retryStr.contains("#")) {
+                                retryStr = retryStr.substring(0, retryStr.indexOf("#")).trim();
+                            }
+                            this.retryAttempts = Integer.parseInt(retryStr);
+                        } catch (NumberFormatException e) {
+                            // Use default
+                        }
+                    } else if (inApiSection && !line.startsWith(" ") && !line.isEmpty()) {
+                        // Exit API section
+                        inApiSection = false;
+                    }
+                }
+            }
+        } catch (IOException e) {
+            plugin.getLogger().warn("Failed to load config.yml: " + e.getMessage());
+            // Use defaults
+            this.apiUrl = "http://api.devvoxel.net/";
+            this.apiEnabled = false;
+            this.timeout = 5000;
+            this.retryAttempts = 3;
         }
     }
     
@@ -76,52 +143,20 @@ public class ApiManager {
             String[] lines = content.split("\n");
             
             // Default values
-            this.apiUrl = "http://45.86.155.38:25664";
             this.serverToken = "";
-            this.apiEnabled = true;
-            this.timeout = 5000;
-            this.retryAttempts = 3;
             
             // Parse configuration
             for (String line : lines) {
                 line = line.trim();
                 if (line.startsWith("token:")) {
                     this.serverToken = line.substring(line.indexOf(":") + 1).trim().replace("\"", "").replace("'", "");
-                } else if (line.startsWith("api_url:")) {
-                    // Parse API URL if present
-                } else if (line.startsWith("enabled:")) {
-                    this.apiEnabled = line.contains("true");
-                } else if (line.startsWith("timeout:")) {
-                    try {
-                        String timeoutStr = line.substring(line.indexOf(":") + 1).trim();
-                        if (timeoutStr.contains("#")) {
-                            timeoutStr = timeoutStr.substring(0, timeoutStr.indexOf("#")).trim();
-                        }
-                        this.timeout = Integer.parseInt(timeoutStr);
-                    } catch (NumberFormatException e) {
-                        // Use default
-                    }
-                } else if (line.startsWith("retry_attempts:")) {
-                    try {
-                        String retryStr = line.substring(line.indexOf(":") + 1).trim();
-                        if (retryStr.contains("#")) {
-                            retryStr = retryStr.substring(0, retryStr.indexOf("#")).trim();
-                        }
-                        this.retryAttempts = Integer.parseInt(retryStr);
-                    } catch (NumberFormatException e) {
-                        // Use default
-                    }
                 }
             }
             
         } catch (IOException e) {
             plugin.getLogger().error("Failed to load token.yml: " + e.getMessage());
             // Set defaults
-            this.apiUrl = "http://api.devvoxel.net/";
             this.serverToken = "";
-            this.apiEnabled = true;
-            this.timeout = 5000;
-            this.retryAttempts = 3;
         }
     }
     

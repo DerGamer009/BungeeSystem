@@ -36,16 +36,19 @@ public class ApiManager {
     public ApiManager(BungeeSystem plugin) {
         this.plugin = plugin;
         
-        // Load token configuration
-        Configuration tokenConfig = loadTokenConfig();
-        this.apiUrl = tokenConfig.getString("server.api_url", "https://api.devvoxel.net/");
-        this.serverToken = tokenConfig.getString("server.token", "");
-        this.apiEnabled = tokenConfig.getBoolean("api.enabled", true);
-        this.timeout = tokenConfig.getInt("api.timeout", 5000);
-        this.retryAttempts = tokenConfig.getInt("api.retry_attempts", 3);
-        this.serverId = tokenConfig.getString("server.server_id", "");
+        // Load API configuration from config.yml
+        Configuration config = plugin.getConfig();
+        this.apiUrl = config.getString("api.url", "http://api.devvoxel.net/");
+        this.apiEnabled = config.getBoolean("api.enabled", false);
+        this.timeout = config.getInt("api.timeout", 5000);
+        this.retryAttempts = config.getInt("api.retry_attempts", 3);
+        this.serverId = config.getString("api.server_id", "");
         
-        // Auto-generate token if none exists
+        // Load token configuration from token.yml
+        Configuration tokenConfig = loadTokenConfig();
+        this.serverToken = tokenConfig.getString("server.token", "");
+        
+        // Auto-generate token if none exists and API is enabled
         if (apiEnabled && (serverToken.isEmpty() || serverToken.equals("your_server_token_here"))) {
             plugin.getLogger().info("No valid token found. Generating new server token...");
             String newToken = TokenGenerator.generateAndSaveToken(plugin);
@@ -58,8 +61,10 @@ public class ApiManager {
             }
         } else if (apiEnabled && !serverToken.isEmpty()) {
             plugin.getLogger().info("API Manager initialized with existing token: " + maskToken(serverToken));
+        } else if (!apiEnabled) {
+            plugin.getLogger().info("API Manager disabled - API features are disabled in config.yml");
         } else {
-            plugin.getLogger().warning("API Manager disabled - no token configured or API disabled");
+            plugin.getLogger().warning("API Manager disabled - no token configured");
         }
         
         // Initialize server connection if API is enabled
