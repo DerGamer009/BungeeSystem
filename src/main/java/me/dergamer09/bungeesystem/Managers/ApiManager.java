@@ -625,12 +625,18 @@ public class ApiManager {
      * Reload token from configuration
      */
     public void reloadToken() {
+        // Reload API settings from config.yml
+        Configuration config = plugin.getConfig();
+        this.apiEnabled = config.getBoolean("api.enabled", false);
+        
+        // Reload token from token.yml
         Configuration tokenConfig = loadTokenConfig();
         this.serverToken = tokenConfig.getString("server.token", "");
-        this.apiEnabled = tokenConfig.getBoolean("api.enabled", true);
         
         if (apiEnabled && !serverToken.isEmpty()) {
             plugin.getLogger().info("API Manager reloaded with token: " + maskToken(serverToken));
+        } else if (!apiEnabled) {
+            plugin.getLogger().info("API Manager reloaded - API features are disabled in config.yml");
         } else {
             plugin.getLogger().warning("API Manager reloaded but no valid token found");
         }

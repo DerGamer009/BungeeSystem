@@ -691,10 +691,16 @@ public class ApiManager {
      * Reload token from configuration
      */
     public void reloadToken() {
+        // Reload API settings from config.yml
+        loadApiConfig();
+        
+        // Reload token from token.yml
         loadTokenConfig();
         
         if (apiEnabled && !serverToken.isEmpty()) {
             plugin.getLogger().info("API Manager reloaded with token: " + maskToken(serverToken));
+        } else if (!apiEnabled) {
+            plugin.getLogger().info("API Manager reloaded - API features are disabled in config.yml");
         } else {
             plugin.getLogger().warn("API Manager reloaded but no valid token found");
         }
