@@ -10,7 +10,7 @@ import net.md_5.bungee.api.event.ProxyPingEvent;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
 import net.kyori.adventure.text.minimessage.MiniMessage;
-import net.kyori.adventure.text.serializer.bungeecord.BungeeComponentSerializer;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 
 // MOTD Listener
 public class MotdListener implements Listener {
@@ -25,10 +25,10 @@ public class MotdListener implements Listener {
         MotdManager manager = plugin.getMotdManager();
         String motd = manager.getMotd(MaintenanceCommand.isMaintenanceMode());
         // Use MiniMessage to properly handle <center> and other formatting tags
-        BaseComponent[] components = BungeeComponentSerializer.get().serialize(
+        String legacyText = LegacyComponentSerializer.legacySection().serialize(
             MiniMessage.miniMessage().deserialize(motd)
         );
-        response.setDescriptionComponent(new TextComponent(components));
+        response.setDescriptionComponent(new TextComponent(legacyText));
     }
 }
 
