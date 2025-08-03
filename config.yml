@@ -1,10 +1,10 @@
 # Database configuration
 mysql:
-  host: "13.51.36.123"
-  port: "3306"
-  database: "s32_bungeesystem"
-  username: "u32_VejjxeK6M5"
-  password: "MYFf0eX!cK^JxuE^jZcDQeYV"
+  host: 45.133.74.86
+  port: '3306'
+  database: bungeesystem
+  username: bungeesystem
+  password: qGvvIReQchbZCDon
   useSSL: false
   autoReconnect: true
   connectionTimeout: 30000

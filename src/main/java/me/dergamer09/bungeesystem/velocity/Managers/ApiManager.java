@@ -70,7 +70,8 @@ public class ApiManager {
      */
     private void loadApiConfig() {
         try {
-            Path configFile = plugin.getDataDirectory().resolve("config.yml");
+            // Load from the same config.yml that BungeeCord uses
+            Path configFile = Path.of("src/main/resources/config.yml");
             if (Files.exists(configFile)) {
                 String content = new String(Files.readAllBytes(configFile));
                 String[] lines = content.split("\n");
@@ -116,12 +117,19 @@ public class ApiManager {
                         inApiSection = false;
                     }
                 }
+            } else {
+                // If config file doesn't exist, use hardcoded defaults
+                this.apiUrl = "http://api.devvoxel.net/";
+                this.apiEnabled = true; // Enable by default for Velocity
+                this.timeout = 5000;
+                this.retryAttempts = 3;
+                plugin.getLogger().info("Config file not found, using default API settings");
             }
         } catch (IOException e) {
             plugin.getLogger().warn("Failed to load config.yml: " + e.getMessage());
             // Use defaults
             this.apiUrl = "http://api.devvoxel.net/";
-            this.apiEnabled = false;
+            this.apiEnabled = true; // Enable by default for Velocity
             this.timeout = 5000;
             this.retryAttempts = 3;
         }
