@@ -93,6 +93,13 @@ public final class BungeeSystem extends Plugin {
         // Check API health if enabled
         if (apiManager.isApiEnabled()) {
             apiManager.checkApiHealth();
+            
+            // Validate server token with backend
+            if (apiManager.validateServerToken()) {
+                getLogger().info("✅ Server token validation successful - Ready for dashboard integration");
+            } else {
+                getLogger().warning("⚠️  Server token validation failed - Check your token configuration");
+            }
         }
     }
 

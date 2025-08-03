@@ -61,6 +61,7 @@ public class VelocityCommandManager {
         registerPlaceholder(cm, "warn", new WarnCommand());
         registerPlaceholder(cm, "whois", new WhoisCommand());
         registerPlaceholder(cm, "generatetoken", new GenerateTokenCommand(plugin));
+        registerPlaceholder(cm, "validatetoken", new ValidateTokenCommand(plugin));
     }
 
     private void registerPlaceholder(CommandManager cm, String name, SimpleCommand command) {

@@ -234,4 +234,56 @@ public class ApiManager {
             plugin.getLogger().warning("API Manager reloaded but no valid token found");
         }
     }
+    
+    /**
+     * Validate server token with the backend
+     * 
+     * @return true if token is valid, false otherwise
+     */
+    public boolean validateServerToken() {
+        if (!apiEnabled || serverToken.isEmpty()) {
+            plugin.getLogger().warning("Cannot validate token - API disabled or no token configured");
+            return false;
+        }
+        
+        try {
+            URL url = new URL(apiUrl + "/api/servers/token");
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("POST");
+            connection.setRequestProperty("Content-Type", "application/json");
+            connection.setRequestProperty("X-API-Key", serverToken);
+            connection.setConnectTimeout(timeout);
+            connection.setReadTimeout(timeout);
+            connection.setDoOutput(true);
+            
+            // Send token validation request
+            JSONObject validationData = new JSONObject();
+            validationData.put("token", serverToken);
+            validationData.put("server_type", "bungeecord");
+            validationData.put("timestamp", System.currentTimeMillis());
+            
+            try (OutputStream os = connection.getOutputStream()) {
+                os.write(validationData.toJSONString().getBytes(StandardCharsets.UTF_8));
+            }
+            
+            int responseCode = connection.getResponseCode();
+            if (responseCode == 200) {
+                plugin.getLogger().info("✅ Server token validated successfully with backend");
+                return true;
+            } else if (responseCode == 401) {
+                plugin.getLogger().warning("❌ Server token validation failed - Invalid token");
+                return false;
+            } else if (responseCode == 404) {
+                plugin.getLogger().warning("❌ Server token validation failed - Endpoint not found");
+                return false;
+            } else {
+                plugin.getLogger().warning("❌ Server token validation failed - HTTP " + responseCode);
+                return false;
+            }
+            
+        } catch (Exception e) {
+            plugin.getLogger().warning("❌ Server token validation error: " + e.getMessage());
+            return false;
+        }
+    }
 } 

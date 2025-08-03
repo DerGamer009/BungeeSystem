@@ -76,6 +76,13 @@ public class VelocitySystem {
         // Check API health if enabled
         if (apiManager.isApiEnabled()) {
             apiManager.checkApiHealth();
+            
+            // Validate server token with backend
+            if (apiManager.validateServerToken()) {
+                logger.info("✅ Server token validation successful - Ready for dashboard integration");
+            } else {
+                logger.warn("⚠️  Server token validation failed - Check your token configuration");
+            }
         }
 
         // Schedule placeholder task

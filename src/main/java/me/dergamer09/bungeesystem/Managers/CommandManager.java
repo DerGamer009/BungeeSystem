@@ -55,6 +55,7 @@ public class CommandManager {
         pm.registerCommand(plugin, new ReloadConfigCommand());
         pm.registerCommand(plugin, new RestartCommand());
         pm.registerCommand(plugin, new GenerateTokenCommand());
+        pm.registerCommand(plugin, new ValidateTokenCommand());
         
         // Quality-of-life commands
         pm.registerCommand(plugin, new AfkCommand());

@@ -21,7 +21,15 @@ Verwende den Command `/generatetoken`:
 /generatetoken force    # Überschreibt existierenden Token
 ```
 
-### 3. Token-Konfiguration (Optional)
+### 3. Token-Validierung
+
+Validiere deinen Token mit dem Backend:
+
+```bash
+/validatetoken          # Validiert den Token mit dem Backend
+```
+
+### 4. Token-Konfiguration (Optional)
 
 Falls du manuell konfigurieren möchtest, erstelle eine `token.yml`:
 
@@ -94,7 +102,17 @@ Das Plugin loggt alle API-Aktivitäten:
 [INFO] API request successful: /api/bans
 [WARNING] API request failed (attempt 1/3): /api/mutes - HTTP 401
 [INFO] API health check successful
+[INFO] ✅ Server token validation successful with backend
+[INFO] ✅ Server token validation successful - Ready for dashboard integration
 ```
+
+### Token-Validierung
+
+Das Plugin validiert automatisch den Token beim Start:
+
+- **Automatisch:** Token wird beim Plugin-Start validiert
+- **Manuell:** Verwende `/validatetoken` für manuelle Validierung
+- **Status:** Zeigt Erfolg/Fehler in den Logs an
 
 ### Health Check
 
