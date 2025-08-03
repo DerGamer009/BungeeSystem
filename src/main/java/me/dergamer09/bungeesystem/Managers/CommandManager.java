@@ -49,9 +49,7 @@ public class CommandManager {
         pm.registerCommand(plugin, new VanishCommand());
         
         // Teleport/server commands
-        pm.registerCommand(plugin, new LobbyCommand("lobby"));
-        pm.registerCommand(plugin, new LobbyCommand("hub"));
-        pm.registerCommand(plugin, new LobbyCommand("l"));
+        pm.registerCommand(plugin, new LobbyCommand());
         
         // System and admin commands
         pm.registerCommand(plugin, new ReloadConfigCommand());
