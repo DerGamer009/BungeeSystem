@@ -17,7 +17,7 @@ api:
   url: "http://api.devvoxel.net/"
   server-ip: "auto"  # Set to "auto" to auto-detect, or specify IP manually
   port: "auto"        # Set to "auto" to auto-detect, or specify port manually
-  enabled: false      # Set to false to disable API features temporarily
+  enabled: true       # Set to true to enable API features
   timeout: 5000       # milliseconds
   retry_attempts: 3
   server_id: ""       # Will be cached after successful connection
