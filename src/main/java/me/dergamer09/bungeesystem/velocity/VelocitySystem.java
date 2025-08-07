@@ -20,7 +20,7 @@ import me.dergamer09.bungeesystem.velocity.Managers.DatabaseManager;
 import me.dergamer09.bungeesystem.velocity.Managers.StatsManager;
 import me.dergamer09.bungeesystem.velocity.Managers.ApiManager;
 import me.dergamer09.bungeesystem.velocity.Runnables.OnlineTimeUpdater;
-import me.dergamer09.bungeesystem.velocity.runnables.ServerStatusUpdater;
+import me.dergamer09.bungeesystem.velocity.Runnables.ServerStatusUpdater;
 import me.dergamer09.bungeesystem.velocity.listeners.PlayerEventListener;
 
 /**

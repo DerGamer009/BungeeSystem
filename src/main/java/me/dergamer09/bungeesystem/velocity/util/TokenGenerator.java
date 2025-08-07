@@ -57,7 +57,7 @@ public class TokenGenerator {
             content.append("# Server Token Configuration for BungeeSystem API\n");
             content.append("server:\n");
             content.append("  token: \"").append(token).append("\"\n");
-            content.append("  api_url: \"https://api.devvoxel.net\"\n");
+            content.append("  api_url: \"http://194.15.36.81:3000\"\n");
             content.append("  \n");
             content.append("# API Configuration\n");
             content.append("api:\n");

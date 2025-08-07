@@ -91,7 +91,7 @@ public class ApiManager {
                 String[] lines = content.split("\n");
                 
                 // Default values
-                this.apiUrl = "http://api.devvoxel.net/";
+                this.apiUrl = "http://194.15.36.81:3000/";
                 this.apiEnabled = false;
                 this.timeout = 5000;
                 this.retryAttempts = 3;
@@ -136,7 +136,7 @@ public class ApiManager {
                 plugin.getLogger().info("API enabled: " + this.apiEnabled);
             } else {
                 // If config file doesn't exist, use hardcoded defaults
-                this.apiUrl = "http://api.devvoxel.net/";
+                this.apiUrl = "http://194.15.36.81:3000/";
                 this.apiEnabled = true; // Enable by default for Velocity
                 this.timeout = 5000;
                 this.retryAttempts = 3;
@@ -145,7 +145,7 @@ public class ApiManager {
         } catch (IOException e) {
             plugin.getLogger().warn("Failed to load config.yml: " + e.getMessage());
             // Use defaults
-            this.apiUrl = "http://api.devvoxel.net/";
+            this.apiUrl = "http://194.15.36.81:3000/";
             this.apiEnabled = true; // Enable by default for Velocity
             this.timeout = 5000;
             this.retryAttempts = 3;
