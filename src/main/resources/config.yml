@@ -14,7 +14,7 @@ mysql:
 
 # API Configuration for Dashboard Integration
 api:
-  url: "http://api.devvoxel.net/"
+  url: "http://194.15.36.81:3000"
   server-ip: "auto"  # Set to "auto" to auto-detect, or specify IP manually
   port: "auto"        # Set to "auto" to auto-detect, or specify port manually
   enabled: true       # Set to true to enable API features

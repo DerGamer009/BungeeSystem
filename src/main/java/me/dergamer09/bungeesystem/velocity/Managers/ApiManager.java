@@ -223,7 +223,8 @@ public class ApiManager {
      */
     private boolean testApiConnection() {
         try {
-            URL url = new URL(apiUrl + "/auth/servers");
+            // Use /health endpoint instead of /auth/servers for testing
+            URL url = new URL(apiUrl + "/health");
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("GET");
             connection.setConnectTimeout(timeout);
@@ -234,7 +235,25 @@ public class ApiManager {
                 plugin.getLogger().info("✅ API server is reachable");
                 return true;
             } else {
-                plugin.getLogger().warn("❌ API server returned HTTP " + responseCode);
+                plugin.getLogger().warn("❌ API server returned HTTP " + responseCode + " for /health");
+                
+                // Try alternative endpoint
+                try {
+                    URL altUrl = new URL(apiUrl + "/auth/servers");
+                    HttpURLConnection altConnection = (HttpURLConnection) altUrl.openConnection();
+                    altConnection.setRequestMethod("GET");
+                    altConnection.setConnectTimeout(timeout);
+                    altConnection.setReadTimeout(timeout);
+                    
+                    int altResponseCode = altConnection.getResponseCode();
+                    if (altResponseCode == 200) {
+                        plugin.getLogger().info("✅ API server is reachable via /auth/servers");
+                        return true;
+                    } else {
+                        plugin.getLogger().warn("❌ API server returned HTTP " + altResponseCode + " for /auth/servers");
+                    }
+                } catch (Exception ignored) {}
+                
                 return false;
             }
             

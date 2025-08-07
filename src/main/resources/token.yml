@@ -3,7 +3,7 @@
 
 server:
   token: "your_server_token_here"
-  api_url: "http://api.devvoxel.net/"
+  api_url: "http://194.15.36.81:3000"
   server_id: ""  # Will be cached after successful connection
   
 # API Configuration
