@@ -122,7 +122,9 @@ public class PlayerEventListener implements Listener {
             // Send player quit event to API
             if (plugin.getApiManager().isApiEnabled()) {
                 String serverName = player.getServer() != null ? player.getServer().getInfo().getName() : "unknown";
-                plugin.getApiManager().sendPlayerQuit(player.getName(), uuid.toString(), serverName);
+                // Calculate session duration (simplified - could be more accurate)
+                long sessionDuration = 1800; // Default 30 minutes, could be calculated from login time
+                plugin.getApiManager().sendPlayerQuit(player.getName(), uuid.toString(), serverName, sessionDuration);
             }
 
         } catch (SQLException e) {

@@ -720,7 +720,7 @@ public class ApiManager {
                         } catch (Exception ignored) {}
                         
                         // Read successful response if needed
-                        try (var inputStream = connection.getInputStream()) {
+                        try (java.io.InputStream inputStream = connection.getInputStream()) {
                             String response = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
                             // Optional: Log response in debug mode
                         }
@@ -728,7 +728,7 @@ public class ApiManager {
                         
                     } else {
                         String errorMessage = "";
-                        try (var errorStream = connection.getErrorStream()) {
+                        try (java.io.InputStream errorStream = connection.getErrorStream()) {
                             if (errorStream != null) {
                                 errorMessage = new String(errorStream.readAllBytes(), StandardCharsets.UTF_8);
                             }

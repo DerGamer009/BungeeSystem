@@ -597,7 +597,7 @@ public class ApiManager {
                     connection.setRequestMethod(method);
                     connection.setRequestProperty("Content-Type", "application/json");
                     connection.setRequestProperty("Accept", "application/json");
-                    connection.setRequestProperty("User-Agent", "BungeeSystem/" + plugin.getVersion());
+                    connection.setRequestProperty("User-Agent", "BungeeSystem/1.2.2-SNAPSHOT");
                     
                     // Use server token for authentication
                     connection.setRequestProperty("X-API-Key", serverToken);
@@ -624,7 +624,7 @@ public class ApiManager {
                         }
                         
                         // Read successful response if needed
-                        try (var inputStream = connection.getInputStream()) {
+                        try (java.io.InputStream inputStream = connection.getInputStream()) {
                             String response = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
                             if (plugin.getConfig().getBoolean("debug.api", false) && !response.isEmpty()) {
                                 plugin.getLogger().info("API Response: " + response);
@@ -634,7 +634,7 @@ public class ApiManager {
                         
                     } else {
                         String errorMessage = "";
-                        try (var errorStream = connection.getErrorStream()) {
+                        try (java.io.InputStream errorStream = connection.getErrorStream()) {
                             if (errorStream != null) {
                                 errorMessage = new String(errorStream.readAllBytes(), StandardCharsets.UTF_8);
                             }

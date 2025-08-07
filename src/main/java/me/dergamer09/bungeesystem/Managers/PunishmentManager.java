@@ -308,7 +308,7 @@ public class PunishmentManager {
             
             // Send to API for dashboard
             if (plugin.getApiManager().isApiEnabled()) {
-                plugin.getApiManager().sendBan(targetName, reasonName, senderName, duration);
+                plugin.getApiManager().sendBan(targetUUID.toString(), targetName, reasonName, senderName, duration);
             }
             
             return true;
@@ -677,7 +677,7 @@ public class PunishmentManager {
             
             // Send to API for dashboard
             if (plugin.getApiManager().isApiEnabled()) {
-                plugin.getApiManager().sendMute(targetName, reasonName, senderName, duration);
+                plugin.getApiManager().sendMute(targetUUID.toString(), targetName, reasonName, senderName, duration);
             }
             
             return true;
@@ -944,7 +944,7 @@ public class PunishmentManager {
             
             // Send to API for dashboard
             if (plugin.getApiManager().isApiEnabled()) {
-                plugin.getApiManager().sendWarn(targetName, reasonName, senderName);
+                plugin.getApiManager().sendWarn(targetUUID.toString(), targetName, reasonName, senderName, "medium");
             }
             
             return true;
@@ -1036,7 +1036,7 @@ public class PunishmentManager {
             
             // Send to API for dashboard
             if (plugin.getApiManager().isApiEnabled()) {
-                plugin.getApiManager().sendKick(targetName, reasonName, senderName);
+                plugin.getApiManager().sendKick(target.getUniqueId().toString(), targetName, reasonName, senderName);
             }
             
             return true;
@@ -1326,7 +1326,7 @@ public class PunishmentManager {
             
             // Send to API for dashboard
             if (plugin.getApiManager().isApiEnabled()) {
-                plugin.getApiManager().sendReport(senderName, targetName, reasonName, serverName);
+                plugin.getApiManager().sendReport(senderUUID, senderName, targetUUID.toString(), targetName, reasonName, serverName);
             }
             
             return true;
