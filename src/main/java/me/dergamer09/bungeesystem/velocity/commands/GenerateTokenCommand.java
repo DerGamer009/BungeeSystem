@@ -3,77 +3,79 @@ package me.dergamer09.bungeesystem.velocity.commands;
 import com.velocitypowered.api.command.SimpleCommand;
 import com.velocitypowered.api.command.CommandSource;
 import com.velocitypowered.api.proxy.Player;
-import com.velocitypowered.api.proxy.ProxyServer;
-import me.dergamer09.bungeesystem.velocity.VelocitySystem;
-import me.dergamer09.bungeesystem.velocity.util.TokenGenerator;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
-
-import java.util.List;
+import me.dergamer09.bungeesystem.velocity.VelocitySystem;
+import me.dergamer09.bungeesystem.velocity.util.TokenGenerator;
 
 /**
- * Command to generate a new server token for API access (Velocity version)
+ * Command to generate server tokens for API authentication
  */
 public class GenerateTokenCommand implements SimpleCommand {
-
+    
     private final VelocitySystem plugin;
-    private final ProxyServer server;
-
+    
     public GenerateTokenCommand(VelocitySystem plugin) {
         this.plugin = plugin;
-        this.server = plugin.getServer();
     }
-
+    
     @Override
     public void execute(Invocation invocation) {
         CommandSource source = invocation.source();
         String[] args = invocation.arguments();
-
+        
         // Check permission
-        if (!source.hasPermission("bungeesystem.admin.generatetoken")) {
-            source.sendMessage(Component.text("You don't have permission to use this command!", NamedTextColor.RED));
-            return;
+        if (source instanceof Player) {
+            Player player = (Player) source;
+            if (!player.hasPermission("bungeesystem.generatetoken")) {
+                source.sendMessage(Component.text("You don't have permission to use this command!")
+                        .color(NamedTextColor.RED));
+                return;
+            }
         }
-
-        // Check if token already exists
-        if (TokenGenerator.tokenExists(plugin) && (args.length == 0 || !args[0].equalsIgnoreCase("force"))) {
-            String currentToken = TokenGenerator.getCurrentToken(plugin);
-            source.sendMessage(Component.text("A token already exists: " + 
-                    TokenGenerator.maskToken(currentToken), NamedTextColor.YELLOW));
-            source.sendMessage(Component.text("Use /generatetoken force to generate a new one.", NamedTextColor.YELLOW));
-            return;
-        }
-
-        // Generate new token
-        source.sendMessage(Component.text("Generating new server token...", NamedTextColor.GREEN));
         
-        String newToken = TokenGenerator.generateAndSaveToken(plugin);
+        boolean force = args.length > 0 && args[0].equalsIgnoreCase("force");
         
-        if (newToken != null) {
-            source.sendMessage(Component.text("✅ New token generated successfully!", NamedTextColor.GREEN));
-            source.sendMessage(Component.text("Token: " + newToken, NamedTextColor.AQUA));
-            source.sendMessage(Component.text("Token has been saved to token.yml", NamedTextColor.GRAY));
-            source.sendMessage(Component.text("⚠️  Keep this token secure and don't share it!", NamedTextColor.YELLOW));
+        try {
+            String token = TokenGenerator.generateAndSaveToken(plugin);
             
-            // Reload API Manager with new token
-            plugin.getApiManager().reloadToken();
+            if (token != null) {
+                source.sendMessage(Component.text("✅ Server token generated successfully!")
+                        .color(NamedTextColor.GREEN));
+                source.sendMessage(Component.text("Token: " + maskToken(token))
+                        .color(NamedTextColor.YELLOW));
+                source.sendMessage(Component.text("💡 Full token saved to token.yml")
+                        .color(NamedTextColor.GRAY));
+                
+                // Reload API manager with new token
+                plugin.getApiManager().reloadToken();
+                
+            } else {
+                source.sendMessage(Component.text("❌ Failed to generate token!")
+                        .color(NamedTextColor.RED));
+            }
             
-        } else {
-            source.sendMessage(Component.text("❌ Failed to generate token. Check console for errors.", NamedTextColor.RED));
+        } catch (Exception e) {
+            source.sendMessage(Component.text("❌ Error generating token: " + e.getMessage())
+                    .color(NamedTextColor.RED));
+            plugin.getLogger().error("Error in generatetoken command", e);
         }
     }
-
-    @Override
-    public List<String> suggest(Invocation invocation) {
-        String[] args = invocation.arguments();
-        if (args.length == 1) {
-            return List.of("force");
-        }
-        return List.of();
-    }
-
+    
     @Override
     public boolean hasPermission(Invocation invocation) {
-        return invocation.source().hasPermission("bungeesystem.admin.generatetoken");
+        CommandSource source = invocation.source();
+        if (source instanceof Player) {
+            return ((Player) source).hasPermission("bungeesystem.generatetoken");
+        }
+        return true; // Console always has permission
     }
-} 
+    
+    /**
+     * Mask token for display
+     */
+    private String maskToken(String token) {
+        if (token.length() <= 8) return "***";
+        return token.substring(0, 4) + "***" + token.substring(token.length() - 4);
+    }
+}

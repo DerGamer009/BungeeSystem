@@ -20,6 +20,10 @@ public class VelocityCommandManager {
         com.velocitypowered.api.command.CommandManager cm = plugin.getServer().getCommandManager();
         cm.register(cm.metaBuilder("bsversion").plugin(plugin).build(), new VersionCommand(plugin, plugin.getVersion()));
         cm.register(cm.metaBuilder("ping").plugin(plugin).build(), new PingCommand(plugin));
+        
+        // API-related commands
+        cm.register(cm.metaBuilder("generatetoken").plugin(plugin).build(), new GenerateTokenCommand(plugin));
+        cm.register(cm.metaBuilder("validatetoken").plugin(plugin).build(), new ValidateTokenCommand(plugin));
 
         // Register placeholders for other commands
         registerPlaceholder(cm, "afk", new AfkCommand(plugin));

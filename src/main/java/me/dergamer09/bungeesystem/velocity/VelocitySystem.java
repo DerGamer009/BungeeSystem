@@ -20,6 +20,8 @@ import me.dergamer09.bungeesystem.velocity.Managers.DatabaseManager;
 import me.dergamer09.bungeesystem.velocity.Managers.StatsManager;
 import me.dergamer09.bungeesystem.velocity.Managers.ApiManager;
 import me.dergamer09.bungeesystem.velocity.Runnables.OnlineTimeUpdater;
+import me.dergamer09.bungeesystem.velocity.runnables.ServerStatusUpdater;
+import me.dergamer09.bungeesystem.velocity.listeners.PlayerEventListener;
 
 /**
  * Velocity entry point for BungeeSystem.
@@ -85,9 +87,20 @@ public class VelocitySystem {
             }
         }
 
-        // Schedule placeholder task
+        // Schedule tasks
         server.getScheduler().buildTask(this, new OnlineTimeUpdater(this))
                 .repeat(java.time.Duration.ofSeconds(1)).schedule();
+                
+        // Schedule server status updates every 30 seconds
+        if (apiManager.isApiEnabled()) {
+            server.getScheduler().buildTask(this, new ServerStatusUpdater(this))
+                    .repeat(java.time.Duration.ofSeconds(30)).schedule();
+        }
+        
+        // Register API-related event listeners
+        if (apiManager.isApiEnabled()) {
+            server.getEventManager().register(this, new PlayerEventListener(this));
+        }
     }
 
     @Subscribe

@@ -2,70 +2,78 @@ package me.dergamer09.bungeesystem.velocity.commands;
 
 import com.velocitypowered.api.command.SimpleCommand;
 import com.velocitypowered.api.command.CommandSource;
-import com.velocitypowered.api.proxy.ProxyServer;
-import me.dergamer09.bungeesystem.velocity.VelocitySystem;
+import com.velocitypowered.api.proxy.Player;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
+import me.dergamer09.bungeesystem.velocity.VelocitySystem;
 
-import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 /**
- * Command to validate the server token with the backend (Velocity version)
+ * Command to validate server token with the backend API
  */
 public class ValidateTokenCommand implements SimpleCommand {
-
+    
     private final VelocitySystem plugin;
-    private final ProxyServer server;
-
+    
     public ValidateTokenCommand(VelocitySystem plugin) {
         this.plugin = plugin;
-        this.server = plugin.getServer();
     }
-
+    
     @Override
     public void execute(Invocation invocation) {
         CommandSource source = invocation.source();
-        String[] args = invocation.arguments();
-
-        // Check permission
-        if (!source.hasPermission("bungeesystem.admin.validatetoken")) {
-            source.sendMessage(Component.text("You don't have permission to use this command!", NamedTextColor.RED));
-            return;
-        }
-
-        // Check if API is enabled
-        if (!plugin.getApiManager().isApiEnabled()) {
-            source.sendMessage(Component.text("❌ API is disabled or no token configured!", NamedTextColor.RED));
-            return;
-        }
-
-        // Start validation
-        source.sendMessage(Component.text("🔍 Validating server token with backend...", NamedTextColor.YELLOW));
         
-        // Run validation asynchronously
-        server.getScheduler().buildTask(plugin, () -> {
-            boolean isValid = plugin.getApiManager().validateServerToken();
-            
-            // Send result back to sender
-            server.getScheduler().buildTask(plugin, () -> {
+        // Check permission
+        if (source instanceof Player) {
+            Player player = (Player) source;
+            if (!player.hasPermission("bungeesystem.validatetoken")) {
+                source.sendMessage(Component.text("You don't have permission to use this command!")
+                        .color(NamedTextColor.RED));
+                return;
+            }
+        }
+        
+        if (!plugin.getApiManager().isApiEnabled()) {
+            source.sendMessage(Component.text("❌ API is disabled in config.yml")
+                    .color(NamedTextColor.RED));
+            return;
+        }
+        
+        source.sendMessage(Component.text("🔄 Validating server token with backend...")
+                .color(NamedTextColor.YELLOW));
+        
+        // Validate token asynchronously
+        CompletableFuture.runAsync(() -> {
+            try {
+                boolean isValid = plugin.getApiManager().validateServerToken();
+                
                 if (isValid) {
-                    source.sendMessage(Component.text("✅ Server token validation successful!", NamedTextColor.GREEN));
-                    source.sendMessage(Component.text("Your server is now connected to the dashboard.", NamedTextColor.AQUA));
+                    source.sendMessage(Component.text("✅ Server token validation successful!")
+                            .color(NamedTextColor.GREEN));
+                    source.sendMessage(Component.text("🎉 Your server is ready for dashboard integration!")
+                            .color(NamedTextColor.GREEN));
                 } else {
-                    source.sendMessage(Component.text("❌ Server token validation failed!", NamedTextColor.RED));
-                    source.sendMessage(Component.text("Check your token configuration and try again.", NamedTextColor.YELLOW));
+                    source.sendMessage(Component.text("❌ Server token validation failed!")
+                            .color(NamedTextColor.RED));
+                    source.sendMessage(Component.text("💡 Try generating a new token: /generatetoken force")
+                            .color(NamedTextColor.GRAY));
                 }
-            }).schedule();
-        }).schedule();
+                
+            } catch (Exception e) {
+                source.sendMessage(Component.text("❌ Error validating token: " + e.getMessage())
+                        .color(NamedTextColor.RED));
+                plugin.getLogger().error("Error in validatetoken command", e);
+            }
+        });
     }
-
-    @Override
-    public List<String> suggest(Invocation invocation) {
-        return List.of();
-    }
-
+    
     @Override
     public boolean hasPermission(Invocation invocation) {
-        return invocation.source().hasPermission("bungeesystem.admin.validatetoken");
+        CommandSource source = invocation.source();
+        if (source instanceof Player) {
+            return ((Player) source).hasPermission("bungeesystem.validatetoken");
+        }
+        return true; // Console always has permission
     }
-} 
+}

@@ -379,16 +379,23 @@ public class ApiManager {
     /**
      * Send a ban to the API
      */
-    public void sendBan(String player, String reason, String admin, long duration) {
+    public void sendBan(String playerUuid, String playerUsername, String reason, String adminName, long duration) {
         if (!apiEnabled || serverToken.isEmpty()) return;
         
         JSONObject banData = new JSONObject();
-        banData.put("player", player);
+        banData.put("playerUuid", playerUuid);
+        banData.put("playerUsername", playerUsername);
         banData.put("reason", reason);
-        banData.put("admin", admin);
-        banData.put("duration", duration);
-        banData.put("server_id", serverId);
+        banData.put("issuedBy", adminName);
+        banData.put("serverId", serverId);
         banData.put("timestamp", System.currentTimeMillis());
+        
+        // Convert duration from seconds to ISO 8601 format if not permanent
+        if (duration > 0) {
+            long expirationTime = System.currentTimeMillis() + (duration * 1000);
+            banData.put("expiresAt", new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'")
+                    .format(new java.util.Date(expirationTime)));
+        }
         
         sendApiRequest("/auth/punishments/bans", banData, "POST");
     }
@@ -396,16 +403,23 @@ public class ApiManager {
     /**
      * Send a mute to the API
      */
-    public void sendMute(String player, String reason, String admin, long duration) {
+    public void sendMute(String playerUuid, String playerUsername, String reason, String adminName, long duration) {
         if (!apiEnabled || serverToken.isEmpty()) return;
         
         JSONObject muteData = new JSONObject();
-        muteData.put("player", player);
+        muteData.put("playerUuid", playerUuid);
+        muteData.put("playerUsername", playerUsername);
         muteData.put("reason", reason);
-        muteData.put("admin", admin);
-        muteData.put("duration", duration);
-        muteData.put("server_id", serverId);
+        muteData.put("issuedBy", adminName);
+        muteData.put("serverId", serverId);
         muteData.put("timestamp", System.currentTimeMillis());
+        
+        // Convert duration from seconds to ISO 8601 format if not permanent
+        if (duration > 0) {
+            long expirationTime = System.currentTimeMillis() + (duration * 1000);
+            muteData.put("expiresAt", new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'")
+                    .format(new java.util.Date(expirationTime)));
+        }
         
         sendApiRequest("/auth/punishments/mutes", muteData, "POST");
     }
@@ -413,15 +427,18 @@ public class ApiManager {
     /**
      * Send a report to the API
      */
-    public void sendReport(String reporter, String target, String reason, String server) {
+    public void sendReport(String reporterUuid, String reporterUsername, String targetUuid, String targetUsername, String reason, String serverName) {
         if (!apiEnabled || serverToken.isEmpty()) return;
         
         JSONObject reportData = new JSONObject();
-        reportData.put("reporter", reporter);
-        reportData.put("target", target);
+        reportData.put("reporterUuid", reporterUuid);
+        reportData.put("reporterUsername", reporterUsername);
+        reportData.put("targetUuid", targetUuid);
+        reportData.put("targetUsername", targetUsername);
         reportData.put("reason", reason);
-        reportData.put("server", server);
-        reportData.put("server_id", serverId);
+        reportData.put("serverName", serverName);
+        reportData.put("serverId", serverId);
+        reportData.put("priority", "medium");
         reportData.put("timestamp", System.currentTimeMillis());
         
         sendApiRequest("/auth/reports", reportData, "POST");
@@ -430,14 +447,15 @@ public class ApiManager {
     /**
      * Send a kick to the API
      */
-    public void sendKick(String player, String reason, String admin) {
+    public void sendKick(String playerUuid, String playerUsername, String reason, String adminName) {
         if (!apiEnabled || serverToken.isEmpty()) return;
         
         JSONObject kickData = new JSONObject();
-        kickData.put("player", player);
+        kickData.put("playerUuid", playerUuid);
+        kickData.put("playerUsername", playerUsername);
         kickData.put("reason", reason);
-        kickData.put("admin", admin);
-        kickData.put("server_id", serverId);
+        kickData.put("issuedBy", adminName);
+        kickData.put("serverId", serverId);
         kickData.put("timestamp", System.currentTimeMillis());
         
         sendApiRequest("/auth/punishments/kicks", kickData, "POST");
@@ -446,14 +464,16 @@ public class ApiManager {
     /**
      * Send a warn to the API
      */
-    public void sendWarn(String player, String reason, String admin) {
+    public void sendWarn(String playerUuid, String playerUsername, String reason, String adminName, String severity) {
         if (!apiEnabled || serverToken.isEmpty()) return;
         
         JSONObject warnData = new JSONObject();
-        warnData.put("player", player);
+        warnData.put("playerUuid", playerUuid);
+        warnData.put("playerUsername", playerUsername);
         warnData.put("reason", reason);
-        warnData.put("admin", admin);
-        warnData.put("server_id", serverId);
+        warnData.put("issuedBy", adminName);
+        warnData.put("serverId", serverId);
+        warnData.put("severity", severity != null ? severity : "medium");
         warnData.put("timestamp", System.currentTimeMillis());
         
         sendApiRequest("/auth/punishments/warns", warnData, "POST");
@@ -462,50 +482,91 @@ public class ApiManager {
     /**
      * Send player join event to API
      */
-    public void sendPlayerJoin(String player, String uuid, String server) {
+    public void sendPlayerJoin(String playerUsername, String playerUuid, String serverName) {
         if (!apiEnabled || serverToken.isEmpty()) return;
         
         JSONObject joinData = new JSONObject();
-        joinData.put("player", player);
-        joinData.put("uuid", uuid);
-        joinData.put("server", server);
-        joinData.put("server_id", serverId);
+        joinData.put("playerUsername", playerUsername);
+        joinData.put("playerUuid", playerUuid);
+        joinData.put("serverName", serverName);
+        joinData.put("serverId", serverId);
+        joinData.put("action", "join");
         joinData.put("timestamp", System.currentTimeMillis());
         
-        sendApiRequest("/auth/players/join", joinData, "POST");
+        sendApiRequest("/auth/players/events", joinData, "POST");
     }
     
     /**
      * Send player quit event to API
      */
-    public void sendPlayerQuit(String player, String uuid, String server) {
+    public void sendPlayerQuit(String playerUsername, String playerUuid, String serverName, long sessionDuration) {
         if (!apiEnabled || serverToken.isEmpty()) return;
         
         JSONObject quitData = new JSONObject();
-        quitData.put("player", player);
-        quitData.put("uuid", uuid);
-        quitData.put("server", server);
-        quitData.put("server_id", serverId);
+        quitData.put("playerUsername", playerUsername);
+        quitData.put("playerUuid", playerUuid);
+        quitData.put("serverName", serverName);
+        quitData.put("serverId", serverId);
+        quitData.put("action", "quit");
+        quitData.put("sessionDuration", sessionDuration);
         quitData.put("timestamp", System.currentTimeMillis());
         
-        sendApiRequest("/auth/players/quit", quitData, "POST");
+        sendApiRequest("/auth/players/events", quitData, "POST");
     }
     
     /**
      * Send player server switch event to API
      */
-    public void sendPlayerSwitch(String player, String uuid, String fromServer, String toServer) {
+    public void sendPlayerSwitch(String playerUsername, String playerUuid, String fromServer, String toServer) {
         if (!apiEnabled || serverToken.isEmpty()) return;
         
         JSONObject switchData = new JSONObject();
-        switchData.put("player", player);
-        switchData.put("uuid", uuid);
-        switchData.put("from_server", fromServer);
-        switchData.put("to_server", toServer);
-        switchData.put("server_id", serverId);
+        switchData.put("playerUsername", playerUsername);
+        switchData.put("playerUuid", playerUuid);
+        switchData.put("fromServer", fromServer);
+        switchData.put("toServer", toServer);
+        switchData.put("serverId", serverId);
+        switchData.put("action", "switch");
         switchData.put("timestamp", System.currentTimeMillis());
         
-        sendApiRequest("/auth/players/switch", switchData, "POST");
+        sendApiRequest("/auth/players/events", switchData, "POST");
+    }
+    
+    /**
+     * Send server status update to API
+     */
+    public void sendServerStatus(int onlinePlayers, int maxPlayers, double tps, double cpuUsage, double ramUsage, String status) {
+        if (!apiEnabled || serverToken.isEmpty()) return;
+        
+        JSONObject statusData = new JSONObject();
+        statusData.put("serverId", serverId);
+        statusData.put("onlinePlayers", onlinePlayers);
+        statusData.put("maxPlayers", maxPlayers);
+        statusData.put("tps", tps);
+        statusData.put("cpuUsage", cpuUsage);
+        statusData.put("ramUsage", ramUsage);
+        statusData.put("status", status); // online, offline, maintenance
+        statusData.put("timestamp", System.currentTimeMillis());
+        
+        sendApiRequest("/auth/servers/" + serverId + "/status", statusData, "PUT");
+    }
+    
+    /**
+     * Send player statistics update to API
+     */
+    public void sendPlayerStats(String playerUuid, String playerUsername, long totalPlaytime, int totalLogins, int votes) {
+        if (!apiEnabled || serverToken.isEmpty()) return;
+        
+        JSONObject statsData = new JSONObject();
+        statsData.put("playerUuid", playerUuid);
+        statsData.put("playerUsername", playerUsername);
+        statsData.put("totalPlaytime", totalPlaytime);
+        statsData.put("totalLogins", totalLogins);
+        statsData.put("votes", votes);
+        statsData.put("serverId", serverId);
+        statsData.put("timestamp", System.currentTimeMillis());
+        
+        sendApiRequest("/auth/players/stats", statsData, "PUT");
     }
     
     /**
@@ -615,54 +676,111 @@ public class ApiManager {
     }
     
     /**
-     * Send API request asynchronously
+     * Send API request asynchronously with improved error handling
      */
     private void sendApiRequest(String endpoint, JSONObject data, String method) {
         CompletableFuture.runAsync(() -> {
             for (int attempt = 1; attempt <= retryAttempts; attempt++) {
+                HttpURLConnection connection = null;
                 try {
                     URL url = new URL(apiUrl + endpoint);
-                    HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                    connection = (HttpURLConnection) url.openConnection();
                     connection.setRequestMethod(method);
                     connection.setRequestProperty("Content-Type", "application/json");
+                    connection.setRequestProperty("Accept", "application/json");
+                    connection.setRequestProperty("User-Agent", "BungeeSystem-Velocity/" + plugin.getVersion());
+                    
+                    // Use server token for authentication
                     connection.setRequestProperty("X-API-Key", serverToken);
+                    connection.setRequestProperty("X-Server-ID", serverId);
+                    
                     connection.setConnectTimeout(timeout);
                     connection.setReadTimeout(timeout);
                     connection.setDoOutput(true);
+                    connection.setDoInput(true);
                     
-                    // Send data
-                    try (OutputStream os = connection.getOutputStream()) {
-                        os.write(data.toJSONString().getBytes(StandardCharsets.UTF_8));
-                    }
-                    
-                    int responseCode = connection.getResponseCode();
-                    if (responseCode >= 200 && responseCode < 300) {
-                        plugin.getLogger().info("API request successful: " + endpoint);
-                        break;
-                    } else {
-                        plugin.getLogger().warn("API request failed (attempt " + attempt + "/" + retryAttempts + 
-                                "): " + endpoint + " - HTTP " + responseCode);
-                        if (attempt == retryAttempts) {
-                            plugin.getLogger().error("All API request attempts failed for: " + endpoint);
+                    // Send data if present
+                    if (data != null && !data.isEmpty()) {
+                        try (OutputStream os = connection.getOutputStream()) {
+                            os.write(data.toJSONString().getBytes(StandardCharsets.UTF_8));
+                            os.flush();
                         }
                     }
                     
-                    connection.disconnect();
-                } catch (Exception e) {
-                    plugin.getLogger().warn("API request error (attempt " + attempt + "/" + retryAttempts + 
-                            "): " + e.getMessage());
-                    if (attempt == retryAttempts) {
-                        plugin.getLogger().error("All API request attempts failed for: " + endpoint + " - " + e.getMessage());
-                    }
-                }
-                
-                // Wait before retry
-                if (attempt < retryAttempts) {
-                    try {
-                        Thread.sleep(1000 * attempt); // Exponential backoff
-                    } catch (InterruptedException ie) {
-                        Thread.currentThread().interrupt();
+                    int responseCode = connection.getResponseCode();
+                    
+                    if (responseCode >= 200 && responseCode < 300) {
+                        // Debug logging if enabled
+                        try {
+                            // Check if debug logging is enabled from config
+                            boolean debugEnabled = true; // Default true for Velocity
+                            if (debugEnabled) {
+                                plugin.getLogger().info("✅ API request successful: " + method + " " + endpoint + " (HTTP " + responseCode + ")");
+                            }
+                        } catch (Exception ignored) {}
+                        
+                        // Read successful response if needed
+                        try (var inputStream = connection.getInputStream()) {
+                            String response = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
+                            // Optional: Log response in debug mode
+                        }
                         break;
+                        
+                    } else {
+                        String errorMessage = "";
+                        try (var errorStream = connection.getErrorStream()) {
+                            if (errorStream != null) {
+                                errorMessage = new String(errorStream.readAllBytes(), StandardCharsets.UTF_8);
+                            }
+                        }
+                        
+                        plugin.getLogger().warn("❌ API request failed (attempt " + attempt + "/" + retryAttempts + 
+                                "): " + method + " " + endpoint + " - HTTP " + responseCode + 
+                                (errorMessage.isEmpty() ? "" : " - " + errorMessage));
+                        
+                        if (attempt == retryAttempts) {
+                            plugin.getLogger().error("🚫 All API request attempts failed for: " + endpoint);
+                            
+                            // Special handling for authentication errors
+                            if (responseCode == 401) {
+                                plugin.getLogger().error("Authentication failed! Please check your server token.");
+                                plugin.getLogger().info("Generate a new token with: /generatetoken force");
+                            } else if (responseCode == 404 && endpoint.contains("/auth/servers/")) {
+                                plugin.getLogger().error("Server not found in API! Please register your server.");
+                            }
+                        }
+                        
+                        // Exponential backoff for retries
+                        if (attempt < retryAttempts) {
+                            try {
+                                Thread.sleep(1000 * attempt);
+                            } catch (InterruptedException ie) {
+                                Thread.currentThread().interrupt();
+                                break;
+                            }
+                        }
+                    }
+                    
+                } catch (Exception e) {
+                    plugin.getLogger().warn("❌ API request exception (attempt " + attempt + "/" + retryAttempts + 
+                            "): " + endpoint + " - " + e.getMessage());
+                    
+                    if (attempt == retryAttempts) {
+                        plugin.getLogger().error("🚫 All API request attempts failed due to exceptions for: " + endpoint);
+                    }
+                    
+                    // Backoff for retries
+                    if (attempt < retryAttempts) {
+                        try {
+                            Thread.sleep(2000 * attempt);
+                        } catch (InterruptedException ie) {
+                            Thread.currentThread().interrupt();
+                            break;
+                        }
+                    }
+                } finally {
+                    if (connection != null) {
+                        connection.disconnect();
                     }
                 }
             }

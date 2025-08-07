@@ -1,94 +1,83 @@
 package me.dergamer09.bungeesystem.velocity.util;
 
 import me.dergamer09.bungeesystem.velocity.VelocitySystem;
-import com.velocitypowered.api.proxy.ProxyServer;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
 
-import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.security.SecureRandom;
-import java.util.Random;
 
 /**
- * Utility class for generating and managing server tokens (Velocity version)
+ * Utility class for generating and managing server tokens for Velocity
  */
 public class TokenGenerator {
     
-    private static final String CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    private static final String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
     private static final int TOKEN_LENGTH = 32;
-    private static final Random RANDOM = new SecureRandom();
+    private static final SecureRandom RANDOM = new SecureRandom();
     
     /**
-     * Generate a random token
+     * Generate a cryptographically secure random token
      * 
-     * @return A random token string
+     * @param prefix The prefix for the token (e.g., "BungeeSystem")
+     * @return A secure random token
      */
-    public static String generateToken() {
-        StringBuilder token = new StringBuilder(TOKEN_LENGTH);
-        for (int i = 0; i < TOKEN_LENGTH; i++) {
-            token.append(CHARS.charAt(RANDOM.nextInt(CHARS.length())));
+    public static String generateToken(String prefix) {
+        StringBuilder token = new StringBuilder();
+        
+        if (prefix != null && !prefix.isEmpty()) {
+            token.append(prefix).append("_");
         }
+        
+        for (int i = 0; i < TOKEN_LENGTH; i++) {
+            token.append(CHARACTERS.charAt(RANDOM.nextInt(CHARACTERS.length())));
+        }
+        
         return token.toString();
     }
     
     /**
-     * Generate a token with prefix
-     * 
-     * @param prefix The prefix to add to the token
-     * @return A token with the specified prefix
-     */
-    public static String generateToken(String prefix) {
-        return prefix + "_" + generateToken();
-    }
-    
-    /**
-     * Generate and save a token to token.yml
+     * Generate and save a token to token.yml for Velocity
      * 
      * @param plugin The VelocitySystem plugin instance
      * @return The generated token
      */
     public static String generateAndSaveToken(VelocitySystem plugin) {
-        String token = generateToken("VelocitySystem");
+        String token = generateToken("BungeeSystem");
         
         try {
-            Path dataFolder = plugin.getDataDirectory();
-            Path tokenFile = dataFolder.resolve("token.yml");
+            Path tokenFile = plugin.getDataDirectory().resolve("token.yml");
             
             // Create data folder if it doesn't exist
-            Files.createDirectories(dataFolder);
+            Files.createDirectories(plugin.getDataDirectory());
             
-            // Create default token.yml if it doesn't exist
-            if (!Files.exists(tokenFile)) {
-                Files.createFile(tokenFile);
-            }
+            // Create or update token.yml
+            StringBuilder content = new StringBuilder();
+            content.append("# Server Token Configuration for BungeeSystem API\n");
+            content.append("server:\n");
+            content.append("  token: \"").append(token).append("\"\n");
+            content.append("  api_url: \"https://api.devvoxel.net\"\n");
+            content.append("  \n");
+            content.append("# API Configuration\n");
+            content.append("api:\n");
+            content.append("  enabled: true\n");
+            content.append("  timeout: 5000  # milliseconds\n");
+            content.append("  retry_attempts: 3\n");
+            content.append("  \n");
+            content.append("# Endpoints\n");
+            content.append("endpoints:\n");
+            content.append("  health: \"/health\"\n");
+            content.append("  bans: \"/auth/punishments/bans\"\n");
+            content.append("  mutes: \"/auth/punishments/mutes\"\n");
+            content.append("  warns: \"/auth/punishments/warns\"\n");
+            content.append("  kicks: \"/auth/punishments/kicks\"\n");
+            content.append("  reports: \"/auth/reports\"\n");
+            content.append("  player_events: \"/auth/players/events\"\n");
+            content.append("  player_stats: \"/auth/players/stats\"\n");
+            content.append("  server_status: \"/auth/servers/{server_id}/status\"\n");
             
-            // Create default configuration content
-            String defaultConfig = 
-                "# Server Token Configuration for VelocitySystem API\n" +
-                "# This token is used to authenticate with the dashboard API\n" +
-                "\n" +
-                "server:\n" +
-                "  token: \"" + token + "\"\n" +
-                "  api_url: \"http://api.devvoxel.net/\"\n" +
-                "  \n" +
-                "# API Configuration\n" +
-                "api:\n" +
-                "  enabled: true\n" +
-                "  timeout: 5000  # milliseconds\n" +
-                "  retry_attempts: 3\n" +
-                "  \n" +
-                "# Endpoints\n" +
-                "endpoints:\n" +
-                "  health: \"/auth/health\"\n" +
-                "  bans: \"/auth/punishments/bans\"\n" +
-                "  mutes: \"/auth/punishments/mutes\"\n" +
-                "  reports: \"/auth/reports\"\n";
-            
-            // Write configuration to file
-            Files.write(tokenFile, defaultConfig.getBytes());
+            Files.write(tokenFile, content.toString().getBytes(StandardCharsets.UTF_8));
             
             plugin.getLogger().info("Generated new server token: " + maskToken(token));
             plugin.getLogger().info("Token saved to token.yml");
@@ -115,57 +104,19 @@ public class TokenGenerator {
                 return false;
             }
             
-            String content = new String(Files.readAllBytes(tokenFile));
-            return content.contains("token:") && 
-                   !content.contains("your_server_token_here") &&
-                   content.contains("VelocitySystem_");
+            String content = new String(Files.readAllBytes(tokenFile), StandardCharsets.UTF_8);
+            return content.contains("token:") && !content.contains("your_server_token_here");
             
         } catch (IOException e) {
-            plugin.getLogger().warn("Failed to check token existence: " + e.getMessage());
             return false;
         }
     }
     
     /**
-     * Get the current token from token.yml
-     * 
-     * @param plugin The VelocitySystem plugin instance
-     * @return The current token, or null if not found
-     */
-    public static String getCurrentToken(VelocitySystem plugin) {
-        try {
-            Path tokenFile = plugin.getDataDirectory().resolve("token.yml");
-            if (!Files.exists(tokenFile)) {
-                return null;
-            }
-            
-            String content = new String(Files.readAllBytes(tokenFile));
-            String[] lines = content.split("\n");
-            
-            for (String line : lines) {
-                if (line.trim().startsWith("token:")) {
-                    String token = line.substring(line.indexOf(":") + 1).trim();
-                    token = token.replace("\"", "").replace("'", "");
-                    
-                    if (!token.isEmpty() && !token.equals("your_server_token_here")) {
-                        return token;
-                    }
-                }
-            }
-            
-            return null;
-            
-        } catch (IOException e) {
-            plugin.getLogger().warn("Failed to get current token: " + e.getMessage());
-            return null;
-        }
-    }
-    
-    /**
-     * Mask token for logging (shows only first 4 and last 4 characters)
+     * Mask token for logging (show only first and last 4 characters)
      * 
      * @param token The token to mask
-     * @return The masked token
+     * @return Masked token
      */
     public static String maskToken(String token) {
         if (token == null || token.length() <= 8) {
@@ -178,20 +129,14 @@ public class TokenGenerator {
      * Validate token format
      * 
      * @param token The token to validate
-     * @return true if the token is valid, false otherwise
+     * @return true if token format is valid
      */
-    public static boolean isValidToken(String token) {
-        if (token == null || token.length() < 16) {
+    public static boolean isValidTokenFormat(String token) {
+        if (token == null || token.isEmpty()) {
             return false;
         }
         
-        // Check if token contains only valid characters
-        for (char c : token.toCharArray()) {
-            if (CHARS.indexOf(c) == -1) {
-                return false;
-            }
-        }
-        
-        return true;
+        // Should start with "BungeeSystem_" and be at least 20 characters
+        return token.startsWith("BungeeSystem_") && token.length() >= 20;
     }
-} 
+}
