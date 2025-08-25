@@ -78,17 +78,7 @@ public class BanCommand extends Command implements TabExecutor {
         // Execute the ban
         boolean success = punishmentManager.banPlayer(sender, targetName, reasonId, customReason, duration);
         
-        if (success) {
-            // Log admin action to API
-            if (plugin.getApiManager().isApiEnabled()) {
-                String adminName = sender instanceof ProxiedPlayer ? ((ProxiedPlayer) sender).getName() : "Console";
-                String reasonName = punishmentManager.getReasonName(reasonId);
-                String details = customReason != null && !customReason.isEmpty() ? 
-                        reasonName + ": " + customReason : reasonName;
-                
-                plugin.getApiManager().sendAdminLog(adminName, "ban", targetName, details);
-            }
-        } else {
+        if (!success) {
             // The punishmentManager will send appropriate error messages
         }
     }

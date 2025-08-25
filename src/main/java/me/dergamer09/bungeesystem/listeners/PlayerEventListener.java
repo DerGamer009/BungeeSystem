@@ -68,22 +68,7 @@ public class PlayerEventListener implements Listener {
             // Update or create player_data entry for seen/whois commands
             updatePlayerData(player, now);
             
-            // Send player join event to API
-            if (plugin.getApiManager().isApiEnabled()) {
-                String serverName = player.getServer() != null ? player.getServer().getInfo().getName() : "unknown";
-                plugin.getApiManager().sendPlayerJoin(player.getName(), uuid.toString(), serverName);
-                
-                // Check for bans via API
-                if (plugin.getConfig().getBoolean("features.punishment_checks", true)) {
-                    if (plugin.getApiManager().checkPlayerBan(player.getName(), uuid.toString())) {
-                        player.disconnect(new TextComponent(
-                                configManager.getMessage("punishment.ban_kick_message",
-                                        "reason", "You are banned from this server",
-                                        "expire", "Permanent")));
-                        return;
-                    }
-                }
-            }
+
             
         } catch (SQLException e) {
             e.printStackTrace();
@@ -119,13 +104,7 @@ public class PlayerEventListener implements Listener {
             BungeeSystem.lastMessageMap.entrySet().removeIf(e -> uuid.equals(e.getValue()));
             BungeeSystem.ignoredPlayers.remove(uuid);
 
-            // Send player quit event to API
-            if (plugin.getApiManager().isApiEnabled()) {
-                String serverName = player.getServer() != null ? player.getServer().getInfo().getName() : "unknown";
-                // Calculate session duration (simplified - could be more accurate)
-                long sessionDuration = 1800; // Default 30 minutes, could be calculated from login time
-                plugin.getApiManager().sendPlayerQuit(player.getName(), uuid.toString(), serverName, sessionDuration);
-            }
+
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -141,11 +120,7 @@ public class PlayerEventListener implements Listener {
         if (player.getServer() != null && event.getTarget() != null) {
             String fromServer = player.getServer().getInfo().getName();
             String toServer = event.getTarget().getName();
-            
-            // Send player switch event to API
-            if (plugin.getApiManager().isApiEnabled()) {
-                plugin.getApiManager().sendPlayerSwitch(player.getName(), uuid.toString(), fromServer, toServer);
-            }
+
         }
     }
     

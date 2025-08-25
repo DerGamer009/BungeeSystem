@@ -29,18 +29,7 @@ public class PlayerEventListener {
         
         // Record join time for session duration calculation
         playerJoinTimes.put(player.getUniqueId().toString(), System.currentTimeMillis());
-        
-        // Send to API if enabled
-        if (plugin.getApiManager().isApiEnabled()) {
-            // Get current server (may be null initially)
-            String serverName = "lobby"; // Default for Velocity
-            
-            plugin.getApiManager().sendPlayerJoin(
-                player.getUsername(),
-                player.getUniqueId().toString(),
-                serverName
-            );
-        }
+
     }
     
     @Subscribe
@@ -60,16 +49,7 @@ public class PlayerEventListener {
         if (player.getCurrentServer().isPresent()) {
             serverName = player.getCurrentServer().get().getServerInfo().getName();
         }
-        
-        // Send to API if enabled
-        if (plugin.getApiManager().isApiEnabled()) {
-            plugin.getApiManager().sendPlayerQuit(
-                player.getUsername(),
-                uuid,
-                serverName,
-                sessionDuration
-            );
-        }
+
     }
     
     @Subscribe
@@ -87,14 +67,7 @@ public class PlayerEventListener {
         
         // Only send if this is actually a server switch (not initial connect)
         if (event.getPreviousServer().isPresent()) {
-            if (plugin.getApiManager().isApiEnabled()) {
-                plugin.getApiManager().sendPlayerSwitch(
-                    player.getUsername(),
-                    player.getUniqueId().toString(),
-                    fromServerName,
-                    toServerName
-                );
-            }
+            // Server switch tracking can be added here if needed
         }
     }
 }

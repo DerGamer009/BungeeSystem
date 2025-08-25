@@ -33,7 +33,7 @@ public final class BungeeSystem extends Plugin {
     private ChatManager chatManager;
     private PunishmentManager punishmentManager;
     private MotdManager motdManager;
-    private ApiManager apiManager;
+
 
     // bStats metrics
     private Metrics metrics;
@@ -90,17 +90,7 @@ public final class BungeeSystem extends Plugin {
         // Check for updates
         updateManager.checkForUpdates();
         
-        // Check API health if enabled
-        if (apiManager.isApiEnabled()) {
-            apiManager.checkApiHealth();
-            
-            // Validate server token with backend
-            if (apiManager.validateServerToken()) {
-                getLogger().info("✅ Server token validation successful - Ready for dashboard integration");
-            } else {
-                getLogger().warning("⚠️  Server token validation failed - Check your token configuration");
-            }
-        }
+
     }
 
     @Override
@@ -128,7 +118,6 @@ public final class BungeeSystem extends Plugin {
         startupManager = new StartupManager(this, currentVersion);
         chatManager = new ChatManager(this);
         motdManager = new MotdManager(this);
-        apiManager = new ApiManager(this);
         
         // Set webhook URL from config
         webhookUrl = config.getString("webhookUrl", "");
@@ -248,12 +237,7 @@ public final class BungeeSystem extends Plugin {
         return punishmentManager;
     }
 
-    /**
-     * Get the API manager
-     */
-    public ApiManager getApiManager() {
-        return apiManager;
-    }
+
 
     /**
      * Get the webhook URL

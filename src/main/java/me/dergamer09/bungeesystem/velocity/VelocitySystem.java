@@ -18,10 +18,9 @@ import me.dergamer09.bungeesystem.velocity.Managers.ListenerManager;
 import me.dergamer09.bungeesystem.velocity.Managers.MotdManager;
 import me.dergamer09.bungeesystem.velocity.Managers.DatabaseManager;
 import me.dergamer09.bungeesystem.velocity.Managers.StatsManager;
-import me.dergamer09.bungeesystem.velocity.Managers.ApiManager;
+
 import me.dergamer09.bungeesystem.velocity.Runnables.OnlineTimeUpdater;
-import me.dergamer09.bungeesystem.velocity.Runnables.ServerStatusUpdater;
-import me.dergamer09.bungeesystem.velocity.listeners.PlayerEventListener;
+
 
 /**
  * Velocity entry point for BungeeSystem.
@@ -41,7 +40,7 @@ public class VelocitySystem {
     private VelocityCommandManager commandManager;
     private ListenerManager listenerManager;
     private MotdManager motdManager;
-    private ApiManager apiManager;
+
     private Metrics metrics;
     // Use the dedicated bStats plugin ID for Velocity
     private static final int BSTATS_PLUGIN_ID = 26443;
@@ -68,39 +67,22 @@ public class VelocitySystem {
         statsManager = new StatsManager(this);
         statsManager.setupTables();
         motdManager = new MotdManager(configManager);
-        apiManager = new ApiManager(this);
+
         commandManager = new VelocityCommandManager(this);
         listenerManager = new ListenerManager(this, logger);
 
         commandManager.registerCommands();
         listenerManager.registerListeners();
 
-        // Check API health if enabled
-        if (apiManager.isApiEnabled()) {
-            apiManager.checkApiHealth();
-            
-            // Validate server token with backend
-            if (apiManager.validateServerToken()) {
-                logger.info("✅ Server token validation successful - Ready for dashboard integration");
-            } else {
-                logger.warn("⚠️  Server token validation failed - Check your token configuration");
-            }
-        }
+
 
         // Schedule tasks
         server.getScheduler().buildTask(this, new OnlineTimeUpdater(this))
                 .repeat(java.time.Duration.ofSeconds(1)).schedule();
                 
-        // Schedule server status updates every 30 seconds
-        if (apiManager.isApiEnabled()) {
-            server.getScheduler().buildTask(this, new ServerStatusUpdater(this))
-                    .repeat(java.time.Duration.ofSeconds(30)).schedule();
-        }
+
         
-        // Register API-related event listeners
-        if (apiManager.isApiEnabled()) {
-            server.getEventManager().register(this, new PlayerEventListener(this));
-        }
+
     }
 
     @Subscribe
@@ -112,7 +94,7 @@ public class VelocitySystem {
     public DatabaseManager getDatabaseManager() { return databaseManager; }
     public MotdManager getMotdManager() { return motdManager; }
     public StatsManager getStatsManager() { return statsManager; }
-    public ApiManager getApiManager() { return apiManager; }
+
     public Logger getLogger() { return logger; }
     public Path getDataDirectory() { return dataDirectory; }
 }

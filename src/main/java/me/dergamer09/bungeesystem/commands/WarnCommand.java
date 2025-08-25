@@ -67,17 +67,7 @@ public class WarnCommand extends Command implements TabExecutor {
         // Execute the warning
         boolean success = punishmentManager.warnPlayer(sender, targetName, reasonId, customReason);
         
-        if (success) {
-            // Log admin action to API
-            if (plugin.getApiManager().isApiEnabled()) {
-                String adminName = sender instanceof ProxiedPlayer ? ((ProxiedPlayer) sender).getName() : "Console";
-                String reasonName = punishmentManager.getReasonName(reasonId);
-                String details = customReason != null && !customReason.isEmpty() ? 
-                        reasonName + ": " + customReason : reasonName;
-                
-                plugin.getApiManager().sendAdminLog(adminName, "warn", targetName, details);
-            }
-        } else {
+        if (!success) {
             // The punishmentManager will send appropriate error messages
         }
     }

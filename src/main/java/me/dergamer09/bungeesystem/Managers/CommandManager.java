@@ -54,8 +54,6 @@ public class CommandManager {
         // System and admin commands
         pm.registerCommand(plugin, new ReloadConfigCommand());
         pm.registerCommand(plugin, new RestartCommand());
-        pm.registerCommand(plugin, new GenerateTokenCommand());
-        pm.registerCommand(plugin, new ValidateTokenCommand());
         
         // Quality-of-life commands
         pm.registerCommand(plugin, new AfkCommand());
@@ -76,9 +74,6 @@ public class CommandManager {
         pm.registerCommand(plugin, new WarnCommand(plugin));
         pm.registerCommand(plugin, new ReportCommand(plugin));
         pm.registerCommand(plugin, new ReportsCommand(plugin));
-        
-        // API integration commands
-        pm.registerCommand(plugin, new PlayerInfoCommand(plugin));
-        pm.registerCommand(plugin, new ServerStatsCommand(plugin));
+
     }
 } 

@@ -12,44 +12,6 @@ mysql:
   maximumPoolSize: 10
   minimumIdle: 5
 
-# API Configuration for Dashboard Integration
-api:
-  url: "http://api.devvoxel.net/"
-  server-ip: "auto"  # Set to "auto" to auto-detect, or specify IP manually
-  port: "auto"        # Set to "auto" to auto-detect, or specify port manually
-  enabled: true
-  timeout: 5000       # milliseconds
-  retry_attempts: 3
-  server_id: ""       # Will be cached after successful connection
-
-# Feature Configuration
-features:
-  # Player tracking and events
-  player_events: true      # Send join/quit/switch events to API
-  player_tracking: true    # Track player statistics and activity
-  
-  # Punishment system integration
-  punishment_api: true     # Send all punishments to API
-  punishment_checks: true  # Check bans/mutes on join/chat via API
-  
-  # Report system integration
-  report_api: true         # Send reports to API
-  report_listing: true     # Allow listing reports from API
-  
-  # Player information
-  player_info: true        # Allow fetching player info from API
-  player_history: true     # Allow fetching player history from API
-  
-  # Server statistics
-  server_stats: true       # Send server statistics to API
-  
-  # Admin logging
-  admin_logging: true      # Log admin actions to API
-  general_logging: true    # Send general plugin logs to API
-  
-  # Real-time updates
-  websocket_updates: false # Enable WebSocket for real-time updates (optional)
-  polling_updates: true    # Enable polling for updates from API
 
 lobbies:
   - Lobby1

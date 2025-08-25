@@ -85,19 +85,7 @@ public class ChatListener implements Listener {
                 return;
             }
         }
-        
-        // Check if player is muted via API
-        if (plugin.getConfig().getBoolean("features.punishment_checks", true) && 
-            plugin.getApiManager().isApiEnabled()) {
-            if (plugin.getApiManager().checkPlayerMute(player.getName(), player.getUniqueId().toString())) {
-                player.sendMessage(new TextComponent(plugin.getPrefix() + plugin.getErrorMessageColor() + 
-                        "You are muted via the dashboard. Please contact staff for assistance."));
-                
-                // Cancel the chat message
-                event.setCancelled(true);
-                return;
-            }
-        }
+
         
         // Check if player has global chat enabled
         if (chatManager.hasGlobalChatEnabled(player)) {
