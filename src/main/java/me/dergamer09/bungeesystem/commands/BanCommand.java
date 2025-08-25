@@ -59,8 +59,9 @@ public class BanCommand extends Command implements TabExecutor {
             reasonId = punishmentManager.getReasonId("BAN", reasonInput);
             
             if (reasonId == -1) {
-                sender.sendMessage(new TextComponent(plugin.getPrefix() + plugin.getErrorMessageColor() + 
-                        "Unknown ban reason: " + reasonInput));
+                String message = plugin.getConfigManager().getMessage("punishment.unknown_reason", 
+                        "type", "ban", "reason", reasonInput);
+                sender.sendMessage(new TextComponent(plugin.getPrefix() + message));
                 listAvailableReasons(sender);
                 return;
             }
@@ -84,16 +85,16 @@ public class BanCommand extends Command implements TabExecutor {
     }
     
     private void sendUsage(CommandSender sender) {
-        sender.sendMessage(new TextComponent(plugin.getPrefix() + plugin.getDefaultMessageColor() + 
-                "Usage: /ban <player> <reason/id> [custom text]"));
+        String message = plugin.getConfigManager().getMessage("punishment.ban.usage");
+        sender.sendMessage(new TextComponent(plugin.getPrefix() + message));
         listAvailableReasons(sender);
     }
     
     private void listAvailableReasons(CommandSender sender) {
         List<Map<String, Object>> reasons = punishmentManager.getReasons("BAN");
         
-        sender.sendMessage(new TextComponent(plugin.getPrefix() + plugin.getDefaultMessageColor() + 
-                "Available ban reasons:"));
+        String message = plugin.getConfigManager().getMessage("punishment.available_reasons", "type", "ban");
+        sender.sendMessage(new TextComponent(plugin.getPrefix() + message));
         
         for (Map<String, Object> reason : reasons) {
             int id = (int)reason.get("id");

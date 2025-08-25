@@ -58,8 +58,9 @@ public class MuteCommand extends Command implements TabExecutor {
             reasonId = punishmentManager.getReasonId("MUTE", reasonInput);
             
             if (reasonId == -1) {
-                sender.sendMessage(new TextComponent(plugin.getPrefix() + plugin.getErrorMessageColor() + 
-                        "Unknown mute reason: " + reasonInput));
+                String message = plugin.getConfigManager().getMessage("punishment.unknown_reason", 
+                        "type", "mute", "reason", reasonInput);
+                sender.sendMessage(new TextComponent(plugin.getPrefix() + message));
                 listAvailableReasons(sender);
                 return;
             }
@@ -83,16 +84,16 @@ public class MuteCommand extends Command implements TabExecutor {
     }
     
     private void sendUsage(CommandSender sender) {
-        sender.sendMessage(new TextComponent(plugin.getPrefix() + plugin.getDefaultMessageColor() + 
-                "Usage: /mute <player> <reason/id> [custom text]"));
+        String message = plugin.getConfigManager().getMessage("punishment.mute.usage");
+        sender.sendMessage(new TextComponent(plugin.getPrefix() + message));
         listAvailableReasons(sender);
     }
     
     private void listAvailableReasons(CommandSender sender) {
         List<Map<String, Object>> reasons = punishmentManager.getReasons("MUTE");
         
-        sender.sendMessage(new TextComponent(plugin.getPrefix() + plugin.getDefaultMessageColor() + 
-                "Available mute reasons:"));
+        String message = plugin.getConfigManager().getMessage("punishment.available_reasons", "type", "mute");
+        sender.sendMessage(new TextComponent(plugin.getPrefix() + message));
         
         for (Map<String, Object> reason : reasons) {
             int id = (int)reason.get("id");

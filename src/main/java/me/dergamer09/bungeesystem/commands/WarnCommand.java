@@ -57,8 +57,9 @@ public class WarnCommand extends Command implements TabExecutor {
             reasonId = punishmentManager.getReasonId("WARN", reasonInput);
             
             if (reasonId == -1) {
-                sender.sendMessage(new TextComponent(plugin.getPrefix() + plugin.getErrorMessageColor() + 
-                        "Unknown warning reason: " + reasonInput));
+                String message = plugin.getConfigManager().getMessage("punishment.unknown_reason", 
+                        "type", "warn", "reason", reasonInput);
+                sender.sendMessage(new TextComponent(plugin.getPrefix() + message));
                 listAvailableReasons(sender);
                 return;
             }
@@ -73,16 +74,16 @@ public class WarnCommand extends Command implements TabExecutor {
     }
     
     private void sendUsage(CommandSender sender) {
-        sender.sendMessage(new TextComponent(plugin.getPrefix() + plugin.getDefaultMessageColor() + 
-                "Usage: /warn <player> <reason/id> [custom text]"));
+        String message = plugin.getConfigManager().getMessage("punishment.warn.usage");
+        sender.sendMessage(new TextComponent(plugin.getPrefix() + message));
         listAvailableReasons(sender);
     }
     
     private void listAvailableReasons(CommandSender sender) {
         List<Map<String, Object>> reasons = punishmentManager.getReasons("WARN");
         
-        sender.sendMessage(new TextComponent(plugin.getPrefix() + plugin.getDefaultMessageColor() + 
-                "Available warning reasons:"));
+        String message = plugin.getConfigManager().getMessage("punishment.available_reasons", "type", "warn");
+        sender.sendMessage(new TextComponent(plugin.getPrefix() + message));
         
         for (Map<String, Object> reason : reasons) {
             int id = (int)reason.get("id");

@@ -209,3 +209,45 @@ report:
   unknown_reason: "&cUnbekannter Meldegrund: &e%reason%"
   success: "&aReport gegen &e%player% &awurde erfolgreich mit Grund &e%reason% &aerstellt."
   failed: "&cReport konnte nicht erstellt werden. Versuche es erneut."
+
+# Bestrafungssystem Nachrichten
+punishment:
+  # Allgemeine Bestrafungs-Nachrichten
+  unknown_reason: "&cUnbekannter %type% Grund: &e%reason%"
+  available_reasons: "&eVerfügbare %type% Gründe:"
+  ban_kick_message: "&cDu wurdest von diesem Server gebannt!\n&7Grund: &f%reason%\n&7Läuft ab: &f%expire%"
+  mute_message: "&cDu bist stumm geschaltet!\n&7Grund: &f%reason%\n&7Läuft ab: &f%expire%"
+  
+  # Ban Befehl Nachrichten
+  ban:
+    usage: "&eBenutzung: &f/ban <Spieler> <Grund/ID> [eigener Text]"
+    success: "&aSpieler &e%player% &awurde erfolgreich gebannt."
+    already_banned: "&cSpieler &e%player% &cist bereits gebannt."
+    
+  # Unban Befehl Nachrichten
+  unban:
+    usage: "&eBenutzung: &f/unban <Spieler>"
+    success: "&aSpieler &e%player% &awurde erfolgreich entbannt."
+    not_banned: "&cSpieler &e%player% &cist nicht gebannt."
+    
+  # Mute Befehl Nachrichten
+  mute:
+    usage: "&eBenutzung: &f/mute <Spieler> <Grund/ID> [eigener Text]"
+    success: "&aSpieler &e%player% &awurde erfolgreich stumm geschaltet."
+    already_muted: "&cSpieler &e%player% &cist bereits stumm geschaltet."
+    
+  # Unmute Befehl Nachrichten
+  unmute:
+    usage: "&eBenutzung: &f/unmute <Spieler>"
+    success: "&aSpieler &e%player% &awurde erfolgreich entstummt."
+    not_muted: "&cSpieler &e%player% &cist nicht stumm geschaltet."
+    
+  # Kick Befehl Nachrichten
+  kick:
+    usage: "&eBenutzung: &f/kick <Spieler> <Grund/ID> [eigener Text]"
+    success: "&aSpieler &e%player% &awurde erfolgreich gekickt."
+    
+  # Warn Befehl Nachrichten
+  warn:
+    usage: "&eBenutzung: &f/warn <Spieler> <Grund/ID> [eigener Text]"
+    success: "&aSpieler &e%player% &awurde erfolgreich verwarnt."

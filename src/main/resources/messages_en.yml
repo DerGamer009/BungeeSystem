@@ -190,3 +190,45 @@ report:
   unknown_reason: "&cUnknown report reason: &e%reason%"
   success: "&aReport against &e%player% &awas successfully created with reason &e%reason%&a."
   failed: "&cFailed to create report. Please try again."
+
+# Punishment system messages
+punishment:
+  # General punishment messages
+  unknown_reason: "&cUnknown %type% reason: &e%reason%"
+  available_reasons: "&eAvailable %type% reasons:"
+  ban_kick_message: "&cYou have been banned from this server!\n&7Reason: &f%reason%\n&7Expires: &f%expire%"
+  mute_message: "&cYou are muted!\n&7Reason: &f%reason%\n&7Expires: &f%expire%"
+  
+  # Ban command messages
+  ban:
+    usage: "&eUsage: &f/ban <player> <reason/id> [custom text]"
+    success: "&aPlayer &e%player% &ahas been banned successfully."
+    already_banned: "&cPlayer &e%player% &cis already banned."
+    
+  # Unban command messages
+  unban:
+    usage: "&eUsage: &f/unban <player>"
+    success: "&aPlayer &e%player% &ahas been unbanned successfully."
+    not_banned: "&cPlayer &e%player% &cis not banned."
+    
+  # Mute command messages
+  mute:
+    usage: "&eUsage: &f/mute <player> <reason/id> [custom text]"
+    success: "&aPlayer &e%player% &ahas been muted successfully."
+    already_muted: "&cPlayer &e%player% &cis already muted."
+    
+  # Unmute command messages
+  unmute:
+    usage: "&eUsage: &f/unmute <player>"
+    success: "&aPlayer &e%player% &ahas been unmuted successfully."
+    not_muted: "&cPlayer &e%player% &cis not muted."
+    
+  # Kick command messages
+  kick:
+    usage: "&eUsage: &f/kick <player> <reason/id> [custom text]"
+    success: "&aPlayer &e%player% &ahas been kicked successfully."
+    
+  # Warn command messages
+  warn:
+    usage: "&eUsage: &f/warn <player> <reason/id> [custom text]"
+    success: "&aPlayer &e%player% &ahas been warned successfully."

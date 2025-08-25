@@ -53,8 +53,9 @@ public class KickCommand extends Command implements TabExecutor {
             reasonId = punishmentManager.getReasonId("KICK", reasonInput);
             
             if (reasonId == -1) {
-                sender.sendMessage(new TextComponent(plugin.getPrefix() + plugin.getErrorMessageColor() + 
-                        "Unknown kick reason: " + reasonInput));
+                String message = plugin.getConfigManager().getMessage("punishment.unknown_reason", 
+                        "type", "kick", "reason", reasonInput);
+                sender.sendMessage(new TextComponent(plugin.getPrefix() + message));
                 listAvailableReasons(sender);
                 return;
             }
@@ -69,16 +70,16 @@ public class KickCommand extends Command implements TabExecutor {
     }
     
     private void sendUsage(CommandSender sender) {
-        sender.sendMessage(new TextComponent(plugin.getPrefix() + plugin.getDefaultMessageColor() + 
-                "Usage: /kick <player> <reason/id> [custom text]"));
+        String message = plugin.getConfigManager().getMessage("punishment.kick.usage");
+        sender.sendMessage(new TextComponent(plugin.getPrefix() + message));
         listAvailableReasons(sender);
     }
     
     private void listAvailableReasons(CommandSender sender) {
         List<Map<String, Object>> reasons = punishmentManager.getReasons("KICK");
         
-        sender.sendMessage(new TextComponent(plugin.getPrefix() + plugin.getDefaultMessageColor() + 
-                "Available kick reasons:"));
+        String message = plugin.getConfigManager().getMessage("punishment.available_reasons", "type", "kick");
+        sender.sendMessage(new TextComponent(plugin.getPrefix() + message));
         
         for (Map<String, Object> reason : reasons) {
             int id = (int)reason.get("id");
