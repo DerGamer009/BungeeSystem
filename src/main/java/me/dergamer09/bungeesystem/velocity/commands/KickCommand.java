@@ -31,7 +31,7 @@ public class KickCommand implements SimpleCommand {
     @Override
     public void execute(Invocation invocation) {
         CommandSource sender = invocation.source();
-        String[] args = invocation.arguments().toArray(new String[0]);
+        String[] args = invocation.arguments();
         
         if (args.length < 2) {
             sendUsage(sender);
@@ -104,7 +104,7 @@ public class KickCommand implements SimpleCommand {
     @Override
     public List<String> suggest(Invocation invocation) {
         List<String> suggestions = new ArrayList<>();
-        String[] args = invocation.arguments().toArray(new String[0]);
+        String[] args = invocation.arguments();
         
         if (args.length == 1) {
             // Suggest online player names

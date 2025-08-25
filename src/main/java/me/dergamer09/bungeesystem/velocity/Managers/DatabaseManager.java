@@ -234,25 +234,6 @@ public class DatabaseManager {
             return false;
         }
     }
-    
-    /**
-     * Get UUID from player name
-     */
-    public UUID getUUIDFromName(String playerName) {
-        if (connection == null) return null;
-        try (PreparedStatement ps = connection.prepareStatement(
-                "SELECT uuid FROM player_data WHERE LOWER(username) = LOWER(?) LIMIT 1")) {
-            ps.setString(1, playerName);
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    return UUID.fromString(rs.getString("uuid"));
-                }
-            }
-        } catch (SQLException e) {
-            logger.error("Failed to get UUID for player {}: {}", playerName, e.getMessage());
-        }
-        return null;
-    }
 
     public List<UUID> getWhitelist() {
         List<UUID> list = new ArrayList<>();

@@ -101,5 +101,4 @@ public class VelocitySystem {
 
     public Logger getLogger() { return logger; }
     public Path getDataDirectory() { return dataDirectory; }
-    public ProxyServer getServer() { return server; }
 }

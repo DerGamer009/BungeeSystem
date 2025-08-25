@@ -305,11 +305,7 @@ public class PunishmentManager {
                         "staff", senderName,
                         "id", String.valueOf(banId)));
             }
-            
-            // Send to API for dashboard
-            if (plugin.getApiManager().isApiEnabled()) {
-                plugin.getApiManager().sendBan(targetUUID.toString(), targetName, reasonName, senderName, duration);
-            }
+
             
             return true;
             
@@ -674,11 +670,7 @@ public class PunishmentManager {
                         "staff", senderName,
                         "id", String.valueOf(muteId)));
             }
-            
-            // Send to API for dashboard
-            if (plugin.getApiManager().isApiEnabled()) {
-                plugin.getApiManager().sendMute(targetUUID.toString(), targetName, reasonName, senderName, duration);
-            }
+
             
             return true;
             
@@ -941,11 +933,7 @@ public class PunishmentManager {
                         "staff", senderName,
                         "id", String.valueOf(warnId)));
             }
-            
-            // Send to API for dashboard
-            if (plugin.getApiManager().isApiEnabled()) {
-                plugin.getApiManager().sendWarn(targetUUID.toString(), targetName, reasonName, senderName, "medium");
-            }
+
             
             return true;
             
@@ -1033,11 +1021,7 @@ public class PunishmentManager {
                         "staff", senderName,
                         "id", String.valueOf(kickId)));
             }
-            
-            // Send to API for dashboard
-            if (plugin.getApiManager().isApiEnabled()) {
-                plugin.getApiManager().sendKick(target.getUniqueId().toString(), targetName, reasonName, senderName);
-            }
+
             
             return true;
             
@@ -1323,11 +1307,7 @@ public class PunishmentManager {
             
             // Notify online staff members
             notifyStaffOfReport(targetName, senderName, reasonName, customReason, serverName, reportId);
-            
-            // Send to API for dashboard
-            if (plugin.getApiManager().isApiEnabled()) {
-                plugin.getApiManager().sendReport(senderUUID, senderName, targetUUID.toString(), targetName, reasonName, serverName);
-            }
+
             
             return true;
             

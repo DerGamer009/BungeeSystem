@@ -21,9 +21,7 @@ public class VelocityCommandManager {
         cm.register(cm.metaBuilder("bsversion").plugin(plugin).build(), new VersionCommand(plugin, plugin.getVersion()));
         cm.register(cm.metaBuilder("ping").plugin(plugin).build(), new PingCommand(plugin));
         
-        // API-related commands
-        cm.register(cm.metaBuilder("generatetoken").plugin(plugin).build(), new GenerateTokenCommand(plugin));
-        cm.register(cm.metaBuilder("validatetoken").plugin(plugin).build(), new ValidateTokenCommand(plugin));
+        // Note: API-related token commands have been removed
 
         // Register punishment commands (fully implemented)
         registerCommand(cm, "ban", new BanCommand(plugin));
