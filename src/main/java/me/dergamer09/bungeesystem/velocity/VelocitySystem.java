@@ -18,6 +18,7 @@ import me.dergamer09.bungeesystem.velocity.Managers.ListenerManager;
 import me.dergamer09.bungeesystem.velocity.Managers.MotdManager;
 import me.dergamer09.bungeesystem.velocity.Managers.DatabaseManager;
 import me.dergamer09.bungeesystem.velocity.Managers.StatsManager;
+import me.dergamer09.bungeesystem.velocity.Managers.PunishmentManager;
 
 import me.dergamer09.bungeesystem.velocity.Runnables.OnlineTimeUpdater;
 
@@ -40,6 +41,7 @@ public class VelocitySystem {
     private VelocityCommandManager commandManager;
     private ListenerManager listenerManager;
     private MotdManager motdManager;
+    private PunishmentManager punishmentManager;
 
     private Metrics metrics;
     // Use the dedicated bStats plugin ID for Velocity
@@ -67,6 +69,7 @@ public class VelocitySystem {
         statsManager = new StatsManager(this);
         statsManager.setupTables();
         motdManager = new MotdManager(configManager);
+        punishmentManager = new PunishmentManager(this);
 
         commandManager = new VelocityCommandManager(this);
         listenerManager = new ListenerManager(this, logger);
@@ -94,7 +97,9 @@ public class VelocitySystem {
     public DatabaseManager getDatabaseManager() { return databaseManager; }
     public MotdManager getMotdManager() { return motdManager; }
     public StatsManager getStatsManager() { return statsManager; }
+    public PunishmentManager getPunishmentManager() { return punishmentManager; }
 
     public Logger getLogger() { return logger; }
     public Path getDataDirectory() { return dataDirectory; }
+    public ProxyServer getServer() { return server; }
 }

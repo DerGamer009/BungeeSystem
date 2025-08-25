@@ -110,6 +110,20 @@ public class ConfigManager {
         }
         return message;
     }
+    
+    /**
+     * Get the plugin prefix with color codes translated
+     */
+    public String getPrefix() {
+        return getMessage("general.prefix");
+    }
+    
+    /**
+     * Get the default message color
+     */
+    public String getDefaultMessageColor() {
+        return "§7"; // Default gray color
+    }
 
     public Component getMessageComponent(String path, String... replacements) {
         String msg = getMessage(path, replacements);

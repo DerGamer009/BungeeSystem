@@ -2,7 +2,6 @@ package me.dergamer09.bungeesystem.velocity.commands;
 
 import com.velocitypowered.api.command.CommandSource;
 import com.velocitypowered.api.command.SimpleCommand;
-import com.velocitypowered.api.proxy.Player;
 import me.dergamer09.bungeesystem.velocity.Managers.ConfigManager;
 import me.dergamer09.bungeesystem.velocity.Managers.PunishmentManager;
 import me.dergamer09.bungeesystem.velocity.VelocitySystem;
@@ -15,15 +14,15 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Mute command implementation for Velocity
+ * Kick command implementation for Velocity
  */
-public class MuteCommand implements SimpleCommand {
+public class KickCommand implements SimpleCommand {
 
     private final VelocitySystem plugin;
     private final PunishmentManager punishmentManager;
     private final ConfigManager configManager;
 
-    public MuteCommand(VelocitySystem plugin) {
+    public KickCommand(VelocitySystem plugin) {
         this.plugin = plugin;
         this.punishmentManager = plugin.getPunishmentManager();
         this.configManager = plugin.getConfigManager();
@@ -53,34 +52,24 @@ public class MuteCommand implements SimpleCommand {
         
         // Check if the reason is an ID
         int reasonId;
-        long duration = -1; // Default to permanent
         
         try {
             reasonId = Integer.parseInt(reasonInput);
         } catch (NumberFormatException e) {
             // Not an ID, try to find the reason by name
-            reasonId = punishmentManager.getReasonId("MUTE", reasonInput);
+            reasonId = punishmentManager.getReasonId("KICK", reasonInput);
             
             if (reasonId == -1) {
                 String message = configManager.getMessage("punishment.unknown_reason", 
-                        "type", "mute", "reason", reasonInput);
+                        "type", "kick", "reason", reasonInput);
                 sender.sendMessage(Component.text(configManager.getPrefix() + message));
                 listAvailableReasons(sender);
                 return;
             }
         }
         
-        // Get the mute reason's duration
-        List<Map<String, Object>> muteReasons = punishmentManager.getReasons("MUTE");
-        for (Map<String, Object> reason : muteReasons) {
-            if ((int)reason.get("id") == reasonId) {
-                duration = (long)reason.get("duration");
-                break;
-            }
-        }
-        
-        // Execute the mute
-        boolean success = punishmentManager.mutePlayer(sender, targetName, reasonId, customReason, duration);
+        // Execute the kick
+        boolean success = punishmentManager.kickPlayer(sender, targetName, reasonId, customReason);
         
         if (!success) {
             // The punishmentManager will send appropriate error messages
@@ -88,45 +77,28 @@ public class MuteCommand implements SimpleCommand {
     }
     
     private void sendUsage(CommandSource sender) {
-        String message = configManager.getMessage("punishment.mute.usage");
+        String message = configManager.getMessage("punishment.kick.usage");
         sender.sendMessage(Component.text(configManager.getPrefix() + message));
         listAvailableReasons(sender);
     }
     
     private void listAvailableReasons(CommandSource sender) {
-        List<Map<String, Object>> reasons = punishmentManager.getReasons("MUTE");
+        List<Map<String, Object>> reasons = punishmentManager.getReasons("KICK");
         
-        String message = configManager.getMessage("punishment.available_reasons", "type", "mute");
+        String message = configManager.getMessage("punishment.available_reasons", "type", "kick");
         sender.sendMessage(Component.text(configManager.getPrefix() + message));
         
         for (Map<String, Object> reason : reasons) {
             int id = (int)reason.get("id");
             String name = (String)reason.get("name");
             String description = (String)reason.get("description");
-            long duration = (long)reason.get("duration");
             
-            String durationStr = duration < 0 ? "Permanent" : 
-                formatDuration(duration);
-            
-            Component component = Component.text(configManager.getDefaultMessageColor() + "  #" + id + ": " + 
-                    name + " (" + durationStr + ")")
+            Component component = Component.text(configManager.getDefaultMessageColor() + "  #" + id + ": " + name)
                     .hoverEvent(HoverEvent.showText(Component.text("§7" + description + "\n§eClick to use this reason")))
-                    .clickEvent(ClickEvent.suggestCommand("/mute " + name));
+                    .clickEvent(ClickEvent.suggestCommand("/kick " + name));
             
             sender.sendMessage(component);
         }
-    }
-    
-    /**
-     * Format duration in seconds to human readable format
-     */
-    private String formatDuration(long seconds) {
-        if (seconds < 0) return "Permanent";
-        
-        if (seconds < 60) return seconds + " seconds";
-        if (seconds < 3600) return (seconds / 60) + " minutes";
-        if (seconds < 86400) return (seconds / 3600) + " hours";
-        return (seconds / 86400) + " days";
     }
 
     @Override
@@ -143,9 +115,9 @@ public class MuteCommand implements SimpleCommand {
                 }
             });
         } else if (args.length == 2) {
-            // Suggest mute reasons
+            // Suggest kick reasons
             String query = args[1].toLowerCase();
-            List<Map<String, Object>> reasons = punishmentManager.getReasons("MUTE");
+            List<Map<String, Object>> reasons = punishmentManager.getReasons("KICK");
             for (Map<String, Object> reason : reasons) {
                 String name = (String) reason.get("name");
                 String id = String.valueOf(reason.get("id"));
@@ -162,6 +134,6 @@ public class MuteCommand implements SimpleCommand {
 
     @Override
     public boolean hasPermission(Invocation invocation) {
-        return invocation.source().hasPermission("bungeesystem.command.mute");
+        return invocation.source().hasPermission("bungeesystem.command.kick");
     }
 }

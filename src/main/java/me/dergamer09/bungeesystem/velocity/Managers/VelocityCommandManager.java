@@ -25,9 +25,14 @@ public class VelocityCommandManager {
         cm.register(cm.metaBuilder("generatetoken").plugin(plugin).build(), new GenerateTokenCommand(plugin));
         cm.register(cm.metaBuilder("validatetoken").plugin(plugin).build(), new ValidateTokenCommand(plugin));
 
-        // Register placeholders for other commands
-        registerPlaceholder(cm, "afk", new AfkCommand(plugin));
-        registerPlaceholder(cm, "ban", new BanCommand());
+        // Register punishment commands (fully implemented)
+        registerCommand(cm, "ban", new BanCommand(plugin));
+        registerCommand(cm, "mute", new MuteCommand(plugin));
+        registerCommand(cm, "kick", new KickCommand(plugin));
+        registerCommand(cm, "warn", new WarnCommand(plugin));
+        
+        // Register other commands
+        registerCommand(cm, "afk", new AfkCommand(plugin));
         registerPlaceholder(cm, "blockbungee", new BlockBungeeCommand(plugin));
         registerPlaceholder(cm, "broadcast", new BroadcastCommand(plugin));
         registerPlaceholder(cm, "find", new FindCommand(plugin));
@@ -40,7 +45,6 @@ public class VelocityCommandManager {
         registerPlaceholder(cm, "hub", new LobbyCommand(plugin));
         registerPlaceholder(cm, "msg", new MSGCommand(plugin));
         registerPlaceholder(cm, "maintenance", new MaintenanceCommand(plugin));
-        registerPlaceholder(cm, "mute", new MuteCommand());
         registerPlaceholder(cm, "nick", new NickCommand(plugin));
         registerPlaceholder(cm, "onlinetime", new OnlineTimeCommand());
         registerPlaceholder(cm, "play", new PlayCommand());
@@ -62,13 +66,14 @@ public class VelocityCommandManager {
         registerPlaceholder(cm, "unmute", new UnmuteCommand());
         registerPlaceholder(cm, "uptime", new UptimeCommand(plugin));
         registerPlaceholder(cm, "vanish", new VanishCommand());
-        registerPlaceholder(cm, "warn", new WarnCommand());
         registerPlaceholder(cm, "whois", new WhoisCommand());
-        registerPlaceholder(cm, "generatetoken", new GenerateTokenCommand(plugin));
-        registerPlaceholder(cm, "validatetoken", new ValidateTokenCommand(plugin));
     }
 
     private void registerPlaceholder(CommandManager cm, String name, SimpleCommand command) {
+        cm.register(cm.metaBuilder(name).plugin(plugin).build(), command);
+    }
+    
+    private void registerCommand(CommandManager cm, String name, SimpleCommand command) {
         cm.register(cm.metaBuilder(name).plugin(plugin).build(), command);
     }
 }
